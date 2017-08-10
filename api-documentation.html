@@ -1,0 +1,501 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>API Documentation &mdash; raveutils 0.1.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="raveutils 0.1.0 documentation" href="index.html"/>
+        <link rel="prev" title="raveutils Package" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> raveutils
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="">API Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-raveutils.kinematics">Kinematics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-raveutils.planning">Planning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-raveutils.visual">Visual</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">raveutils</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>API Documentation</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/api-documentation.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="api-documentation">
+<h1>API Documentation<a class="headerlink" href="#api-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-raveutils.kinematics">
+<span id="kinematics"></span><h2>Kinematics<a class="headerlink" href="#module-raveutils.kinematics" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="raveutils.kinematics.compute_jacobian">
+<code class="descclassname">raveutils.kinematics.</code><code class="descname">compute_jacobian</code><span class="sig-paren">(</span><em>robot</em>, <em>link_name=None</em>, <em>translation_only=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raveutils/kinematics.html#compute_jacobian"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#raveutils.kinematics.compute_jacobian" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the Jacobian matrix</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>robot</strong> (<em>orpy.Robot</em>) &#8211; OpenRAVE robot object</li>
+<li><strong>link_name</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The name of link</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>J</strong> &#8211;
+The Jacobian computed matrix</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">array_like</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="raveutils.kinematics.compute_yoshikawa_index">
+<code class="descclassname">raveutils.kinematics.</code><code class="descname">compute_yoshikawa_index</code><span class="sig-paren">(</span><em>robot</em>, <em>link_name=None</em>, <em>translation_only=False</em>, <em>penalize_jnt_limits=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raveutils/kinematics.html#compute_yoshikawa_index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#raveutils.kinematics.compute_yoshikawa_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the manipulability Yoshikawa index</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>robot</strong> (<em>orpy.Robot</em>) &#8211; OpenRAVE robot object</li>
+<li><strong>link_name</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The name of link for which the index will be computed</li>
+<li><strong>translation_only</strong> (<em>boolean, optional</em>) &#8211; If True use only the translation part of the Jacobian matrix to
+compute the index. If False use the translation and rotation.</li>
+<li><strong>penalize_jnt_limits</strong> (<em>boolean, optional</em>) &#8211; If True penalize/attenuate the manipulability proportionally
+to the <em>distance</em> to the joint limits of the robot</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>index</strong> &#8211;
+The Yoshikawa manipulability index</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)">float</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="raveutils.kinematics.find_ik_solutions">
+<code class="descclassname">raveutils.kinematics.</code><code class="descname">find_ik_solutions</code><span class="sig-paren">(</span><em>robot</em>, <em>target</em>, <em>iktype</em>, <em>collision_check=True</em>, <em>freeinc=0.087</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raveutils/kinematics.html#find_ik_solutions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#raveutils.kinematics.find_ik_solutions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find all the possible IK solutions</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>robot</strong> (<em>orpy.Robot</em>) &#8211; OpenRAVE robot object</li>
+<li><strong>target</strong> (<em>array_like or orpy.Ray</em>) &#8211; The target in Cartesian space. A target can be defined as a Ray
+(position and direction) which is 5D or an homogeneous transformation
+which is 6D</li>
+<li><strong>iktype</strong> (<em>orpy.IkParameterizationType</em>) &#8211; <p>Inverse kinematics type to use.
+Supported values:</p>
+<blockquote>
+<div><ul>
+<li><code class="docutils literal"><span class="pre">orpy.IkParameterizationType.Transform6D</span></code></li>
+<li><code class="docutils literal"><span class="pre">orpy.IkParameterizationType.TranslationDirection5D</span></code></li>
+</ul>
+</div></blockquote>
+</li>
+<li><strong>collision_check</strong> (<em>bool, optional</em>) &#8211; If true find only collision-free solutions</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>solutions</strong> &#8211;
+The found IK solutions</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="raveutils.kinematics.load_ikfast">
+<code class="descclassname">raveutils.kinematics.</code><code class="descname">load_ikfast</code><span class="sig-paren">(</span><em>robot, iktype, freejoints=['J6'], freeinc=[0.01], autogenerate=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raveutils/kinematics.html#load_ikfast"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#raveutils.kinematics.load_ikfast" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load the IKFast solver</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>robot</strong> (<em>orpy.Robot</em>) &#8211; OpenRAVE robot object</li>
+<li><strong>iktype</strong> (<em>orpy.IkParameterizationType</em>) &#8211; Inverse kinematics type to use</li>
+<li><strong>freeinc</strong> (<em>list</em>) &#8211; Free increment for the <code class="docutils literal"><span class="pre">TranslationDirection5D</span></code> iktype</li>
+<li><strong>autogenerate</strong> (<em>bool, optional</em>) &#8211; If true automatically generate the inverse kinematics solver</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>success</strong> &#8211;
+True if succeeded, False otherwise</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/library/functions.html#bool" title="(in Python v2.7)">bool</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="raveutils.kinematics.load_link_stats">
+<code class="descclassname">raveutils.kinematics.</code><code class="descname">load_link_stats</code><span class="sig-paren">(</span><em>robot</em>, <em>xyzdelta=0.01</em>, <em>autogenerate=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raveutils/kinematics.html#load_link_stats"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#raveutils.kinematics.load_link_stats" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO: Document load_link_stats</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-raveutils.planning">
+<span id="planning"></span><h2>Planning<a class="headerlink" href="#module-raveutils.planning" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="raveutils.planning.plan_to_joint_configuration">
+<code class="descclassname">raveutils.planning.</code><code class="descname">plan_to_joint_configuration</code><span class="sig-paren">(</span><em>robot</em>, <em>qgoal</em>, <em>planner='birrt'</em>, <em>max_iters=20</em>, <em>max_ppiters=40</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raveutils/planning.html#plan_to_joint_configuration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#raveutils.planning.plan_to_joint_configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plan the trajectory to the given <code class="docutils literal"><span class="pre">qgoal</span></code> configuration.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>robot</strong> (<em>orpy.Robot</em>) &#8211; OpenRAVE robot object.</li>
+<li><strong>qgoal</strong> (<em>array_like</em>) &#8211; The goal configuration.</li>
+<li><strong>planner</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; Name of the planning method.</li>
+<li><strong>max_iters</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; Maximum iterations of planning.</li>
+<li><strong>max_ppiters</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; Maximum iterations of post processing.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>traj</strong> &#8211;
+Planned trajectory. If plan fails, return None.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">orpy.trajectory</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-raveutils.visual">
+<span id="visual"></span><h2>Visual<a class="headerlink" href="#module-raveutils.visual" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="raveutils.visual.draw_axes">
+<code class="descclassname">raveutils.visual.</code><code class="descname">draw_axes</code><span class="sig-paren">(</span><em>env</em>, <em>transform</em>, <em>dist=0.03</em>, <em>linewidth=2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raveutils/visual.html#draw_axes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#raveutils.visual.draw_axes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw an RGB set of axes to the OpenRAVE environment.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>transform</strong> (<a class="reference external" href="https://docs.python.org/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; Transformation where to draw the axes.</li>
+<li><strong>dist</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; Length of the axes (meters).</li>
+<li><strong>linewidth</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; Line width of the axes (pixels).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>hanles</strong> &#8211;
+The total axes added to the scene.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">orpy.GraphHandle</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="raveutils.visual.draw_plane">
+<code class="descclassname">raveutils.visual.</code><code class="descname">draw_plane</code><span class="sig-paren">(</span><em>env</em>, <em>plane</em>, <em>extents=(4</em>, <em>4)</em>, <em>texture=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raveutils/visual.html#draw_plane"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#raveutils.visual.draw_plane" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw a plane to the OpenRAVE environment.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>plane</strong> (<em>criros.spalg.Plane</em>) &#8211; Plane object constructed from its origin and normal.</li>
+<li><strong>extents</strong> (<em>list or array_like</em>) &#8211; The length and width of the drawn plane rectangle.</li>
+<li><strong>texture</strong> (<em>array_like</em>) &#8211; Texture of the drawn plane. An array of size N*M*4, with [:, :, 0], [:, :, 1], [:, :, 2] and [:, :, 3]
+describe the changes of the transparency and RGB colors of the plane.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>handles</strong> &#8211;
+Handles holding the plot.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">orpy.GraphHandle</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="raveutils.visual.draw_point">
+<code class="descclassname">raveutils.visual.</code><code class="descname">draw_point</code><span class="sig-paren">(</span><em>env</em>, <em>point</em>, <em>linewidth=10</em>, <em>color=(0</em>, <em>1</em>, <em>0)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raveutils/visual.html#draw_point"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#raveutils.visual.draw_point" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw a colored point to the OpenRAVE environment.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>point</strong> (<em>list or array_like</em>) &#8211; point: Position of the point.</li>
+<li><strong>linewidth</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; Size of the point.</li>
+<li><strong>color</strong> (<em>list or array_like</em>) &#8211; Color of the point.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>handles</strong> &#8211;
+Handles holding the plot.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">orpy.GraphHandle</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="raveutils.visual.draw_ray">
+<code class="descclassname">raveutils.visual.</code><code class="descname">draw_ray</code><span class="sig-paren">(</span><em>env</em>, <em>ray</em>, <em>dist=0.03</em>, <em>linewidth=2</em>, <em>color=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raveutils/visual.html#draw_ray"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#raveutils.visual.draw_ray" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw an arrow with the orpy.linelist heads to the OpenRAVE environment.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>ray</strong> (<em>orpy.ray</em>) &#8211; The ray describes the origin and the direction of the arrow.</li>
+<li><strong>dist</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; Length of the arrow heads.</li>
+<li><strong>linewidth</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; Line width of the arrow (pixels).</li>
+<li><strong>color</strong> (<em>list or array_like</em>) &#8211; Color of the arrow.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>handles</strong> &#8211;
+Handles holding the plot.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">orpy.GraphHandle</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="raveutils.visual.draw_spline">
+<code class="descclassname">raveutils.visual.</code><code class="descname">draw_spline</code><span class="sig-paren">(</span><em>env</em>, <em>spline</em>, <em>num=100</em>, <em>linewidth=1.0</em>, <em>colors=(0</em>, <em>0</em>, <em>1)</em>, <em>start=0</em>, <em>stop=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raveutils/visual.html#draw_spline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#raveutils.visual.draw_spline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw line strips for the sequential segments of a curve to the OpenRAVE environment.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>spline</strong> (<em>scipy.interpolate.BSpline</em>) &#8211; B-spline of the curve.</li>
+<li><strong>num</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; Number of segments to draw.</li>
+<li><strong>linewidth</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; Line width of the line strip (pixels).</li>
+<li><strong>colors</strong> (<em>list or array_like</em>) &#8211; Colors of the line strips.</li>
+<li><strong>start</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; Start drawing position of the curve, in <code class="docutils literal"><span class="pre">[0,</span> <span class="pre">1]</span></code>.</li>
+<li><strong>stop</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; End drawing position of the curve, in <code class="docutils literal"><span class="pre">[0,</span> <span class="pre">1]</span></code>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>handles</strong> &#8211;
+Handles holding the plot.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">orpy.GraphHandle</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="raveutils Package" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, CRI Group.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,237 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>raveutils.planning &mdash; raveutils 0.1.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="raveutils 0.1.0 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> raveutils
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api-documentation.html">API Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">raveutils</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+    <li>raveutils.planning</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for raveutils.planning</h1><div class="highlight"><pre>
+<span class="ch">#!/usr/bin/env python</span>
+<span class="kn">import</span> <span class="nn">criros</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">openravepy</span> <span class="kn">as</span> <span class="nn">orpy</span>
+
+
+<div class="viewcode-block" id="plan_to_joint_configuration"><a class="viewcode-back" href="../../api-documentation.html#raveutils.planning.plan_to_joint_configuration">[docs]</a><span class="k">def</span> <span class="nf">plan_to_joint_configuration</span><span class="p">(</span><span class="n">robot</span><span class="p">,</span> <span class="n">qgoal</span><span class="p">,</span> <span class="n">planner</span><span class="o">=</span><span class="s1">&#39;birrt&#39;</span><span class="p">,</span> <span class="n">max_iters</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+                                                                <span class="n">max_ppiters</span><span class="o">=</span><span class="mi">40</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">  Plan the trajectory to the given ``qgoal`` configuration.</span>
+
+<span class="sd">  Parameters</span>
+<span class="sd">  ----------</span>
+<span class="sd">  robot: orpy.Robot</span>
+<span class="sd">    OpenRAVE robot object.</span>
+<span class="sd">  qgoal: array_like</span>
+<span class="sd">    The goal configuration.</span>
+<span class="sd">  planner: str</span>
+<span class="sd">    Name of the planning method.</span>
+<span class="sd">  max_iters: float</span>
+<span class="sd">    Maximum iterations of planning.</span>
+<span class="sd">  max_ppiters: float</span>
+<span class="sd">    Maximum iterations of post processing.</span>
+
+<span class="sd">  Returns</span>
+<span class="sd">  -------</span>
+<span class="sd">  traj: orpy.trajectory</span>
+<span class="sd">    Planned trajectory. If plan fails, return None.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="n">env</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">GetEnv</span><span class="p">()</span>
+  <span class="n">planner</span> <span class="o">=</span> <span class="n">orpy</span><span class="o">.</span><span class="n">RaveCreatePlanner</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">planner</span><span class="p">)</span>
+  <span class="n">params</span> <span class="o">=</span> <span class="n">orpy</span><span class="o">.</span><span class="n">Planner</span><span class="o">.</span><span class="n">PlannerParameters</span><span class="p">()</span>
+  <span class="n">params</span><span class="o">.</span><span class="n">SetRobotActiveJoints</span><span class="p">(</span><span class="n">robot</span><span class="p">)</span>
+  <span class="n">params</span><span class="o">.</span><span class="n">SetGoalConfig</span><span class="p">(</span><span class="n">qgoal</span><span class="p">)</span>
+  <span class="n">params</span><span class="o">.</span><span class="n">SetMaxIterations</span><span class="p">(</span><span class="n">max_iters</span><span class="p">)</span>
+  <span class="n">params</span><span class="o">.</span><span class="n">SetPostProcessing</span><span class="p">(</span><span class="s1">&#39;ParabolicSmoother&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;&lt;_nmaxiterations&gt;{0}}&lt;/_nmaxiterations&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">max_ppiters</span><span class="p">))</span>
+  <span class="n">initsuccess</span> <span class="o">=</span> <span class="n">planner</span><span class="o">.</span><span class="n">InitPlan</span><span class="p">(</span><span class="n">robot</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+  <span class="n">traj</span> <span class="o">=</span> <span class="bp">None</span>
+  <span class="k">if</span> <span class="n">initsuccess</span><span class="p">:</span>
+    <span class="c1"># Plan a trajectory</span>
+    <span class="n">traj</span> <span class="o">=</span> <span class="n">orpy</span><span class="o">.</span><span class="n">RaveCreateTrajectory</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="n">planner</span><span class="o">.</span><span class="n">PlanPath</span><span class="p">(</span><span class="n">traj</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">status</span> <span class="o">!=</span> <span class="n">orpy</span><span class="o">.</span><span class="n">PlannerStatus</span><span class="o">.</span><span class="n">HasSolution</span><span class="p">:</span>
+      <span class="n">traj</span> <span class="o">=</span> <span class="bp">None</span>
+  <span class="k">return</span> <span class="n">traj</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, CRI Group.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
