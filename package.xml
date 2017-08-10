@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package>
+  <name>raveutils</name>
+  <version>0.1.0</version>
+  <description>Utilities package for OpenRAVE</description>
+
+  <author email="fsuarez6@gmail.com">Francisco Suarez-Ruiz</author>
+  <maintainer email="fsuarez6@gmail.com">Francisco Suarez-Ruiz</maintainer>
+  <license>BSD 3-Clause</license>
+  <url type="repository">https://github.com/crigroup/raveutils</url>
+  <url type="bugtracker">https://github.com/crigroup/raveutils/issues</url>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <run_depend>python-numpy</run_depend>
+
+  <export>
+    <rosdoc config="rosdoc.yaml"/>
+  </export>
+
+</package>
