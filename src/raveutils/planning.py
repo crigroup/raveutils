@@ -34,7 +34,7 @@ def plan_to_joint_configuration(robot, qgoal, planner='birrt', max_iters=20,
   params.SetGoalConfig(qgoal)
   params.SetMaxIterations(max_iters)
   params.SetPostProcessing('ParabolicSmoother',
-                '<_nmaxiterations>{0}}</_nmaxiterations>'.format(max_ppiters))
+                '<_nmaxiterations>{0}</_nmaxiterations>'.format(max_ppiters))
   initsuccess = planner.InitPlan(robot, params)
   traj = None
   if initsuccess:
