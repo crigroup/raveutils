@@ -86,8 +86,7 @@ def compute_yoshikawa_index(robot, link_name=None, translation_only=False,
   index = np.sqrt( max(np.linalg.det(np.dot(J, J.T)), 0) )*weight*scale
   return index
 
-def find_ik_solutions(robot, target, iktype, collision_check=True,
-                                                                freeinc=0.087):
+def find_ik_solutions(robot, target, iktype, collision_free=True, freeinc=0.087):
   """
   Find all the possible IK solutions
 
@@ -104,7 +103,7 @@ def find_ik_solutions(robot, target, iktype, collision_check=True,
     Supported values:
       - ``orpy.IkParameterizationType.Transform6D``
       - ``orpy.IkParameterizationType.TranslationDirection5D``
-  collision_check: bool, optional
+  collision_free: bool, optional
     If true find only collision-free solutions
 
   Returns
@@ -134,7 +133,7 @@ def find_ik_solutions(robot, target, iktype, collision_check=True,
     ikparam = orpy.IkParameterization(goal, iktype)
     manipulator = robot.GetActiveManipulator()
     opt = 0
-    if collision_check:
+    if collision_free:
       opt = orpy.IkFilterOptions.CheckEnvCollisions
     solutions += list(manipulator.FindIKSolutions(ikparam, opt))
   return solutions
