@@ -4,7 +4,7 @@ import numpy as np
 import openravepy as orpy
 
 
-def plan_to_joint_configuration(robot, qgoal, planner='birrt', max_iters=20,
+def plan_to_joint_configuration(robot, qgoal, pname='birrt', max_iters=20,
                                                                 max_ppiters=40):
   """
   Plan the trajectory to the given ``qgoal`` configuration.
@@ -12,15 +12,15 @@ def plan_to_joint_configuration(robot, qgoal, planner='birrt', max_iters=20,
   Parameters
   ----------
   robot: orpy.Robot
-    OpenRAVE robot object.
+    OpenRAVE robot object
   qgoal: array_like
-    The goal configuration.
-  planner: str
-    Name of the planning method.
+    The goal configuration
+  pname: str
+    Name of the planning algorithm
   max_iters: float
-    Maximum iterations of planning.
+    Maximum iterations of planning
   max_ppiters: float
-    Maximum iterations of post processing.
+    Maximum iterations of post-processing
 
   Returns
   -------
@@ -28,7 +28,7 @@ def plan_to_joint_configuration(robot, qgoal, planner='birrt', max_iters=20,
     Planned trajectory. If plan fails, return None.
   """
   env = robot.GetEnv()
-  planner = orpy.RaveCreatePlanner(env, planner)
+  planner = orpy.RaveCreatePlanner(env, pname)
   params = orpy.Planner.PlannerParameters()
   params.SetRobotActiveJoints(robot)
   params.SetGoalConfig(qgoal)
