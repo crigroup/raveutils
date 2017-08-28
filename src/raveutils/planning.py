@@ -33,8 +33,11 @@ def plan_to_joint_configuration(robot, qgoal, pname='birrt', max_iters=20,
   params.SetRobotActiveJoints(robot)
   params.SetGoalConfig(qgoal)
   params.SetMaxIterations(max_iters)
-  params.SetPostProcessing('ParabolicSmoother',
+  if max_ppiters > 0:
+    params.SetPostProcessing('ParabolicSmoother',
                 '<_nmaxiterations>{0}</_nmaxiterations>'.format(max_ppiters))
+  else:
+    params.SetPostProcessing('', '')
   initsuccess = planner.InitPlan(robot, params)
   traj = None
   if initsuccess:
@@ -43,4 +46,28 @@ def plan_to_joint_configuration(robot, qgoal, pname='birrt', max_iters=20,
     status = planner.PlanPath(traj)
     if status != orpy.PlannerStatus.HasSolution:
       traj = None
+  return traj
+
+def retime_trajectory(robot, traj, method):
+  env = robot.GetEnv()
+  # Populate planner parameters
+  params = orpy.Planner.PlannerParameters()
+  params.SetRobotActiveJoints(robot)
+  params.SetMaxIterations(20)
+  params.SetPostProcessing('', '')
+  # Generate the trajectory
+  planner = orpy.RaveCreatePlanner(env, method)
+  success = planner.InitPlan(robot, params)
+  if success:
+    status = planner.PlanPath(traj)
+  else:
+    status = orpy.PlannerStatus.Failed
+  return status
+
+def trajectory_from_waypoints(robot, waypoints):
+  env = robot.GetEnv()
+  traj = orpy.RaveCreateTrajectory(env, '')
+  traj.Init(robot.GetActiveConfigurationSpecification())
+  for i in xrange(len(waypoints)):
+    traj.Insert(i, waypoints[i])
   return traj
