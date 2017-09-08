@@ -1,31 +1,31 @@
 #!/usr/bin/env python
-import criros
 import numpy as np
 import openravepy as orpy
 
 
-def plan_to_joint_configuration(robot, qgoal, pname='birrt', max_iters=20,
+def plan_to_joint_configuration(robot, qgoal, pname='BiRRT', max_iters=20,
                                                                 max_ppiters=40):
   """
-  Plan the trajectory to the given ``qgoal`` configuration.
+  Plan a trajectory to the given `qgoal` configuration.
 
   Parameters
   ----------
   robot: orpy.Robot
-    OpenRAVE robot object
+    The OpenRAVE robot
   qgoal: array_like
     The goal configuration
   pname: str
-    Name of the planning algorithm
+    Name of the planning algorithm. Available options are: `BasicRRT`, `BiRRT`
   max_iters: float
-    Maximum iterations of planning
+    Maximum iterations for the planning stage
   max_ppiters: float
-    Maximum iterations of post-processing
+    Maximum iterations for the post-processing stage. It will use a parabolic
+    smoother wich short-cuts the trajectory and then smooths it
 
   Returns
   -------
   traj: orpy.trajectory
-    Planned trajectory. If plan fails, return None.
+    Planned trajectory. If plan fails, this function returns `None`.
   """
   env = robot.GetEnv()
   planner = orpy.RaveCreatePlanner(env, pname)
@@ -49,6 +49,25 @@ def plan_to_joint_configuration(robot, qgoal, pname='birrt', max_iters=20,
   return traj
 
 def retime_trajectory(robot, traj, method):
+  """
+  Retime an OpenRAVE trajectory using the specified method.
+
+  Parameters
+  ----------
+  robot: orpy.Robot
+    The OpenRAVE robot
+  traj: orpy.trajectory
+    The traj to be retimed. The time paremetrization will be *overwritten*.
+  method: str
+    Retiming method. Available options are: `LinearTrajectoryRetimer`,
+    `ParabolicTrajectoryRetimer`, `CubicTrajectoryRetimer`
+
+  Returns
+  -------
+  status: orpy.PlannerStatus
+    Flag indicating the status of the trajectory retiming. It can be: `Failed`,
+    `HasSolution`, `Interrupted` or `InterruptedWithSolution`.
+  """
   env = robot.GetEnv()
   # Populate planner parameters
   params = orpy.Planner.PlannerParameters()
@@ -65,9 +84,24 @@ def retime_trajectory(robot, traj, method):
   return status
 
 def trajectory_from_waypoints(robot, waypoints):
+  """
+  Generate an OpenRAVE trajectory using the given waypoints.
+
+  Parameters
+  ----------
+  robot: orpy.Robot
+    The OpenRAVE robot
+  waypoints: list
+    List of waypoints (joint configurations)
+
+  Returns
+  -------
+  traj: orpy.trajectory
+    Resulting OpenRAVE trajectory.
+  """
   env = robot.GetEnv()
   traj = orpy.RaveCreateTrajectory(env, '')
   traj.Init(robot.GetActiveConfigurationSpecification())
-  for i in xrange(len(waypoints)):
-    traj.Insert(i, waypoints[i])
+  for i,q in enumerate(waypoints):
+    traj.Insert(i, q)
   return traj

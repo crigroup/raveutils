@@ -9,3 +9,10 @@ catkin_python_setup()
 catkin_package(
   DEPENDS OpenRAVE
 )
+
+# Tests
+catkin_add_nosetests(tests/test_conversions.py)
+catkin_add_nosetests(tests/test_kinematics.py)
+catkin_add_nosetests(tests/test_planning.py)
+catkin_add_nosetests(tests/test_transforms.py)
+catkin_add_nosetests(tests/test_visual.py)
