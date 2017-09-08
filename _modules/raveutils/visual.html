@@ -81,6 +81,7 @@
             
             
                 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api-documentation.html">API Documentation</a></li>
 </ul>
 
@@ -131,70 +132,53 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">openravepy</span> <span class="kn">as</span> <span class="nn">orpy</span>
 
-<div class="viewcode-block" id="draw_point"><a class="viewcode-back" href="../../api-documentation.html#raveutils.visual.draw_point">[docs]</a><span class="k">def</span> <span class="nf">draw_point</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)):</span>
-  <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">  Draw a colored point to the OpenRAVE environment.</span>
-
-<span class="sd">  Parameters</span>
-<span class="sd">  ----------</span>
-<span class="sd">  point: list or array_like</span>
-<span class="sd">    point: Position of the point.</span>
-<span class="sd">  linewidth: float</span>
-<span class="sd">    Size of the point.</span>
-<span class="sd">  color: list or array_like</span>
-<span class="sd">    Color of the point.</span>
-
-<span class="sd">  Returns</span>
-<span class="sd">  -------</span>
-<span class="sd">  handles: orpy.GraphHandle</span>
-<span class="sd">    Handles holding the plot.</span>
-<span class="sd">  &quot;&quot;&quot;</span>
-  <span class="n">iktype</span> <span class="o">=</span> <span class="n">orpy</span><span class="o">.</span><span class="n">IkParameterizationType</span><span class="o">.</span><span class="n">Translation3D</span>
-  <span class="n">ikparam</span> <span class="o">=</span> <span class="n">orpy</span><span class="o">.</span><span class="n">IkParameterization</span><span class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="n">iktype</span><span class="p">)</span>
-  <span class="n">handles</span> <span class="o">=</span> <span class="n">orpy</span><span class="o">.</span><span class="n">misc</span><span class="o">.</span><span class="n">DrawIkparam2</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">ikparam</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="n">linewidth</span><span class="p">,</span>
-                                                                <span class="n">coloradd</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
-  <span class="k">return</span> <span class="n">handles</span></div>
 
 <div class="viewcode-block" id="draw_axes"><a class="viewcode-back" href="../../api-documentation.html#raveutils.visual.draw_axes">[docs]</a><span class="k">def</span> <span class="nf">draw_axes</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">dist</span><span class="o">=</span><span class="mf">0.03</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
   <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">  Draw an RGB set of axes to the OpenRAVE environment.</span>
+<span class="sd">  Draw an RGB set of axes into the OpenRAVE environment.</span>
 
 <span class="sd">  Parameters</span>
 <span class="sd">  ----------</span>
-<span class="sd">  transform: string</span>
-<span class="sd">    Transformation where to draw the axes.</span>
+<span class="sd">  env: orpy.Environment</span>
+<span class="sd">    The OpenRAVE environment</span>
+<span class="sd">  transform: array_like</span>
+<span class="sd">    The homogeneous transformation where to draw the axes</span>
 <span class="sd">  dist: float</span>
-<span class="sd">    Length of the axes (meters).</span>
+<span class="sd">    Length of the axes (meters)</span>
 <span class="sd">  linewidth: float</span>
-<span class="sd">    Line width of the axes (pixels).</span>
+<span class="sd">    Line width of the axes (pixels)</span>
 
 <span class="sd">  Returns</span>
 <span class="sd">  -------</span>
-<span class="sd">  hanles: orpy.GraphHandle</span>
+<span class="sd">  h: orpy.GraphHandle</span>
 <span class="sd">    The total axes added to the scene.</span>
 <span class="sd">  &quot;&quot;&quot;</span>
   <span class="n">iktype</span> <span class="o">=</span> <span class="n">orpy</span><span class="o">.</span><span class="n">IkParameterizationType</span><span class="o">.</span><span class="n">Transform6D</span>
   <span class="n">ikparam</span> <span class="o">=</span> <span class="n">orpy</span><span class="o">.</span><span class="n">IkParameterization</span><span class="p">(</span><span class="n">transform</span><span class="p">,</span> <span class="n">iktype</span><span class="p">)</span>
-  <span class="n">handles</span> <span class="o">=</span> <span class="n">orpy</span><span class="o">.</span><span class="n">misc</span><span class="o">.</span><span class="n">DrawIkparam2</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">ikparam</span><span class="p">,</span> <span class="n">dist</span><span class="o">=</span><span class="n">dist</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="n">linewidth</span><span class="p">)</span>
-  <span class="k">return</span> <span class="n">handles</span></div>
+  <span class="n">h</span> <span class="o">=</span> <span class="n">orpy</span><span class="o">.</span><span class="n">misc</span><span class="o">.</span><span class="n">DrawIkparam2</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">ikparam</span><span class="p">,</span> <span class="n">dist</span><span class="o">=</span><span class="n">dist</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="n">linewidth</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">h</span></div>
 
-<div class="viewcode-block" id="draw_plane"><a class="viewcode-back" href="../../api-documentation.html#raveutils.visual.draw_plane">[docs]</a><span class="k">def</span> <span class="nf">draw_plane</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">plane</span><span class="p">,</span> <span class="n">extents</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span> <span class="n">texture</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="draw_plane"><a class="viewcode-back" href="../../api-documentation.html#raveutils.visual.draw_plane">[docs]</a><span class="k">def</span> <span class="nf">draw_plane</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">extents</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span> <span class="n">texture</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
   <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">  Draw a plane to the OpenRAVE environment.</span>
+<span class="sd">  Draw a plane into the OpenRAVE environment.</span>
 
 <span class="sd">  Parameters</span>
 <span class="sd">  ----------</span>
-<span class="sd">  plane: criros.spalg.Plane</span>
-<span class="sd">    Plane object constructed from its origin and normal.</span>
-<span class="sd">  extents: list or array_like</span>
-<span class="sd">    The length and width of the drawn plane rectangle.</span>
+<span class="sd">  env: orpy.Environment</span>
+<span class="sd">    The OpenRAVE environment</span>
+<span class="sd">  transform: array_like</span>
+<span class="sd">    Transform that represents the plane. The origin of the plane corresponds to</span>
+<span class="sd">    the position of the transform. Axis Z of the transform is used as the plane</span>
+<span class="sd">    normal</span>
+<span class="sd">  extents: list</span>
+<span class="sd">    The length and width of the plane (meters)</span>
 <span class="sd">  texture: array_like</span>
-<span class="sd">    Texture of the drawn plane. An array of size N*M*4, with [:, :, 0], [:, :, 1], [:, :, 2] and [:, :, 3]</span>
-<span class="sd">    describe the changes of the transparency and RGB colors of the plane.</span>
+<span class="sd">    Texture of the drawn plane. It must have a size `N*M*4`. The last dimension</span>
+<span class="sd">    corresponds to the RGBA channels.</span>
 
 <span class="sd">  Returns</span>
 <span class="sd">  -------</span>
-<span class="sd">  handles: orpy.GraphHandle</span>
+<span class="sd">  h: orpy.GraphHandle</span>
 <span class="sd">    Handles holding the plot.</span>
 <span class="sd">  &quot;&quot;&quot;</span>
   <span class="k">if</span> <span class="n">texture</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
@@ -202,29 +186,56 @@
     <span class="n">texture</span><span class="p">[:,:,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.2</span>
     <span class="n">texture</span><span class="p">[:,:,</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.2</span>
     <span class="n">texture</span><span class="p">[:,:,</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.2</span>
-  <span class="n">T</span> <span class="o">=</span> <span class="n">plane</span><span class="o">.</span><span class="n">get_transform</span><span class="p">()</span>
   <span class="k">with</span> <span class="n">env</span><span class="p">:</span>
-    <span class="n">handles</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">drawplane</span><span class="p">(</span><span class="n">transform</span><span class="o">=</span><span class="n">T</span><span class="p">,</span> <span class="n">extents</span><span class="o">=</span><span class="n">extents</span><span class="p">,</span> <span class="n">texture</span><span class="o">=</span><span class="n">texture</span><span class="p">)</span>
-  <span class="k">return</span> <span class="n">handles</span></div>
+    <span class="n">h</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">drawplane</span><span class="p">(</span><span class="n">transform</span><span class="p">,</span> <span class="n">extents</span><span class="o">=</span><span class="n">extents</span><span class="p">,</span> <span class="n">texture</span><span class="o">=</span><span class="n">texture</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">h</span></div>
 
-<div class="viewcode-block" id="draw_ray"><a class="viewcode-back" href="../../api-documentation.html#raveutils.visual.draw_ray">[docs]</a><span class="k">def</span> <span class="nf">draw_ray</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">ray</span><span class="p">,</span> <span class="n">dist</span><span class="o">=</span><span class="mf">0.03</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="draw_point"><a class="viewcode-back" href="../../api-documentation.html#raveutils.visual.draw_point">[docs]</a><span class="k">def</span> <span class="nf">draw_point</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)):</span>
   <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">  Draw an arrow with the orpy.linelist heads to the OpenRAVE environment.</span>
+<span class="sd">  Draw a colored point into the OpenRAVE environment.</span>
 
 <span class="sd">  Parameters</span>
 <span class="sd">  ----------</span>
-<span class="sd">  ray: orpy.ray</span>
-<span class="sd">    The ray describes the origin and the direction of the arrow.</span>
-<span class="sd">  dist: float</span>
-<span class="sd">    Length of the arrow heads.</span>
-<span class="sd">  linewidth: float</span>
-<span class="sd">    Line width of the arrow (pixels).</span>
-<span class="sd">  color: list or array_like</span>
-<span class="sd">    Color of the arrow.</span>
+<span class="sd">  env: orpy.Environment</span>
+<span class="sd">    The OpenRAVE environment</span>
+<span class="sd">  point: array_like</span>
+<span class="sd">    XYZ position of the point</span>
+<span class="sd">  size: float</span>
+<span class="sd">    Size of the point (pixels)</span>
+<span class="sd">  color: array_like</span>
+<span class="sd">    Color of the point in the format `(red, green, blue, alpha)`</span>
 
 <span class="sd">  Returns</span>
 <span class="sd">  -------</span>
-<span class="sd">  handles: orpy.GraphHandle</span>
+<span class="sd">  h: orpy.GraphHandle</span>
+<span class="sd">    Handles of the plot. This is require for the point to stay on the</span>
+<span class="sd">    environment</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="n">iktype</span> <span class="o">=</span> <span class="n">orpy</span><span class="o">.</span><span class="n">IkParameterizationType</span><span class="o">.</span><span class="n">Translation3D</span>
+  <span class="n">ikparam</span> <span class="o">=</span> <span class="n">orpy</span><span class="o">.</span><span class="n">IkParameterization</span><span class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="n">iktype</span><span class="p">)</span>
+  <span class="n">h</span> <span class="o">=</span> <span class="n">orpy</span><span class="o">.</span><span class="n">misc</span><span class="o">.</span><span class="n">DrawIkparam2</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">ikparam</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">coloradd</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">h</span></div>
+
+<div class="viewcode-block" id="draw_ray"><a class="viewcode-back" href="../../api-documentation.html#raveutils.visual.draw_ray">[docs]</a><span class="k">def</span> <span class="nf">draw_ray</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">ray</span><span class="p">,</span> <span class="n">dist</span><span class="o">=</span><span class="mf">0.03</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">  Draw a ray as an arrow + line into the OpenRAVE environment.</span>
+
+<span class="sd">  Parameters</span>
+<span class="sd">  ----------</span>
+<span class="sd">  env: orpy.Environment</span>
+<span class="sd">    The OpenRAVE environment</span>
+<span class="sd">  ray: orpy.ray</span>
+<span class="sd">    The input ray  with the position and direction of the arrow</span>
+<span class="sd">  dist: float</span>
+<span class="sd">    Length of the line</span>
+<span class="sd">  linewidth: float</span>
+<span class="sd">    Linewidth of the arrow and line (pixels)</span>
+<span class="sd">  color: array_like</span>
+<span class="sd">    Color of the arrow in the format `(red, green, blue, alpha)`</span>
+
+<span class="sd">  Returns</span>
+<span class="sd">  -------</span>
+<span class="sd">  h: orpy.GraphHandle</span>
 <span class="sd">    Handles holding the plot.</span>
 <span class="sd">  &quot;&quot;&quot;</span>
   <span class="k">if</span> <span class="n">dist</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -234,43 +245,9 @@
     <span class="n">newray</span> <span class="o">=</span> <span class="n">ray</span>
   <span class="n">iktype</span> <span class="o">=</span> <span class="n">orpy</span><span class="o">.</span><span class="n">IkParameterizationType</span><span class="o">.</span><span class="n">TranslationDirection5D</span>
   <span class="n">ikparam</span> <span class="o">=</span> <span class="n">orpy</span><span class="o">.</span><span class="n">IkParameterization</span><span class="p">(</span><span class="n">ray</span><span class="p">,</span> <span class="n">iktype</span><span class="p">)</span>
-  <span class="n">handles</span> <span class="o">=</span> <span class="n">orpy</span><span class="o">.</span><span class="n">misc</span><span class="o">.</span><span class="n">DrawIkparam2</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">ikparam</span><span class="p">,</span> <span class="n">dist</span><span class="o">=</span><span class="n">dist</span><span class="p">,</span>
-                                          <span class="n">linewidth</span><span class="o">=</span><span class="n">linewidth</span><span class="p">,</span> <span class="n">coloradd</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
-  <span class="k">return</span> <span class="n">handles</span></div>
-
-<div class="viewcode-block" id="draw_spline"><a class="viewcode-back" href="../../api-documentation.html#raveutils.visual.draw_spline">[docs]</a><span class="k">def</span> <span class="nf">draw_spline</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">spline</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                                                                        <span class="n">stop</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-  <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">  Draw line strips for the sequential segments of a curve to the OpenRAVE environment.</span>
-
-<span class="sd">  Parameters</span>
-<span class="sd">  ----------</span>
-<span class="sd">  spline: scipy.interpolate.BSpline</span>
-<span class="sd">    B-spline of the curve.</span>
-<span class="sd">  num: int</span>
-<span class="sd">    Number of segments to draw.</span>
-<span class="sd">  linewidth: float</span>
-<span class="sd">    Line width of the line strip (pixels).</span>
-<span class="sd">  colors: list or array_like</span>
-<span class="sd">    Colors of the line strips.</span>
-<span class="sd">  start: float</span>
-<span class="sd">    Start drawing position of the curve, in ``[0, 1]``.</span>
-<span class="sd">  stop: float</span>
-<span class="sd">    End drawing position of the curve, in ``[0, 1]``.</span>
-
-<span class="sd">  Returns</span>
-<span class="sd">  -------</span>
-<span class="sd">  handles: orpy.GraphHandle</span>
-<span class="sd">    Handles holding the plot.</span>
-<span class="sd">  &quot;&quot;&quot;</span>
-  <span class="k">if</span> <span class="n">colors</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-    <span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">num</span>
-  <span class="n">linestrip</span> <span class="o">=</span> <span class="p">[]</span>
-  <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="n">num</span><span class="p">):</span>
-    <span class="n">linestrip</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">spline</span><span class="p">(</span><span class="n">u</span><span class="p">))</span>
-  <span class="n">handle</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">drawlinestrip</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">linestrip</span><span class="p">),</span> <span class="n">linewidth</span><span class="o">=</span><span class="n">linewidth</span><span class="p">,</span>
-                                                      <span class="n">colors</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">colors</span><span class="p">))</span>
-  <span class="k">return</span> <span class="n">handle</span></div>
+  <span class="n">h</span> <span class="o">=</span> <span class="n">orpy</span><span class="o">.</span><span class="n">misc</span><span class="o">.</span><span class="n">DrawIkparam2</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">ikparam</span><span class="p">,</span> <span class="n">dist</span><span class="o">=</span><span class="n">dist</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="n">linewidth</span><span class="p">,</span>
+                                                                <span class="n">coloradd</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">h</span></div>
 </pre></div>
 
            </div>

@@ -81,6 +81,7 @@
             
             
                 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api-documentation.html">API Documentation</a></li>
 </ul>
 
@@ -128,42 +129,45 @@
             
   <h1>Source code for raveutils.planning</h1><div class="highlight"><pre>
 <span class="ch">#!/usr/bin/env python</span>
-<span class="kn">import</span> <span class="nn">criros</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">openravepy</span> <span class="kn">as</span> <span class="nn">orpy</span>
 
 
-<div class="viewcode-block" id="plan_to_joint_configuration"><a class="viewcode-back" href="../../api-documentation.html#raveutils.planning.plan_to_joint_configuration">[docs]</a><span class="k">def</span> <span class="nf">plan_to_joint_configuration</span><span class="p">(</span><span class="n">robot</span><span class="p">,</span> <span class="n">qgoal</span><span class="p">,</span> <span class="n">planner</span><span class="o">=</span><span class="s1">&#39;birrt&#39;</span><span class="p">,</span> <span class="n">max_iters</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+<div class="viewcode-block" id="plan_to_joint_configuration"><a class="viewcode-back" href="../../api-documentation.html#raveutils.planning.plan_to_joint_configuration">[docs]</a><span class="k">def</span> <span class="nf">plan_to_joint_configuration</span><span class="p">(</span><span class="n">robot</span><span class="p">,</span> <span class="n">qgoal</span><span class="p">,</span> <span class="n">pname</span><span class="o">=</span><span class="s1">&#39;BiRRT&#39;</span><span class="p">,</span> <span class="n">max_iters</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
                                                                 <span class="n">max_ppiters</span><span class="o">=</span><span class="mi">40</span><span class="p">):</span>
   <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">  Plan the trajectory to the given ``qgoal`` configuration.</span>
+<span class="sd">  Plan a trajectory to the given `qgoal` configuration.</span>
 
 <span class="sd">  Parameters</span>
 <span class="sd">  ----------</span>
 <span class="sd">  robot: orpy.Robot</span>
-<span class="sd">    OpenRAVE robot object.</span>
+<span class="sd">    The OpenRAVE robot</span>
 <span class="sd">  qgoal: array_like</span>
-<span class="sd">    The goal configuration.</span>
-<span class="sd">  planner: str</span>
-<span class="sd">    Name of the planning method.</span>
+<span class="sd">    The goal configuration</span>
+<span class="sd">  pname: str</span>
+<span class="sd">    Name of the planning algorithm. Available options are: `BasicRRT`, `BiRRT`</span>
 <span class="sd">  max_iters: float</span>
-<span class="sd">    Maximum iterations of planning.</span>
+<span class="sd">    Maximum iterations for the planning stage</span>
 <span class="sd">  max_ppiters: float</span>
-<span class="sd">    Maximum iterations of post processing.</span>
+<span class="sd">    Maximum iterations for the post-processing stage. It will use a parabolic</span>
+<span class="sd">    smoother wich short-cuts the trajectory and then smooths it</span>
 
 <span class="sd">  Returns</span>
 <span class="sd">  -------</span>
 <span class="sd">  traj: orpy.trajectory</span>
-<span class="sd">    Planned trajectory. If plan fails, return None.</span>
+<span class="sd">    Planned trajectory. If plan fails, this function returns `None`.</span>
 <span class="sd">  &quot;&quot;&quot;</span>
   <span class="n">env</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">GetEnv</span><span class="p">()</span>
-  <span class="n">planner</span> <span class="o">=</span> <span class="n">orpy</span><span class="o">.</span><span class="n">RaveCreatePlanner</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">planner</span><span class="p">)</span>
+  <span class="n">planner</span> <span class="o">=</span> <span class="n">orpy</span><span class="o">.</span><span class="n">RaveCreatePlanner</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">pname</span><span class="p">)</span>
   <span class="n">params</span> <span class="o">=</span> <span class="n">orpy</span><span class="o">.</span><span class="n">Planner</span><span class="o">.</span><span class="n">PlannerParameters</span><span class="p">()</span>
   <span class="n">params</span><span class="o">.</span><span class="n">SetRobotActiveJoints</span><span class="p">(</span><span class="n">robot</span><span class="p">)</span>
   <span class="n">params</span><span class="o">.</span><span class="n">SetGoalConfig</span><span class="p">(</span><span class="n">qgoal</span><span class="p">)</span>
   <span class="n">params</span><span class="o">.</span><span class="n">SetMaxIterations</span><span class="p">(</span><span class="n">max_iters</span><span class="p">)</span>
-  <span class="n">params</span><span class="o">.</span><span class="n">SetPostProcessing</span><span class="p">(</span><span class="s1">&#39;ParabolicSmoother&#39;</span><span class="p">,</span>
-                <span class="s1">&#39;&lt;_nmaxiterations&gt;{0}}&lt;/_nmaxiterations&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">max_ppiters</span><span class="p">))</span>
+  <span class="k">if</span> <span class="n">max_ppiters</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="n">params</span><span class="o">.</span><span class="n">SetPostProcessing</span><span class="p">(</span><span class="s1">&#39;ParabolicSmoother&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;&lt;_nmaxiterations&gt;{0}&lt;/_nmaxiterations&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">max_ppiters</span><span class="p">))</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="n">params</span><span class="o">.</span><span class="n">SetPostProcessing</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
   <span class="n">initsuccess</span> <span class="o">=</span> <span class="n">planner</span><span class="o">.</span><span class="n">InitPlan</span><span class="p">(</span><span class="n">robot</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
   <span class="n">traj</span> <span class="o">=</span> <span class="bp">None</span>
   <span class="k">if</span> <span class="n">initsuccess</span><span class="p">:</span>
@@ -172,6 +176,64 @@
     <span class="n">status</span> <span class="o">=</span> <span class="n">planner</span><span class="o">.</span><span class="n">PlanPath</span><span class="p">(</span><span class="n">traj</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">status</span> <span class="o">!=</span> <span class="n">orpy</span><span class="o">.</span><span class="n">PlannerStatus</span><span class="o">.</span><span class="n">HasSolution</span><span class="p">:</span>
       <span class="n">traj</span> <span class="o">=</span> <span class="bp">None</span>
+  <span class="k">return</span> <span class="n">traj</span></div>
+
+<div class="viewcode-block" id="retime_trajectory"><a class="viewcode-back" href="../../api-documentation.html#raveutils.planning.retime_trajectory">[docs]</a><span class="k">def</span> <span class="nf">retime_trajectory</span><span class="p">(</span><span class="n">robot</span><span class="p">,</span> <span class="n">traj</span><span class="p">,</span> <span class="n">method</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">  Retime an OpenRAVE trajectory using the specified method.</span>
+
+<span class="sd">  Parameters</span>
+<span class="sd">  ----------</span>
+<span class="sd">  robot: orpy.Robot</span>
+<span class="sd">    The OpenRAVE robot</span>
+<span class="sd">  traj: orpy.trajectory</span>
+<span class="sd">    The traj to be retimed. The time paremetrization will be *overwritten*.</span>
+<span class="sd">  method: str</span>
+<span class="sd">    Retiming method. Available options are: `LinearTrajectoryRetimer`,</span>
+<span class="sd">    `ParabolicTrajectoryRetimer`, `CubicTrajectoryRetimer`</span>
+
+<span class="sd">  Returns</span>
+<span class="sd">  -------</span>
+<span class="sd">  status: orpy.PlannerStatus</span>
+<span class="sd">    Flag indicating the status of the trajectory retiming. It can be: `Failed`,</span>
+<span class="sd">    `HasSolution`, `Interrupted` or `InterruptedWithSolution`.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="n">env</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">GetEnv</span><span class="p">()</span>
+  <span class="c1"># Populate planner parameters</span>
+  <span class="n">params</span> <span class="o">=</span> <span class="n">orpy</span><span class="o">.</span><span class="n">Planner</span><span class="o">.</span><span class="n">PlannerParameters</span><span class="p">()</span>
+  <span class="n">params</span><span class="o">.</span><span class="n">SetRobotActiveJoints</span><span class="p">(</span><span class="n">robot</span><span class="p">)</span>
+  <span class="n">params</span><span class="o">.</span><span class="n">SetMaxIterations</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+  <span class="n">params</span><span class="o">.</span><span class="n">SetPostProcessing</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+  <span class="c1"># Generate the trajectory</span>
+  <span class="n">planner</span> <span class="o">=</span> <span class="n">orpy</span><span class="o">.</span><span class="n">RaveCreatePlanner</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span>
+  <span class="n">success</span> <span class="o">=</span> <span class="n">planner</span><span class="o">.</span><span class="n">InitPlan</span><span class="p">(</span><span class="n">robot</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+  <span class="k">if</span> <span class="n">success</span><span class="p">:</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="n">planner</span><span class="o">.</span><span class="n">PlanPath</span><span class="p">(</span><span class="n">traj</span><span class="p">)</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="n">orpy</span><span class="o">.</span><span class="n">PlannerStatus</span><span class="o">.</span><span class="n">Failed</span>
+  <span class="k">return</span> <span class="n">status</span></div>
+
+<div class="viewcode-block" id="trajectory_from_waypoints"><a class="viewcode-back" href="../../api-documentation.html#raveutils.planning.trajectory_from_waypoints">[docs]</a><span class="k">def</span> <span class="nf">trajectory_from_waypoints</span><span class="p">(</span><span class="n">robot</span><span class="p">,</span> <span class="n">waypoints</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">  Generate an OpenRAVE trajectory using the given waypoints.</span>
+
+<span class="sd">  Parameters</span>
+<span class="sd">  ----------</span>
+<span class="sd">  robot: orpy.Robot</span>
+<span class="sd">    The OpenRAVE robot</span>
+<span class="sd">  waypoints: list</span>
+<span class="sd">    List of waypoints (joint configurations)</span>
+
+<span class="sd">  Returns</span>
+<span class="sd">  -------</span>
+<span class="sd">  traj: orpy.trajectory</span>
+<span class="sd">    Resulting OpenRAVE trajectory.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="n">env</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">GetEnv</span><span class="p">()</span>
+  <span class="n">traj</span> <span class="o">=</span> <span class="n">orpy</span><span class="o">.</span><span class="n">RaveCreateTrajectory</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+  <span class="n">traj</span><span class="o">.</span><span class="n">Init</span><span class="p">(</span><span class="n">robot</span><span class="o">.</span><span class="n">GetActiveConfigurationSpecification</span><span class="p">())</span>
+  <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">q</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">waypoints</span><span class="p">):</span>
+    <span class="n">traj</span><span class="o">.</span><span class="n">Insert</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
   <span class="k">return</span> <span class="n">traj</span></div>
 </pre></div>
 

@@ -2,6 +2,14 @@
 API Documentation
 *****************
 
+Conversions
+===========
+
+.. automodule:: raveutils.conversions
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Kinematics
 ==========
 
@@ -17,6 +25,14 @@ Planning
    :members:
    :undoc-members:
    :show-inheritance:
+
+Transforms
+==========
+
+.. automodule:: raveutils.transforms
+  :members:
+  :undoc-members:
+  :show-inheritance:
 
 Visual
 ======

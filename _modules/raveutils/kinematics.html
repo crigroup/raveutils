@@ -81,6 +81,7 @@
             
             
                 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api-documentation.html">API Documentation</a></li>
 </ul>
 
@@ -128,10 +129,10 @@
             
   <h1>Source code for raveutils.kinematics</h1><div class="highlight"><pre>
 <span class="ch">#!/usr/bin/env python</span>
-<span class="kn">import</span> <span class="nn">criros</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">openravepy</span> <span class="kn">as</span> <span class="nn">orpy</span>
-<span class="kn">import</span> <span class="nn">tf.transformations</span> <span class="kn">as</span> <span class="nn">tr</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">conversions</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">transforms</span> <span class="k">as</span> <span class="n">tr</span>
 
 
 <div class="viewcode-block" id="compute_jacobian"><a class="viewcode-back" href="../../api-documentation.html#raveutils.kinematics.compute_jacobian">[docs]</a><span class="k">def</span> <span class="nf">compute_jacobian</span><span class="p">(</span><span class="n">robot</span><span class="p">,</span> <span class="n">link_name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">translation_only</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
@@ -141,14 +142,17 @@
 <span class="sd">  Parameters</span>
 <span class="sd">  ----------</span>
 <span class="sd">  robot: orpy.Robot</span>
-<span class="sd">    OpenRAVE robot object</span>
-<span class="sd">  link_name: str</span>
-<span class="sd">    The name of link</span>
+<span class="sd">    The OpenRAVE robot</span>
+<span class="sd">  link_name: str, optional</span>
+<span class="sd">    The name of link. If it&#39;s `None`, the last link of the kinematic chain is</span>
+<span class="sd">    used</span>
+<span class="sd">  translation_only: bool, optional</span>
+<span class="sd">    If set, only the translation Jacobian is computed</span>
 
 <span class="sd">  Returns</span>
 <span class="sd">  -------</span>
 <span class="sd">  J: array_like</span>
-<span class="sd">    The Jacobian computed matrix</span>
+<span class="sd">    The computed Jacobian matrix</span>
 <span class="sd">  &quot;&quot;&quot;</span>
   <span class="k">if</span> <span class="n">link_name</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
     <span class="n">link_name</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">GetLinks</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">GetName</span><span class="p">()</span>
@@ -158,13 +162,12 @@
   <span class="n">idx</span> <span class="o">=</span> <span class="n">names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">link_name</span><span class="p">)</span>
   <span class="n">origin</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">GetLink</span><span class="p">(</span><span class="n">link_name</span><span class="p">)</span><span class="o">.</span><span class="n">GetTransform</span><span class="p">()[:</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
   <span class="n">manip</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">GetActiveManipulator</span><span class="p">()</span>
-  <span class="n">dof</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">GetActiveDOF</span><span class="p">()</span>
   <span class="n">indices</span> <span class="o">=</span> <span class="n">manip</span><span class="o">.</span><span class="n">GetArmIndices</span><span class="p">()</span>
   <span class="n">Jtrans</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">ComputeJacobianTranslation</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">origin</span><span class="p">)[:,</span><span class="n">indices</span><span class="p">]</span>
   <span class="k">if</span> <span class="n">translation_only</span><span class="p">:</span>
     <span class="n">J</span> <span class="o">=</span> <span class="n">Jtrans</span>
   <span class="k">else</span><span class="p">:</span>
-    <span class="n">J</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">6</span><span class="p">,</span><span class="n">dof</span><span class="p">))</span>
+    <span class="n">J</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">6</span><span class="p">,</span> <span class="n">Jtrans</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
     <span class="n">J</span><span class="p">[:</span><span class="mi">3</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">Jtrans</span>
     <span class="n">J</span><span class="p">[</span><span class="mi">3</span><span class="p">:,:]</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">ComputeJacobianAxisAngle</span><span class="p">(</span><span class="n">idx</span><span class="p">)[:,</span><span class="n">indices</span><span class="p">]</span>
   <span class="k">return</span> <span class="n">J</span></div>
@@ -172,18 +175,19 @@
 <div class="viewcode-block" id="compute_yoshikawa_index"><a class="viewcode-back" href="../../api-documentation.html#raveutils.kinematics.compute_yoshikawa_index">[docs]</a><span class="k">def</span> <span class="nf">compute_yoshikawa_index</span><span class="p">(</span><span class="n">robot</span><span class="p">,</span> <span class="n">link_name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">translation_only</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
                                                       <span class="n">penalize_jnt_limits</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
   <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">  Compute the manipulability Yoshikawa index</span>
+<span class="sd">  Compute the Yoshikawa index (manipulability index)</span>
 
 <span class="sd">  Parameters</span>
 <span class="sd">  ----------</span>
 <span class="sd">  robot: orpy.Robot</span>
-<span class="sd">    OpenRAVE robot object</span>
-<span class="sd">  link_name: str</span>
-<span class="sd">    The name of link for which the index will be computed</span>
-<span class="sd">  translation_only: boolean, optional</span>
-<span class="sd">    If True use only the translation part of the Jacobian matrix to</span>
-<span class="sd">    compute the index. If False use the translation and rotation.</span>
-<span class="sd">  penalize_jnt_limits: boolean, optional</span>
+<span class="sd">    The OpenRAVE robot</span>
+<span class="sd">  link_name: str, optional</span>
+<span class="sd">    The name of link. If it&#39;s `None`, the last link of the kinematic chain is</span>
+<span class="sd">    used.</span>
+<span class="sd">  translation_only: bool, optional</span>
+<span class="sd">    If `True` use only the translation part of the Jacobian matrix to</span>
+<span class="sd">    compute the index. If `False` use the translation and rotation.</span>
+<span class="sd">  penalize_jnt_limits: bool, optional</span>
 <span class="sd">    If True penalize/attenuate the manipulability proportionally</span>
 <span class="sd">    to the *distance* to the joint limits of the robot</span>
 
@@ -215,45 +219,46 @@
   <span class="n">index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span> <span class="nb">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">det</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">J</span><span class="o">.</span><span class="n">T</span><span class="p">)),</span> <span class="mi">0</span><span class="p">)</span> <span class="p">)</span><span class="o">*</span><span class="n">weight</span><span class="o">*</span><span class="n">scale</span>
   <span class="k">return</span> <span class="n">index</span></div>
 
-<div class="viewcode-block" id="find_ik_solutions"><a class="viewcode-back" href="../../api-documentation.html#raveutils.kinematics.find_ik_solutions">[docs]</a><span class="k">def</span> <span class="nf">find_ik_solutions</span><span class="p">(</span><span class="n">robot</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">iktype</span><span class="p">,</span> <span class="n">collision_check</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-                                                                <span class="n">freeinc</span><span class="o">=</span><span class="mf">0.087</span><span class="p">):</span>
+<div class="viewcode-block" id="find_ik_solutions"><a class="viewcode-back" href="../../api-documentation.html#raveutils.kinematics.find_ik_solutions">[docs]</a><span class="k">def</span> <span class="nf">find_ik_solutions</span><span class="p">(</span><span class="n">robot</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">iktype</span><span class="p">,</span> <span class="n">collision_free</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">freeinc</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
   <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">  Find all the possible IK solutions</span>
 
 <span class="sd">  Parameters</span>
 <span class="sd">  ----------</span>
 <span class="sd">  robot: orpy.Robot</span>
-<span class="sd">    OpenRAVE robot object</span>
+<span class="sd">    The OpenRAVE robot</span>
 <span class="sd">  target: array_like or orpy.Ray</span>
-<span class="sd">    The target in Cartesian space. A target can be defined as a Ray</span>
-<span class="sd">    (position and direction) which is 5D or an homogeneous transformation</span>
-<span class="sd">    which is 6D</span>
+<span class="sd">    The target in the task space (Cartesian). A target can be defined as a Ray</span>
+<span class="sd">    (position and direction) which is 5D or as an homogeneous transformation</span>
+<span class="sd">    which is 6D.</span>
 <span class="sd">  iktype: orpy.IkParameterizationType</span>
-<span class="sd">    Inverse kinematics type to use.</span>
-<span class="sd">    Supported values:</span>
-<span class="sd">      - ``orpy.IkParameterizationType.Transform6D``</span>
-<span class="sd">      - ``orpy.IkParameterizationType.TranslationDirection5D``</span>
-<span class="sd">  collision_check: bool, optional</span>
-<span class="sd">    If true find only collision-free solutions</span>
+<span class="sd">    Inverse kinematics type to use. Supported values:</span>
+<span class="sd">    `orpy.IkParameterizationType.Transform6D` and</span>
+<span class="sd">    `orpy.IkParameterizationType.TranslationDirection5D`</span>
+<span class="sd">  collision_free: bool, optional</span>
+<span class="sd">    If true, find only collision-free solutions</span>
+<span class="sd">  freeinc: float, optional</span>
+<span class="sd">    The free increment (discretization) to be used for the free DOF when the</span>
+<span class="sd">    target is 5D.</span>
 
 <span class="sd">  Returns</span>
 <span class="sd">  -------</span>
 <span class="sd">  solutions: list</span>
-<span class="sd">    The found IK solutions</span>
+<span class="sd">    The list of IK solutions found</span>
 <span class="sd">  &quot;&quot;&quot;</span>
   <span class="c1"># Populate the target list</span>
   <span class="n">target_list</span> <span class="o">=</span> <span class="p">[]</span>
   <span class="k">if</span> <span class="n">iktype</span> <span class="o">==</span> <span class="n">orpy</span><span class="o">.</span><span class="n">IkParameterizationType</span><span class="o">.</span><span class="n">TranslationDirection5D</span><span class="p">:</span>
     <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">target</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">orpy</span><span class="o">.</span><span class="n">Ray</span><span class="p">:</span>
-      <span class="n">ray</span> <span class="o">=</span> <span class="n">criros</span><span class="o">.</span><span class="n">conversions</span><span class="o">.</span><span class="n">to_ray</span><span class="p">(</span><span class="n">goal</span><span class="p">)</span>
+      <span class="n">ray</span> <span class="o">=</span> <span class="n">conversions</span><span class="o">.</span><span class="n">to_ray</span><span class="p">(</span><span class="n">goal</span><span class="p">)</span>
       <span class="n">target_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ray</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
       <span class="n">target_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
   <span class="k">elif</span> <span class="n">iktype</span> <span class="o">==</span> <span class="n">orpy</span><span class="o">.</span><span class="n">IkParameterizationType</span><span class="o">.</span><span class="n">Transform6D</span><span class="p">:</span>
     <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">target</span><span class="p">)</span> <span class="ow">is</span> <span class="n">orpy</span><span class="o">.</span><span class="n">Ray</span><span class="p">:</span>
-      <span class="n">Tray</span> <span class="o">=</span> <span class="n">criros</span><span class="o">.</span><span class="n">conversions</span><span class="o">.</span><span class="n">from_ray</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+      <span class="n">Tray</span> <span class="o">=</span> <span class="n">conversions</span><span class="o">.</span><span class="n">from_ray</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
       <span class="k">for</span> <span class="n">angle</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">freeinc</span><span class="p">):</span>
-        <span class="n">Toffset</span> <span class="o">=</span> <span class="n">tr</span><span class="o">.</span><span class="n">rotation_matrix</span><span class="p">(</span><span class="n">angle</span><span class="p">,</span> <span class="n">criros</span><span class="o">.</span><span class="n">spalg</span><span class="o">.</span><span class="n">Z_AXIS</span><span class="p">)</span>
+        <span class="n">Toffset</span> <span class="o">=</span> <span class="n">orpy</span><span class="o">.</span><span class="n">matrixFromAxisAngle</span><span class="p">(</span><span class="n">angle</span><span class="o">*</span><span class="n">Z_AXIS</span><span class="p">)</span>
         <span class="n">target_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Tray</span><span class="p">,</span> <span class="n">Toffset</span><span class="p">))</span>
     <span class="k">else</span><span class="p">:</span>
       <span class="n">target_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
@@ -263,7 +268,7 @@
     <span class="n">ikparam</span> <span class="o">=</span> <span class="n">orpy</span><span class="o">.</span><span class="n">IkParameterization</span><span class="p">(</span><span class="n">goal</span><span class="p">,</span> <span class="n">iktype</span><span class="p">)</span>
     <span class="n">manipulator</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">GetActiveManipulator</span><span class="p">()</span>
     <span class="n">opt</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">if</span> <span class="n">collision_check</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">collision_free</span><span class="p">:</span>
       <span class="n">opt</span> <span class="o">=</span> <span class="n">orpy</span><span class="o">.</span><span class="n">IkFilterOptions</span><span class="o">.</span><span class="n">CheckEnvCollisions</span>
     <span class="n">solutions</span> <span class="o">+=</span> <span class="nb">list</span><span class="p">(</span><span class="n">manipulator</span><span class="o">.</span><span class="n">FindIKSolutions</span><span class="p">(</span><span class="n">ikparam</span><span class="p">,</span> <span class="n">opt</span><span class="p">))</span>
   <span class="k">return</span> <span class="n">solutions</span></div>
@@ -276,18 +281,19 @@
 <span class="sd">  Parameters</span>
 <span class="sd">  ----------</span>
 <span class="sd">  robot: orpy.Robot</span>
-<span class="sd">    OpenRAVE robot object</span>
+<span class="sd">    The OpenRAVE robot</span>
 <span class="sd">  iktype: orpy.IkParameterizationType</span>
-<span class="sd">    Inverse kinematics type to use</span>
+<span class="sd">    Inverse kinematics type to be used</span>
 <span class="sd">  freeinc: list</span>
-<span class="sd">    Free increment for the ``TranslationDirection5D`` iktype</span>
+<span class="sd">    The free increment (discretization) to be used for the free DOF when the</span>
+<span class="sd">    target is the `iktype` is `TranslationDirection5D`</span>
 <span class="sd">  autogenerate: bool, optional</span>
-<span class="sd">    If true automatically generate the inverse kinematics solver</span>
+<span class="sd">    If true, auto-generate the IKFast solver</span>
 
 <span class="sd">  Returns</span>
 <span class="sd">  -------</span>
 <span class="sd">  success: bool</span>
-<span class="sd">    True if succeeded, False otherwise</span>
+<span class="sd">    `True` if succeeded, `False` otherwise</span>
 <span class="sd">  &quot;&quot;&quot;</span>
   <span class="c1"># Improve code readability</span>
   <span class="kn">from</span> <span class="nn">openravepy.databases.inversekinematics</span> <span class="kn">import</span> <span class="n">InverseKinematicsModel</span>
@@ -318,8 +324,30 @@
 
 <div class="viewcode-block" id="load_link_stats"><a class="viewcode-back" href="../../api-documentation.html#raveutils.kinematics.load_link_stats">[docs]</a><span class="k">def</span> <span class="nf">load_link_stats</span><span class="p">(</span><span class="n">robot</span><span class="p">,</span> <span class="n">xyzdelta</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">autogenerate</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
   <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">  TODO: Document load_link_stats</span>
+<span class="sd">  Load/generate the `Link Statistics` database which contains statistics on body</span>
+<span class="sd">  links like swept volumes.</span>
+
+<span class="sd">  When using link statics, it is possible to set the joints weights and</span>
+<span class="sd">  resolutions so that planning is fastest. The `xyzdelta` parameter specifies</span>
+<span class="sd">  the smallest object that can be found in the environment, this becomes the new</span>
+<span class="sd">  discretization factor when checking collision. Higher values mean faster</span>
+<span class="sd">  planning.</span>
+
+<span class="sd">  Parameters</span>
+<span class="sd">  ----------</span>
+<span class="sd">  robot: orpy.Robot</span>
+<span class="sd">    The OpenRAVE robot</span>
+<span class="sd">  xyzdelta: float</span>
+<span class="sd">    Smallest object that can be found in the environment (meters)</span>
+<span class="sd">  autogenerate: bool, optional</span>
+<span class="sd">    If true, auto-generate the `Link Statistics` database</span>
+
+<span class="sd">  Returns</span>
+<span class="sd">  -------</span>
+<span class="sd">  success: bool</span>
+<span class="sd">    `True` if succeeded, `False` otherwise</span>
 <span class="sd">  &quot;&quot;&quot;</span>
+  <span class="n">success</span> <span class="o">=</span> <span class="bp">False</span>
   <span class="n">statsmodel</span> <span class="o">=</span> <span class="n">orpy</span><span class="o">.</span><span class="n">databases</span><span class="o">.</span><span class="n">linkstatistics</span><span class="o">.</span><span class="n">LinkStatisticsModel</span><span class="p">(</span><span class="n">robot</span><span class="p">)</span>
   <span class="k">if</span> <span class="ow">not</span> <span class="n">statsmodel</span><span class="o">.</span><span class="n">load</span><span class="p">()</span> <span class="ow">and</span> <span class="n">autogenerate</span><span class="p">:</span>
     <span class="k">print</span> <span class="s1">&#39;Generating LinkStatistics database. Will take ~1 minute...&#39;</span>
@@ -327,6 +355,7 @@
   <span class="k">if</span> <span class="n">statsmodel</span><span class="o">.</span><span class="n">load</span><span class="p">():</span>
     <span class="n">statsmodel</span><span class="o">.</span><span class="n">setRobotWeights</span><span class="p">()</span>
     <span class="n">statsmodel</span><span class="o">.</span><span class="n">setRobotResolutions</span><span class="p">(</span><span class="n">xyzdelta</span><span class="o">=</span><span class="n">xyzdelta</span><span class="p">)</span>
+    <span class="n">success</span> <span class="o">=</span> <span class="bp">True</span>
   <span class="k">else</span><span class="p">:</span>
     <span class="n">manip</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">GetActiveManipulator</span><span class="p">()</span>
     <span class="n">indices</span> <span class="o">=</span> <span class="n">manip</span><span class="o">.</span><span class="n">GetArmIndices</span><span class="p">()</span>
@@ -345,7 +374,26 @@
       <span class="n">robot</span><span class="o">.</span><span class="n">SetDOFWeights</span><span class="p">(</span><span class="n">robot_weights</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
       <span class="n">robot</span><span class="o">.</span><span class="n">SetDOFWeights</span><span class="p">([</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">robot</span><span class="o">.</span><span class="n">GetDOF</span><span class="p">())</span>
-  <span class="k">return</span> <span class="n">robot</span><span class="o">.</span><span class="n">GetDOFWeights</span><span class="p">()</span></div>
+  <span class="k">return</span> <span class="n">success</span></div>
+
+<div class="viewcode-block" id="random_joint_values"><a class="viewcode-back" href="../../api-documentation.html#raveutils.kinematics.random_joint_values">[docs]</a><span class="k">def</span> <span class="nf">random_joint_values</span><span class="p">(</span><span class="n">robot</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">  Generate random joint values within the joint limits of the robot.</span>
+
+<span class="sd">  Parameters</span>
+<span class="sd">  ----------</span>
+<span class="sd">  robot: orpy.Robot</span>
+<span class="sd">    The OpenRAVE robot</span>
+
+<span class="sd">  Returns</span>
+<span class="sd">  -------</span>
+<span class="sd">  values: array_like</span>
+<span class="sd">    The random joint values</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="c1"># Get the limits of the active DOFs</span>
+  <span class="n">lower</span><span class="p">,</span> <span class="n">upper</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">GetActiveDOFLimits</span><span class="p">()</span>
+  <span class="n">values</span> <span class="o">=</span> <span class="n">lower</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">lower</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="n">upper</span><span class="o">-</span><span class="n">lower</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">values</span></div>
 </pre></div>
 
            </div>
