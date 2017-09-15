@@ -49,4 +49,6 @@ before_script:
 # Compile
 script:
   - cd ~/catkin_ws
-  - catkin_make test
+  - catkin_make
+  - cd src/raveutils/tests/
+  - nosetests -v -s
