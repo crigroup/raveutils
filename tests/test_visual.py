@@ -2,7 +2,7 @@
 import unittest
 import numpy as np
 import openravepy as orpy
-from raveutils import visual
+from raveutils import visual as orvis
 
 
 class TestModule(unittest.TestCase):
@@ -26,7 +26,7 @@ class TestModule(unittest.TestCase):
     angle = np.deg2rad(45)
     transform = orpy.matrixFromAxisAngle(angle*axis)
     transform[:3,3] = np.random.randn(3)*0.5
-    h = visual.draw_axes(self.env, transform)
+    h = orvis.draw_axes(self.env, transform)
     self.assertEqual(len(h), 1)
     self.assertEqual(type(h[0]), orpy.GraphHandle)
 
@@ -37,13 +37,13 @@ class TestModule(unittest.TestCase):
     angle = np.deg2rad(45)
     transform = orpy.matrixFromAxisAngle(angle*axis)
     transform[:3,3] = np.random.randn(3)*0.5
-    h = visual.draw_plane(self.env, transform)
+    h = orvis.draw_plane(self.env, transform)
     self.assertEqual(type(h), orpy.GraphHandle)
 
   def test_draw_point(self):
     np.random.seed(123)
     point = np.random.randn(3)
-    h = visual.draw_point(self.env, point)
+    h = orvis.draw_point(self.env, point)
     self.assertEqual(len(h), 1)
     self.assertEqual(type(h[0]), orpy.GraphHandle)
 
@@ -53,7 +53,7 @@ class TestModule(unittest.TestCase):
     direction /= np.linalg.norm(direction)
     position = np.random.randn(3)*0.5
     ray = orpy.Ray(position, direction)
-    handles = visual.draw_ray(self.env, ray)
+    handles = orvis.draw_ray(self.env, ray)
     self.assertEqual(len(handles), 3)
     types = [type(h) for h in handles]
     self.assertEqual(len(set(types)), 1)

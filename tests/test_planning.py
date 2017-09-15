@@ -2,7 +2,8 @@
 import unittest
 import numpy as np
 import openravepy as orpy
-from raveutils import kinematics, planning
+from raveutils import kinematics as orkin
+from raveutils import planning as orplan
 
 
 class TestModule(unittest.TestCase):
@@ -29,25 +30,25 @@ class TestModule(unittest.TestCase):
   def test_plan_to_joint_configuration(self):
     robot = self.robot
     np.random.seed(123)
-    qgoal = kinematics.random_joint_values(robot)
+    qgoal = orkin.random_joint_values(robot)
     # Test all the available planners
-    traj = planning.plan_to_joint_configuration(robot, qgoal, pname='BiRRT')
+    traj = orplan.plan_to_joint_configuration(robot, qgoal, pname='BiRRT')
     self.assertNotEqual(traj, None)
-    traj = planning.plan_to_joint_configuration(robot, qgoal, pname='BasicRRT')
+    traj = orplan.plan_to_joint_configuration(robot, qgoal, pname='BasicRRT')
     self.assertNotEqual(traj, None)
 
   def test_retime_trajectory(self):
     robot = self.robot
     np.random.seed(123)
-    qgoal = kinematics.random_joint_values(robot)
-    traj = planning.plan_to_joint_configuration(robot, qgoal, pname='BiRRT')
+    qgoal = orkin.random_joint_values(robot)
+    traj = orplan.plan_to_joint_configuration(robot, qgoal, pname='BiRRT')
     # Test all the available retiming methods
-    status = planning.retime_trajectory(robot, traj, 'LinearTrajectoryRetimer')
+    status = orplan.retime_trajectory(robot, traj, 'LinearTrajectoryRetimer')
     self.assertEqual(status, orpy.PlannerStatus.HasSolution)
-    status = planning.retime_trajectory(robot, traj,
+    status = orplan.retime_trajectory(robot, traj,
                                                   'ParabolicTrajectoryRetimer')
     self.assertEqual(status, orpy.PlannerStatus.HasSolution)
-    status = planning.retime_trajectory(robot, traj, 'CubicTrajectoryRetimer')
+    status = orplan.retime_trajectory(robot, traj, 'CubicTrajectoryRetimer')
     self.assertEqual(status, orpy.PlannerStatus.HasSolution)
 
   def test_trajectory_from_waypoints(self):
@@ -55,6 +56,6 @@ class TestModule(unittest.TestCase):
     np.random.seed(123)
     waypoints = []
     for i in range(5):
-      waypoints.append(kinematics.random_joint_values(robot))
-    traj = planning.trajectory_from_waypoints(robot, waypoints)
+      waypoints.append(orkin.random_joint_values(robot))
+    traj = orplan.trajectory_from_waypoints(robot, waypoints)
     self.assertEqual(traj.GetNumWaypoints(), len(waypoints))
