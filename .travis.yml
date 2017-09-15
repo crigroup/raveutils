@@ -48,6 +48,5 @@ before_script:
 
 # Compile
 script:
-  - source /opt/ros/indigo/setup.bash
   - cd ~/catkin_ws
   - catkin_make test
