@@ -51,6 +51,4 @@ script:
   - cd ~/catkin_ws
   - catkin_make
   - source devel/setup.bash
-  - echo $ROS_PACKAGE_PATH
-  - cd src/raveutils/tests/
-  - nosetests -v -s
+  - catkin_make test
