@@ -32,10 +32,14 @@ class TestModule(unittest.TestCase):
     np.random.seed(123)
     qgoal = orkin.random_joint_values(robot)
     # Test all the available planners
-    traj = orplan.plan_to_joint_configuration(robot, qgoal, pname='BiRRT')
-    self.assertNotEqual(traj, None)
+    traj1 = orplan.plan_to_joint_configuration(robot, qgoal, pname='BiRRT')
+    self.assertNotEqual(traj1, None)
     traj = orplan.plan_to_joint_configuration(robot, qgoal, pname='BasicRRT')
     self.assertNotEqual(traj, None)
+    # Test swaping option
+    traj2 = orplan.plan_to_joint_configuration(robot, qgoal, pname='BiRRT',
+                                                                  try_swap=True)
+    self.assertNotEqual(traj2, None)
 
   def test_retime_trajectory(self):
     robot = self.robot

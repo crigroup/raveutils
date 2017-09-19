@@ -1,10 +1,11 @@
 #!/usr/bin/env python
+import itertools
 import numpy as np
 import openravepy as orpy
 
 
 def plan_to_joint_configuration(robot, qgoal, pname='BiRRT', max_iters=20,
-                                                                max_ppiters=40):
+                                                max_ppiters=40, try_swap=False):
   """
   Plan a trajectory to the given `qgoal` configuration.
 
@@ -21,32 +22,46 @@ def plan_to_joint_configuration(robot, qgoal, pname='BiRRT', max_iters=20,
   max_ppiters: float
     Maximum iterations for the post-processing stage. It will use a parabolic
     smoother wich short-cuts the trajectory and then smooths it
+  try_swap: bool
+    If set will compute two trajectories: first `qstart` -> `qgoal`, second
+    `qgoal` -> `qstart` and will select the minimum duration one.
 
   Returns
   -------
   traj: orpy.trajectory
     Planned trajectory. If plan fails, this function returns `None`.
   """
+  qstart = robot.GetActiveDOFValues()
   env = robot.GetEnv()
   planner = orpy.RaveCreatePlanner(env, pname)
   params = orpy.Planner.PlannerParameters()
-  params.SetRobotActiveJoints(robot)
-  params.SetGoalConfig(qgoal)
   params.SetMaxIterations(max_iters)
   if max_ppiters > 0:
     params.SetPostProcessing('ParabolicSmoother',
                 '<_nmaxiterations>{0}</_nmaxiterations>'.format(max_ppiters))
   else:
     params.SetPostProcessing('', '')
-  initsuccess = planner.InitPlan(robot, params)
-  traj = None
-  if initsuccess:
-    # Plan a trajectory
-    traj = orpy.RaveCreateTrajectory(env, '')
-    status = planner.PlanPath(traj)
-    if status != orpy.PlannerStatus.HasSolution:
-      traj = None
-  return traj
+  # Plan trajectory
+  best_traj = None
+  min_duration = float('inf')
+  for qa, qb in itertools.permutations([qstart, qgoal], 2):
+    with robot:
+      robot.SetActiveDOFValues(qa)
+      params.SetGoalConfig(qb)
+      params.SetRobotActiveJoints(robot)
+      initsuccess = planner.InitPlan(robot, params)
+      if initsuccess:
+        traj = orpy.RaveCreateTrajectory(env, '')
+        status = planner.PlanPath(traj)             # Plan the trajectory
+        if status == orpy.PlannerStatus.HasSolution:
+          duration = traj.GetDuration()
+          if duration < min_duration:
+            min_duration = duration
+            best_traj = orpy.RaveCreateTrajectory(env, traj.GetXMLId())
+            best_traj.Clone(traj, 0)
+    if not try_swap:
+      break
+  return best_traj
 
 def retime_trajectory(robot, traj, method):
   """
