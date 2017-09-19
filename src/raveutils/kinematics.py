@@ -128,7 +128,7 @@ def find_ik_solutions(robot, target, iktype, collision_free=True, freeinc=0.1):
     if type(target) is orpy.Ray:
       Tray = conversions.from_ray(target)
       for angle in np.arange(0, 2*np.pi, freeinc):
-        Toffset = orpy.matrixFromAxisAngle(angle*Z_AXIS)
+        Toffset = orpy.matrixFromAxisAngle(angle*tr.Z_AXIS)
         target_list.append(np.dot(Tray, Toffset))
     else:
       target_list.append(target)
