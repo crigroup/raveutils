@@ -28,7 +28,7 @@ def plan_to_joint_configuration(robot, qgoal, pname='BiRRT', max_iters=20,
 
   Returns
   -------
-  traj: orpy.trajectory
+  traj: orpy.Trajectory
     Planned trajectory. If plan fails, this function returns `None`.
   """
   qstart = robot.GetActiveDOFValues()
@@ -79,7 +79,7 @@ def retime_trajectory(robot, traj, method):
   ----------
   robot: orpy.Robot
     The OpenRAVE robot
-  traj: orpy.trajectory
+  traj: orpy.Trajectory
     The traj to be retimed. The time paremetrization will be *overwritten*.
   method: str
     Retiming method. Available options are: `LinearTrajectoryRetimer`,
@@ -119,7 +119,7 @@ def trajectory_from_waypoints(robot, waypoints):
 
   Returns
   -------
-  traj: orpy.trajectory
+  traj: orpy.Trajectory
     Resulting OpenRAVE trajectory.
   """
   env = robot.GetEnv()
