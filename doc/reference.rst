@@ -1,6 +1,22 @@
-*****************
-API Documentation
-*****************
+*************
+API Reference
+*************
+
+Body
+====
+
+.. automodule:: raveutils.body
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Camera
+======
+
+.. automodule:: raveutils.camera
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 Conversions
 ===========
@@ -17,6 +33,14 @@ Kinematics
    :members:
    :undoc-members:
    :show-inheritance:
+
+Meshes
+======
+
+.. automodule:: raveutils.mesh
+  :members:
+  :undoc-members:
+  :show-inheritance:
 
 Planning
 ========
