@@ -39,6 +39,7 @@ install:
   - catkin_make
   - source devel/setup.bash
   - cd ~/catkin_ws/src
+  - git clone https://github.com/crigroup/openrave_catkin.git
   - ln -s $CI_SOURCE_PATH .
 
 # Install all dependencies

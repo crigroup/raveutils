@@ -1,7 +1,10 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(raveutils)
 
-find_package(catkin REQUIRED)
+find_package(catkin REQUIRED COMPONENTS
+  openrave_catkin
+)
+
 find_package(OpenRAVE REQUIRED)
 
 catkin_python_setup()
@@ -16,3 +19,6 @@ catkin_add_nosetests(tests/test_kinematics.py)
 catkin_add_nosetests(tests/test_planning.py)
 catkin_add_nosetests(tests/test_transforms.py)
 # test_visual.py is skipped because it will make travis fail
+
+install(DIRECTORY data DESTINATION ${OpenRAVE_DEVEL_DIR})
+install(DIRECTORY data DESTINATION ${OpenRAVE_INSTALL_DIR})
