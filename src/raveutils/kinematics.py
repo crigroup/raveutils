@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 import numpy as np
 import openravepy as orpy
-from . import conversions
-from . import transforms as tr
+# Local modules
+import raveutils as ru
 
 
 def compute_jacobian(robot, link_name=None, translation_only=False):
@@ -120,15 +120,15 @@ def find_ik_solutions(robot, target, iktype, collision_free=True, freeinc=0.1):
   target_list = []
   if iktype == orpy.IkParameterizationType.TranslationDirection5D:
     if type(target) is not orpy.Ray:
-      ray = conversions.to_ray(goal)
+      ray = ru.conversions.to_ray(goal)
       target_list.append(ray)
     else:
       target_list.append(target)
   elif iktype == orpy.IkParameterizationType.Transform6D:
     if type(target) is orpy.Ray:
-      Tray = conversions.from_ray(target)
+      Tray = ru.conversions.from_ray(target)
       for angle in np.arange(0, 2*np.pi, freeinc):
-        Toffset = orpy.matrixFromAxisAngle(angle*tr.Z_AXIS)
+        Toffset = orpy.matrixFromAxisAngle(angle*ru.transforms.Z_AXIS)
         target_list.append(np.dot(Tray, Toffset))
     else:
       target_list.append(target)

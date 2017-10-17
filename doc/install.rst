@@ -1,6 +1,6 @@
-************
-Installation
-************
+*******
+Install
+*******
 
 The following instructions have been tested in **Ubuntu 16.04** (Xenial), 64
 bits.
@@ -41,9 +41,10 @@ Go to your ROS working directory::
 
   cd ~/catkin_ws/src
 
-Clone this repository::
+Clone these repositories::
 
   git clone https://github.com/crigroup/raveutils.git
+  git clone https://github.com/crigroup/openrave_catkin.git
 
 Install any missing dependencies using rosdep::
 

@@ -299,4 +299,11 @@ texinfo_documents = [
 
 
 # Example configuration for intersphinx: refer to the Python standard library.
-intersphinx_mapping = {'https://docs.python.org/': None}
+intersphinx_mapping = {
+  'python': ('https://docs.python.org/', None),
+  'numpy':  ('http://docs.scipy.org/doc/numpy/', None),
+  'scipy':  ('http://docs.scipy.org/doc/scipy/reference', None)
+}
+
+# Document __special__ class methods as well
+autoclass_content = 'both'

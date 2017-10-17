@@ -9,6 +9,23 @@ Y_AXIS = np.array([0., 1., 0.], dtype=np.float64)
 Z_AXIS = np.array([0., 0., 1.], dtype=np.float64)
 
 
+def counterclockwise_hull(hull):
+  """
+  Make the edges counterclockwise order
+
+  Parameters
+  ----------
+  hull: scipy.spatial.ConvexHull
+    Convex hull to be re-ordered.
+  """
+  midpoint = np.sum(hull.points, axis=0) / hull.points.shape[0]
+  for i,simplex in enumerate(hull.simplices):
+    x, y, z = hull.points[simplex]
+    voutward = (x + y + z) / 3 - midpoint
+    vccw = np.cross((y - x), (z - y))
+    if np.inner(vccw, voutward) < 0:
+      hull.simplices[i] = [simplex[0], simplex[2], simplex[1]]
+
 def perpendicular_vector(vector):
   """
   Find an arbitrary perpendicular vector
@@ -47,7 +64,7 @@ def transform_between_axes(axis_a, axis_b):
   Returns
   -------
   transform: array_like
-    The transformation that transforms axis `axis_a` into axis `axis_b`
+    The transformation that transforms axis ``axis_a`` into axis ``axis_b``
   """
   a_unit = unit_vector(axis_a)
   b_unit = unit_vector(axis_b)
@@ -60,13 +77,12 @@ def transform_between_axes(axis_a, axis_b):
   transform = orpy.matrixFromAxisAngle(angle*axis)
   return transform
 
-
 def transform_inv(transform):
   """
   Compute the inverse of an homogeneous transformation.
 
-  .. note:: This function is more efficient than using ``numpy.linalg.inv``
-    given the special properties of the homogeneous transformations.
+  .. note:: This function is more efficient than :obj:`numpy.linalg.inv` given
+    the special properties of homogeneous transformations.
 
   Parameters
   ----------

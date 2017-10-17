@@ -2,18 +2,18 @@
 import unittest
 import numpy as np
 import openravepy as orpy
-from raveutils import conversions as orconv
-import raveutils.transforms as tr
+# Tested package
+import raveutils as ru
 
 
-class TestModule(unittest.TestCase):
+class Test_conversions(unittest.TestCase):
   def test_ray_conversions(self):
     # Create the ray
     position = np.array([0.5,  -0.25,  0.1])
-    direction = tr.unit_vector([-0.2506, 0.6846, 0.6846])
+    direction = ru.transforms.unit_vector([-0.2506, 0.6846, 0.6846])
     ray = orpy.Ray(position, direction)
     # Check that the conversion works in both direction
-    transform = orconv.from_ray(ray)
-    ray_from_transform = orconv.to_ray(transform)
+    transform = ru.conversions.from_ray(ray)
+    ray_from_transform = ru.conversions.to_ray(transform)
     np.testing.assert_allclose(ray.pos(), ray_from_transform.pos())
     np.testing.assert_allclose(ray.dir(), ray_from_transform.dir())

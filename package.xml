@@ -13,10 +13,20 @@
 
   <buildtool_depend>catkin</buildtool_depend>
 
-  <depend>python-numpy</depend>
+  <depend>openrave_catkin</depend>
+  <depend>rospy</depend>
+
+  <exec_depend>image_geometry</exec_depend>
+  <exec_depend>python-numpy</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>trajectory_msgs</exec_depend>
 
   <doc_depend>python-sphinx</doc_depend>
   <doc_depend>python-sphinx-rtd-theme</doc_depend>
   <doc_depend>rosdoc_lite</doc_depend>
+
+  <export>
+    <rosdoc config="rosdoc.yaml"/>
+  </export>
 
 </package>
