@@ -52,6 +52,6 @@ script:
   - cd ~/catkin_ws
   - catkin_make install
   - source devel/setup.bash
-  - cd ~/catkin_ws/src/criutils
+  - cd ~/catkin_ws/src/raveutils/tests
   # Test all the modules except for visual
   - nosetests -e test_visual -v
