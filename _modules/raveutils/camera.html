@@ -1,0 +1,306 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>raveutils.camera &mdash; raveutils 0.1.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="raveutils 0.1.1 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> raveutils
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">raveutils</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+    <li>raveutils.camera</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for raveutils.camera</h1><div class="highlight"><pre>
+<span class="ch">#!/usr/bin/env python</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">openravepy</span> <span class="kn">as</span> <span class="nn">orpy</span>
+<span class="kn">from</span> <span class="nn">scipy.spatial</span> <span class="kn">import</span> <span class="n">ConvexHull</span><span class="p">,</span> <span class="n">Delaunay</span>
+<span class="c1"># Image geometry</span>
+<span class="kn">from</span> <span class="nn">image_geometry</span> <span class="kn">import</span> <span class="n">PinholeCameraModel</span>
+<span class="c1"># Local modules</span>
+<span class="kn">import</span> <span class="nn">raveutils</span> <span class="kn">as</span> <span class="nn">ru</span>
+
+
+<div class="viewcode-block" id="CameraFOV"><a class="viewcode-back" href="../../reference.html#raveutils.camera.CameraFOV">[docs]</a><span class="k">class</span> <span class="nc">CameraFOV</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">  Base class for the field-of-view of a Pin hole camera.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">camera_info</span><span class="p">,</span> <span class="n">maxdist</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    camera_info: sensor_msgs/CameraInfo</span>
+<span class="sd">      Meta information of the camera. For more details check the</span>
+<span class="sd">      `sensor_msgs/CameraInfo</span>
+<span class="sd">      &lt;http://docs.ros.org/api/sensor_msgs/html/msg/CameraInfo.html&gt;`_</span>
+<span class="sd">      documentation.</span>
+<span class="sd">    maxdist: float</span>
+<span class="sd">     Maximum distance the FOV covers in the Z direction of the camera frame.</span>
+<span class="sd">    transform: array_like</span>
+<span class="sd">     Homogenous transformation of the camera reference frame. If `None` then</span>
+<span class="sd">     the identity matrix is used.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">transform</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+      <span class="n">transform</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">maxdist</span> <span class="o">=</span> <span class="n">maxdist</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">transform</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">transform</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">cam_model</span> <span class="o">=</span> <span class="n">PinholeCameraModel</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">cam_model</span><span class="o">.</span><span class="n">fromCameraInfo</span><span class="p">(</span><span class="n">camera_info</span><span class="p">)</span>
+    <span class="c1"># Compute FOV corners</span>
+    <span class="n">delta_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cam_model</span><span class="o">.</span><span class="n">getDeltaX</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_model</span><span class="o">.</span><span class="n">width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxdist</span><span class="p">)</span>
+    <span class="n">delta_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cam_model</span><span class="o">.</span><span class="n">getDeltaY</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_model</span><span class="o">.</span><span class="n">height</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxdist</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">corners</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">corners</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">transform</span><span class="p">[:</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+    <span class="n">idx</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]):</span>
+      <span class="n">point</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxdist</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+      <span class="n">point</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">delta_x</span><span class="p">,</span> <span class="n">delta_y</span><span class="p">])</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">corners</span><span class="p">[</span><span class="n">idx</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">transform</span><span class="p">,</span> <span class="n">point</span><span class="p">)[:</span><span class="mi">3</span><span class="p">]</span>
+      <span class="n">idx</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<div class="viewcode-block" id="CameraFOV.get_corners"><a class="viewcode-back" href="../../reference.html#raveutils.camera.CameraFOV.get_corners">[docs]</a>  <span class="k">def</span> <span class="nf">get_corners</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the five corners of the camera field of view</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    corners: array_like</span>
+<span class="sd">      A 5x3 array with the five corners of the camera field of view</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">corners</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corners</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">corners</span></div>
+
+<div class="viewcode-block" id="CameraFOV.get_trimesh"><a class="viewcode-back" href="../../reference.html#raveutils.camera.CameraFOV.get_trimesh">[docs]</a>  <span class="k">def</span> <span class="nf">get_trimesh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the convex hull that representes the field of view as a trimesh</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    vertices: array_like</span>
+<span class="sd">      The trimesh vertices</span>
+<span class="sd">    faces: array_like</span>
+<span class="sd">      The trimesh faces</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    raveutils.mesh.trimesh_from_point_cloud</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">corners</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_corners</span><span class="p">()</span>
+    <span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span> <span class="o">=</span> <span class="n">ru</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">trimesh_from_point_cloud</span><span class="p">(</span><span class="n">corners</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span></div>
+
+<div class="viewcode-block" id="CameraFOV.contains"><a class="viewcode-back" href="../../reference.html#raveutils.camera.CameraFOV.contains">[docs]</a>  <span class="k">def</span> <span class="nf">contains</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">points</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check if all the XYZ points are inside the camera field of view</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    points: array_like</span>
+<span class="sd">      List of XYZ points</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    all_inside: bool</span>
+<span class="sd">      True if all the points are inside the FOV. False otherwise.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">hull</span> <span class="o">=</span> <span class="n">ConvexHull</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corners</span><span class="p">)</span>
+    <span class="n">triangulation</span> <span class="o">=</span> <span class="n">Delaunay</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corners</span><span class="p">[</span><span class="n">hull</span><span class="o">.</span><span class="n">vertices</span><span class="p">])</span>
+    <span class="n">all_inside</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">alltrue</span><span class="p">(</span><span class="n">triangulation</span><span class="o">.</span><span class="n">find_simplex</span><span class="p">(</span><span class="n">points</span><span class="p">)</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">all_inside</span></div>
+
+<div class="viewcode-block" id="CameraFOV.random_point_inside"><a class="viewcode-back" href="../../reference.html#raveutils.camera.CameraFOV.random_point_inside">[docs]</a>  <span class="k">def</span> <span class="nf">random_point_inside</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate a random XYZ point inside the camera field of view</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    random_point: array_like</span>
+<span class="sd">      The random XYZ point inside the camera field of view</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxdist</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
+    <span class="n">delta_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cam_model</span><span class="o">.</span><span class="n">getDeltaX</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_model</span><span class="o">.</span><span class="n">width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+    <span class="n">delta_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cam_model</span><span class="o">.</span><span class="n">getDeltaY</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_model</span><span class="o">.</span><span class="n">height</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+    <span class="n">point</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+    <span class="n">point</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">delta_x</span><span class="p">,</span><span class="n">delta_y</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random_sample</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">-</span><span class="mf">1.</span><span class="p">)</span>
+    <span class="n">random_point</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">,</span> <span class="n">point</span><span class="p">)[:</span><span class="mi">3</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">random_point</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, CRI Group.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.1.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

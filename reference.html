@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>API Documentation &mdash; raveutils 0.1.0 documentation</title>
+  <title>API Reference &mdash; raveutils 0.1.1 documentation</title>
   
 
   
@@ -30,8 +30,8 @@
   
 
   
-    <link rel="top" title="raveutils 0.1.0 documentation" href="index.html"/>
-        <link rel="prev" title="Installation" href="installation.html"/> 
+    <link rel="top" title="raveutils 0.1.1 documentation" href="index.html"/>
+        <link rel="prev" title="Install" href="install.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.1.0
+                0.1.1
               </div>
             
           
@@ -81,10 +81,13 @@
             
             
                 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="">API Documentation</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Install</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-raveutils.body">Body</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-raveutils.camera">Camera</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-raveutils.conversions">Conversions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-raveutils.kinematics">Kinematics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-raveutils.mesh">Meshes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-raveutils.planning">Planning</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-raveutils.transforms">Transforms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-raveutils.visual">Visual</a></li>
@@ -120,11 +123,11 @@
   <ul class="wy-breadcrumbs">
     <li><a href="index.html">Docs</a> &raquo;</li>
       
-    <li>API Documentation</li>
+    <li>API Reference</li>
       <li class="wy-breadcrumbs-aside">
         
           
-            <a href="_sources/api-documentation.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/reference.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -134,8 +137,181 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="api-documentation">
-<h1>API Documentation<a class="headerlink" href="#api-documentation" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="api-reference">
+<h1>API Reference<a class="headerlink" href="#api-reference" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-raveutils.body">
+<span id="body"></span><h2>Body<a class="headerlink" href="#module-raveutils.body" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="raveutils.body.enable_body">
+<code class="descclassname">raveutils.body.</code><code class="descname">enable_body</code><span class="sig-paren">(</span><em>body</em>, <em>enable</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raveutils/body.html#enable_body"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#raveutils.body.enable_body" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enables all the links of a body.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>body</strong> (<em>orpy.KinBody</em>) &#8211; The OpenRAVE body</li>
+<li><strong>enable</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If true, will enable all the links.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="raveutils.body.get_bounding_box_corners">
+<code class="descclassname">raveutils.body.</code><code class="descname">get_bounding_box_corners</code><span class="sig-paren">(</span><em>body</em>, <em>transform=None</em>, <em>scale=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raveutils/body.html#get_bounding_box_corners"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#raveutils.body.get_bounding_box_corners" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the bounding box corners (8 corners) for the given body.
+If <code class="docutils literal"><span class="pre">transform</span></code> is given the corners are transformed properly.
+The <code class="docutils literal"><span class="pre">scale</span></code> parameters is a factor used to scale the extents of the
+bounding box.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>body</strong> (<em>orpy.KinBody</em>) &#8211; The OpenRAVE body</li>
+<li><strong>transform</strong> (<em>array_like</em>) &#8211; Homogeneous transformation of the body. If <code class="docutils literal"><span class="pre">None</span></code>, the corners are given
+using the current pose of the body in OpenRAVE.</li>
+<li><strong>scale</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The scale factor to modify the extents of the bounding box.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>corners</strong> &#8211;
+List containing the 8 box corners. Each corner is a XYZ <code class="docutils literal"><span class="pre">np.array</span></code></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="raveutils.body.set_body_transparency">
+<code class="descclassname">raveutils.body.</code><code class="descname">set_body_transparency</code><span class="sig-paren">(</span><em>body</em>, <em>transparency=0.0</em>, <em>links=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raveutils/body.html#set_body_transparency"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#raveutils.body.set_body_transparency" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the transparency value of all the body&#8217;s geometries</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>body</strong> (<em>orpy.KinBody</em>) &#8211; The OpenRAVE body</li>
+<li><strong>transparency</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The transparency value. If it&#8217;s out of range [0.0, 1.0], it&#8217;ll be clipped.</li>
+<li><strong>links</strong> (<em>list</em>) &#8211; List of links to be modified. By default all the links are.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-raveutils.camera">
+<span id="camera"></span><h2>Camera<a class="headerlink" href="#module-raveutils.camera" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="raveutils.camera.CameraFOV">
+<em class="property">class </em><code class="descclassname">raveutils.camera.</code><code class="descname">CameraFOV</code><span class="sig-paren">(</span><em>camera_info</em>, <em>maxdist</em>, <em>transform=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raveutils/camera.html#CameraFOV"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#raveutils.camera.CameraFOV" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>Base class for the field-of-view of a Pin hole camera.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>camera_info</strong> (<em>sensor_msgs/CameraInfo</em>) &#8211; Meta information of the camera. For more details check the
+<a class="reference external" href="http://docs.ros.org/api/sensor_msgs/html/msg/CameraInfo.html">sensor_msgs/CameraInfo</a>
+documentation.</li>
+<li><strong>maxdist</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; Maximum distance the FOV covers in the Z direction of the camera frame.</li>
+<li><strong>transform</strong> (<em>array_like</em>) &#8211; Homogenous transformation of the camera reference frame. If <cite>None</cite> then
+the identity matrix is used.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="raveutils.camera.CameraFOV.contains">
+<code class="descname">contains</code><span class="sig-paren">(</span><em>points</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raveutils/camera.html#CameraFOV.contains"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#raveutils.camera.CameraFOV.contains" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if all the XYZ points are inside the camera field of view</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>points</strong> (<em>array_like</em>) &#8211; List of XYZ points</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>all_inside</strong> &#8211;
+True if all the points are inside the FOV. False otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/library/functions.html#bool" title="(in Python v2.7)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="raveutils.camera.CameraFOV.get_corners">
+<code class="descname">get_corners</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/raveutils/camera.html#CameraFOV.get_corners"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#raveutils.camera.CameraFOV.get_corners" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the five corners of the camera field of view</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>corners</strong> &#8211;
+A 5x3 array with the five corners of the camera field of view</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">array_like</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="raveutils.camera.CameraFOV.get_trimesh">
+<code class="descname">get_trimesh</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/raveutils/camera.html#CameraFOV.get_trimesh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#raveutils.camera.CameraFOV.get_trimesh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the convex hull that representes the field of view as a trimesh</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
+<li><strong>vertices</strong> (<em>array_like</em>) &#8211;
+The trimesh vertices</li>
+<li><strong>faces</strong> (<em>array_like</em>) &#8211;
+The trimesh faces</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#raveutils.mesh.trimesh_from_point_cloud" title="raveutils.mesh.trimesh_from_point_cloud"><code class="xref py py-meth docutils literal"><span class="pre">raveutils.mesh.trimesh_from_point_cloud()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="raveutils.camera.CameraFOV.random_point_inside">
+<code class="descname">random_point_inside</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/raveutils/camera.html#CameraFOV.random_point_inside"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#raveutils.camera.CameraFOV.random_point_inside" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a random XYZ point inside the camera field of view</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>random_point</strong> &#8211;
+The random XYZ point inside the camera field of view</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">array_like</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
 <div class="section" id="module-raveutils.conversions">
 <span id="conversions"></span><h2>Conversions<a class="headerlink" href="#module-raveutils.conversions" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
@@ -349,6 +525,38 @@ The random joint values</td>
 </dd></dl>
 
 </div>
+<div class="section" id="module-raveutils.mesh">
+<span id="meshes"></span><h2>Meshes<a class="headerlink" href="#module-raveutils.mesh" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="raveutils.mesh.trimesh_from_point_cloud">
+<code class="descclassname">raveutils.mesh.</code><code class="descname">trimesh_from_point_cloud</code><span class="sig-paren">(</span><em>cloud</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raveutils/mesh.html#trimesh_from_point_cloud"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#raveutils.mesh.trimesh_from_point_cloud" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a point cloud into a convex hull trimesh</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cloud</strong> (<em>array_like</em>) &#8211; The input point cloud. It can be <code class="docutils literal"><span class="pre">pcl.Cloud</span></code> or <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.array.html#numpy.array" title="(in NumPy v1.13)"><code class="xref py py-obj docutils literal"><span class="pre">numpy.array</span></code></a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
+<li><strong>vertices</strong> (<em>array_like</em>) &#8211;
+The trimesh vertices</li>
+<li><strong>faces</strong> (<em>array_like</em>) &#8211;
+The trimesh faces</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.ConvexHull.html#scipy.spatial.ConvexHull" title="(in SciPy v0.19.1)"><code class="xref py py-obj docutils literal"><span class="pre">scipy.spatial.ConvexHull</span></code></a></dt>
+<dd>For more details about convex hulls</dd>
+</dl>
+</div>
+</dd></dl>
+
+</div>
 <div class="section" id="module-raveutils.planning">
 <span id="planning"></span><h2>Planning<a class="headerlink" href="#module-raveutils.planning" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
@@ -375,7 +583,7 @@ smoother wich short-cuts the trajectory and then smooths it</li>
 Planned trajectory. If plan fails, this function returns <cite>None</cite>.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">orpy.trajectory</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">orpy.Trajectory</p>
 </td>
 </tr>
 </tbody>
@@ -392,7 +600,7 @@ Planned trajectory. If plan fails, this function returns <cite>None</cite>.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>robot</strong> (<em>orpy.Robot</em>) &#8211; The OpenRAVE robot</li>
-<li><strong>traj</strong> (<em>orpy.trajectory</em>) &#8211; The traj to be retimed. The time paremetrization will be <em>overwritten</em>.</li>
+<li><strong>traj</strong> (<em>orpy.Trajectory</em>) &#8211; The traj to be retimed. The time paremetrization will be <em>overwritten</em>.</li>
 <li><strong>method</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; Retiming method. Available options are: <cite>LinearTrajectoryRetimer</cite>,
 <cite>ParabolicTrajectoryRetimer</cite>, <cite>CubicTrajectoryRetimer</cite></li>
 </ul>
@@ -404,6 +612,31 @@ Flag indicating the status of the trajectory retiming. It can be: <cite>Failed</
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">orpy.PlannerStatus</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="raveutils.planning.ros_trajectory_from_openrave">
+<code class="descclassname">raveutils.planning.</code><code class="descname">ros_trajectory_from_openrave</code><span class="sig-paren">(</span><em>robot_name</em>, <em>traj</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raveutils/planning.html#ros_trajectory_from_openrave"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#raveutils.planning.ros_trajectory_from_openrave" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert an OpenRAVE trajectory into a ROS JointTrajectory message.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>robot_name</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The robot name in OpenRAVE</li>
+<li><strong>traj</strong> (<em>orpy.Trajectory</em>) &#8211; The input OpenRAVE trajectory</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>ros_traj</strong> &#8211;
+The equivalent ROS JointTrajectory message</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">trajectory_msgs/JointTrajectory</p>
 </td>
 </tr>
 </tbody>
@@ -428,7 +661,7 @@ Flag indicating the status of the trajectory retiming. It can be: <cite>Failed</
 Resulting OpenRAVE trajectory.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">orpy.trajectory</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">orpy.Trajectory</p>
 </td>
 </tr>
 </tbody>
@@ -438,6 +671,20 @@ Resulting OpenRAVE trajectory.</p>
 </div>
 <div class="section" id="module-raveutils.transforms">
 <span id="transforms"></span><h2>Transforms<a class="headerlink" href="#module-raveutils.transforms" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="raveutils.transforms.counterclockwise_hull">
+<code class="descclassname">raveutils.transforms.</code><code class="descname">counterclockwise_hull</code><span class="sig-paren">(</span><em>hull</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raveutils/transforms.html#counterclockwise_hull"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#raveutils.transforms.counterclockwise_hull" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make the edges counterclockwise order</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>hull</strong> (<a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.ConvexHull.html#scipy.spatial.ConvexHull" title="(in SciPy v0.19.1)"><em>scipy.spatial.ConvexHull</em></a>) &#8211; Convex hull to be re-ordered.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="function">
 <dt id="raveutils.transforms.perpendicular_vector">
 <code class="descclassname">raveutils.transforms.</code><code class="descname">perpendicular_vector</code><span class="sig-paren">(</span><em>vector</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raveutils/transforms.html#perpendicular_vector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#raveutils.transforms.perpendicular_vector" title="Permalink to this definition">¶</a></dt>
@@ -472,7 +719,7 @@ The perpendicular vector</td>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>transform</strong> &#8211;
-The transformation that transforms axis <cite>axis_a</cite> into axis <cite>axis_b</cite></p>
+The transformation that transforms axis <code class="docutils literal"><span class="pre">axis_a</span></code> into axis <code class="docutils literal"><span class="pre">axis_b</span></code></p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">array_like</p>
@@ -488,8 +735,8 @@ The transformation that transforms axis <cite>axis_a</cite> into axis <cite>axis
 <dd><p>Compute the inverse of an homogeneous transformation.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">This function is more efficient than using <code class="docutils literal"><span class="pre">numpy.linalg.inv</span></code>
-given the special properties of the homogeneous transformations.</p>
+<p class="last">This function is more efficient than <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.linalg.inv.html#numpy.linalg.inv" title="(in NumPy v1.13)"><code class="xref py py-obj docutils literal"><span class="pre">numpy.linalg.inv</span></code></a> given
+the special properties of homogeneous transformations.</p>
 </div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -652,7 +899,7 @@ Handles holding the plot.</p>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
       
-        <a href="installation.html" class="btn btn-neutral" title="Installation" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="install.html" class="btn btn-neutral" title="Install" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -683,7 +930,7 @@ Handles holding the plot.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.1.0',
+            VERSION:'0.1.1',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

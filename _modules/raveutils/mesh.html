@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>raveutils.conversions &mdash; raveutils 0.1.1 documentation</title>
+  <title>raveutils.mesh &mdash; raveutils 0.1.1 documentation</title>
   
 
   
@@ -115,7 +115,7 @@
       
           <li><a href="../index.html">Module code</a> &raquo;</li>
       
-    <li>raveutils.conversions</li>
+    <li>raveutils.mesh</li>
       <li class="wy-breadcrumbs-aside">
         
           
@@ -127,48 +127,41 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for raveutils.conversions</h1><div class="highlight"><pre>
+  <h1>Source code for raveutils.mesh</h1><div class="highlight"><pre>
 <span class="ch">#!/usr/bin/env python</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">openravepy</span> <span class="kn">as</span> <span class="nn">orpy</span>
+<span class="kn">import</span> <span class="nn">scipy.spatial</span>
 <span class="c1"># Local modules</span>
 <span class="kn">import</span> <span class="nn">raveutils</span> <span class="kn">as</span> <span class="nn">ru</span>
 
 
-<div class="viewcode-block" id="from_ray"><a class="viewcode-back" href="../../reference.html#raveutils.conversions.from_ray">[docs]</a><span class="k">def</span> <span class="nf">from_ray</span><span class="p">(</span><span class="n">ray</span><span class="p">):</span>
+<div class="viewcode-block" id="trimesh_from_point_cloud"><a class="viewcode-back" href="../../reference.html#raveutils.mesh.trimesh_from_point_cloud">[docs]</a><span class="k">def</span> <span class="nf">trimesh_from_point_cloud</span><span class="p">(</span><span class="n">cloud</span><span class="p">):</span>
   <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">  Convert an `orpy.Ray` into a homogeneous transformation.</span>
+<span class="sd">  Convert a point cloud into a convex hull trimesh</span>
 
 <span class="sd">  Parameters</span>
 <span class="sd">  ----------</span>
-<span class="sd">  ray: orpy.Ray</span>
-<span class="sd">    The input OpenRAVE ray</span>
+<span class="sd">  cloud: array_like</span>
+<span class="sd">    The input point cloud. It can be ``pcl.Cloud`` or :obj:`numpy.array`</span>
 
 <span class="sd">  Returns</span>
 <span class="sd">  -------</span>
-<span class="sd">  transform: array_like</span>
-<span class="sd">    The resulting homogeneous transformation</span>
+<span class="sd">  vertices: array_like</span>
+<span class="sd">    The trimesh vertices</span>
+<span class="sd">  faces: array_like</span>
+<span class="sd">    The trimesh faces</span>
+
+<span class="sd">  See Also</span>
+<span class="sd">  --------</span>
+<span class="sd">  :obj:`scipy.spatial.ConvexHull`: For more details about convex hulls</span>
 <span class="sd">  &quot;&quot;&quot;</span>
-  <span class="n">transform</span> <span class="o">=</span> <span class="n">ru</span><span class="o">.</span><span class="n">transforms</span><span class="o">.</span><span class="n">transform_between_axes</span><span class="p">(</span><span class="n">ru</span><span class="o">.</span><span class="n">transforms</span><span class="o">.</span><span class="n">Z_AXIS</span><span class="p">,</span> <span class="n">ray</span><span class="o">.</span><span class="n">dir</span><span class="p">())</span>
-  <span class="n">transform</span><span class="p">[:</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">ray</span><span class="o">.</span><span class="n">pos</span><span class="p">()</span>
-  <span class="k">return</span> <span class="n">transform</span></div>
-
-<div class="viewcode-block" id="to_ray"><a class="viewcode-back" href="../../reference.html#raveutils.conversions.to_ray">[docs]</a><span class="k">def</span> <span class="nf">to_ray</span><span class="p">(</span><span class="n">transform</span><span class="p">):</span>
-  <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">  Convert a homogeneous transformation into an `orpy.Ray`.</span>
-
-<span class="sd">  Parameters</span>
-<span class="sd">  ----------</span>
-<span class="sd">  transform:  array_like</span>
-<span class="sd">    The input homogeneous transformation</span>
-
-<span class="sd">  Returns</span>
-<span class="sd">  -------</span>
-<span class="sd">  transform: orpy.Ray</span>
-<span class="sd">    The resulting ray</span>
-<span class="sd">  &quot;&quot;&quot;</span>
-  <span class="n">ray</span> <span class="o">=</span> <span class="n">orpy</span><span class="o">.</span><span class="n">Ray</span><span class="p">(</span><span class="n">transform</span><span class="p">[:</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="n">transform</span><span class="p">[:</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
-  <span class="k">return</span> <span class="n">ray</span></div>
+  <span class="n">points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">cloud</span><span class="p">)</span>
+  <span class="n">hull</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">spatial</span><span class="o">.</span><span class="n">ConvexHull</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
+  <span class="n">hull</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">spatial</span><span class="o">.</span><span class="n">ConvexHull</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="n">hull</span><span class="o">.</span><span class="n">vertices</span><span class="p">])</span>
+  <span class="n">ru</span><span class="o">.</span><span class="n">transforms</span><span class="o">.</span><span class="n">counterclockwise_hull</span><span class="p">(</span><span class="n">hull</span><span class="p">)</span>
+  <span class="n">vertices</span> <span class="o">=</span> <span class="n">hull</span><span class="o">.</span><span class="n">points</span>
+  <span class="n">faces</span> <span class="o">=</span> <span class="n">hull</span><span class="o">.</span><span class="n">simplices</span>
+  <span class="k">return</span> <span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span></div>
 </pre></div>
 
            </div>
