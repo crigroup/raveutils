@@ -2,8 +2,8 @@
 Changelog for package raveutils
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.1.1 (2017-10-17)
+------------------
 * Add commonly used OpenRAVE models
 * Add modules: body, camera and mesh
 * Contributors: fsuarez6
