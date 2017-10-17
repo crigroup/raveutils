@@ -1,7 +1,9 @@
 #!/usr/bin/env python
+import rospy
 import itertools
 import numpy as np
 import openravepy as orpy
+from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 
 
 def plan_to_joint_configuration(robot, qgoal, pname='BiRRT', max_iters=20,
@@ -105,6 +107,60 @@ def retime_trajectory(robot, traj, method):
   else:
     status = orpy.PlannerStatus.Failed
   return status
+
+def ros_trajectory_from_openrave(robot_name, traj):
+  """
+  Convert an OpenRAVE trajectory into a ROS JointTrajectory message.
+
+  Parameters
+  ----------
+  robot_name: str
+    The robot name in OpenRAVE
+  traj: orpy.Trajectory
+    The input OpenRAVE trajectory
+
+  Returns
+  -------
+  ros_traj: trajectory_msgs/JointTrajectory
+    The equivalent ROS JointTrajectory message
+  """
+  ros_traj = JointTrajectory()
+  # Specification groups
+  spec = traj.GetConfigurationSpecification()
+  try:
+    values_group = spec.GetGroupFromName('joint_values {0}'.format(robot_name))
+  except orpy.openrave_exception:
+    orpy.RaveLogError('Corrupted traj, failed to find group: joint_values')
+    return None
+  try:
+    velocities_group = spec.GetGroupFromName(
+                                      'joint_velocities {0}'.format(robot_name))
+  except orpy.openrave_exception:
+    orpy.RaveLogError('Corrupted traj, failed to find group: joint_velocities')
+    return None
+  try:
+    deltatime_group = spec.GetGroupFromName('deltatime')
+  except orpy.openrave_exception:
+    orpy.RaveLogError('Corrupted trajectory. Failed to find group: deltatime')
+    return None
+  # Copy waypoints
+  time_from_start = 0
+  for i in range(traj.GetNumWaypoints()):
+    waypoint = traj.GetWaypoint(i).tolist()
+    deltatime = waypoint[deltatime_group.offset]
+    # OpenRAVE trajectory sometimes comes with repeated waypoints. Skip them!
+    if np.isclose(deltatime, 0) and i > 0:
+      continue
+    # Append waypoint
+    ros_point = JointTrajectoryPoint()
+    values_end = values_group.offset + values_group.dof
+    ros_point.positions = waypoint[values_group.offset:values_end]
+    velocities_end = velocities_group.offset + velocities_group.dof
+    ros_point.velocities = waypoint[velocities_group.offset:velocities_end]
+    time_from_start += deltatime
+    ros_point.time_from_start = rospy.Duration(time_from_start)
+    ros_traj.points.append(ros_point)
+  return ros_traj
 
 def trajectory_from_waypoints(robot, waypoints):
   """

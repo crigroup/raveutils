@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 import numpy as np
 import openravepy as orpy
-from . import transforms as tr
+# Local modules
+import raveutils as ru
 
 
 def from_ray(ray):
@@ -18,7 +19,7 @@ def from_ray(ray):
   transform: array_like
     The resulting homogeneous transformation
   """
-  transform = tr.transform_between_axes(tr.Z_AXIS, ray.dir())
+  transform = ru.transforms.transform_between_axes(ru.transforms.Z_AXIS, ray.dir())
   transform[:3,3] = ray.pos()
   return transform
 
