@@ -3,6 +3,7 @@ project(raveutils)
 
 find_package(catkin REQUIRED COMPONENTS
   openrave_catkin
+  rospy
 )
 
 find_package(OpenRAVE REQUIRED)

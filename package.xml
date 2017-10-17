@@ -14,6 +14,7 @@
   <buildtool_depend>catkin</buildtool_depend>
 
   <depend>openrave_catkin</depend>
+  <depend>rospy</depend>
 
   <exec_depend>image_geometry</exec_depend>
   <exec_depend>python-numpy</exec_depend>
