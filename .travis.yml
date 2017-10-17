@@ -50,6 +50,8 @@ before_script:
 # Compile
 script:
   - cd ~/catkin_ws
-  - catkin_make
+  - catkin_make install
   - source devel/setup.bash
-  - catkin_make test
+  - cd ~/catkin_ws/src/criutils
+  # Test all the modules except for visual
+  - nosetests -e test_visual -v

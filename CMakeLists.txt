@@ -14,11 +14,9 @@ catkin_package(
 )
 
 # Tests
-catkin_add_nosetests(tests/test_conversions.py)
-catkin_add_nosetests(tests/test_kinematics.py)
-catkin_add_nosetests(tests/test_planning.py)
-catkin_add_nosetests(tests/test_transforms.py)
-# test_visual.py is skipped because it will make travis fail
+if (CATKIN_ENABLE_TESTING)
+  catkin_add_nosetests(tests)
+endif()
 
 install(DIRECTORY data DESTINATION ${OpenRAVE_DEVEL_DIR})
 install(DIRECTORY data DESTINATION ${OpenRAVE_INSTALL_DIR})
