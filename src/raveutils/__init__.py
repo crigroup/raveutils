@@ -1,5 +1,8 @@
 #!/usr/bin/env python
+import body
+import camera
 import conversions
+import mesh
 import kinematics
 import planning
 import transforms
