@@ -5,7 +5,7 @@
   <Robot file="denso_vs060.dae"></Robot>
 
   <!-- Coupling-Ensenso -->
-  <Kinbody file="objects/coupling_ensenso.kinbody.xml">
+  <Kinbody file="../objects/coupling_ensenso.kinbody.xml">
     <body name="coupling_ensenso">
       <offsetfrom>link6</offsetfrom>
     </body>
@@ -17,7 +17,7 @@
   </Kinbody>
 
   <!-- Ensenso -->
-  <Kinbody file="objects/ensenso_n35.kinbody.xml">
+  <Kinbody file="../objects/ensenso_n35.kinbody.xml">
     <body name="camera">
       <offsetfrom>coupling_ensenso</offsetfrom>
       <translation>-0.0735 0 0.062</translation>
@@ -37,7 +37,7 @@
   </Kinbody>
 
   <!-- Coupling-drill -->
-  <Kinbody file="objects/coupling_makita.kinbody.xml">
+  <Kinbody file="../objects/coupling_makita.kinbody.xml">
     <body name="coupling_makita">
       <offsetfrom>coupling_ensenso</offsetfrom>
       <translation>0 0.120 0.01</translation>
@@ -50,7 +50,7 @@
   </Kinbody>
 
   <!-- Drill -->
-  <Kinbody file="objects/makita.kinbody.xml">
+  <Kinbody file="../objects/makita.kinbody.xml">
     <body name="neck1">
       <offsetfrom>coupling_makita</offsetfrom>
     </body>
