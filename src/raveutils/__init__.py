@@ -1,9 +1,9 @@
 #!/usr/bin/env python
-import body
-import camera
-import conversions
-import mesh
-import kinematics
-import planning
-import transforms
-import visual
+from . import body
+from . import camera
+from . import conversions
+from . import mesh
+from . import kinematics
+from . import planning
+from . import transforms
+from . import visual
