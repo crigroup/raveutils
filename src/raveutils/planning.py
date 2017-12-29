@@ -25,8 +25,8 @@ def plan_to_joint_configuration(robot, qgoal, pname='BiRRT', max_iters=20,
     Maximum iterations for the post-processing stage. It will use a parabolic
     smoother wich short-cuts the trajectory and then smooths it
   try_swap: bool
-    If set will compute two trajectories: first `qstart` -> `qgoal`, second
-    `qgoal` -> `qstart` and will select the minimum duration one.
+    If set, will compute the direct and reversed trajectory. The minimum
+    duration trajectory is used.
 
   Returns
   -------

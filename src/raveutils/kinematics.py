@@ -5,7 +5,8 @@ import openravepy as orpy
 import raveutils as ru
 
 
-def compute_jacobian(robot, link_name=None, translation_only=False):
+def compute_jacobian(robot, link_name=None, link_idx=None,
+                                                      translation_only=False):
   """
   Compute the Jacobian matrix
 
@@ -16,6 +17,9 @@ def compute_jacobian(robot, link_name=None, translation_only=False):
   link_name: str, optional
     The name of link. If it's `None`, the last link of the kinematic chain is
     used
+  link_idx: int, optional
+    The index of link. If it's `None`, the last link of the kinematic chain is
+    used
   translation_only: bool, optional
     If set, only the translation Jacobian is computed
 
@@ -23,23 +27,32 @@ def compute_jacobian(robot, link_name=None, translation_only=False):
   -------
   J: array_like
     The computed Jacobian matrix
+
+  Notes
+  -----
+  If both `link_idx` and `link_name` are given, `link_idx` will have priority.
   """
-  if link_name is None:
-    link_name = robot.GetLinks()[-1].GetName()
-  names = [l.GetName() for l in robot.GetLinks()]
-  if link_name not in names:
-    raise KeyError('Invalid link name: {0}'.format(link_name))
-  idx = names.index(link_name)
-  origin = robot.GetLink(link_name).GetTransform()[:3,3]
+  num_links = len(robot.GetLinks())
+  if link_idx is None:
+    if link_name is None:
+      link_name = robot.GetLinks()[-1].GetName()
+      link_idx = num_links - 1
+    else:
+      names = [l.GetName() for l in robot.GetLinks()]
+      if link_name not in names:
+        raise KeyError('Invalid link name: {0}'.format(link_name))
+  elif not (0 <= num_links < num_links):
+    raise KeyError('Invalid link index: {0}'.format(num_links))
+  origin = robot.GetLinks()[link_idx].GetTransform()[:3,3]
   manip = robot.GetActiveManipulator()
   indices = manip.GetArmIndices()
-  Jtrans = robot.ComputeJacobianTranslation(idx, origin)[:,indices]
+  Jtrans = robot.ComputeJacobianTranslation(link_idx, origin)[:,indices]
   if translation_only:
     J = Jtrans
   else:
     J = np.zeros((6, Jtrans.shape[1]))
     J[:3,:] = Jtrans
-    J[3:,:] = robot.ComputeJacobianAxisAngle(idx)[:,indices]
+    J[3:,:] = robot.ComputeJacobianAxisAngle(link_idx)[:,indices]
   return J
 
 def compute_yoshikawa_index(robot, link_name=None, translation_only=False,
