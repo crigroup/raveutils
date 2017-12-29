@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import numpy as np
+import baldor as br
 import openravepy as orpy
 # Local modules
 import raveutils as ru
@@ -141,7 +142,7 @@ def find_ik_solutions(robot, target, iktype, collision_free=True, freeinc=0.1):
     if type(target) is orpy.Ray:
       Tray = ru.conversions.from_ray(target)
       for angle in np.arange(0, 2*np.pi, freeinc):
-        Toffset = orpy.matrixFromAxisAngle(angle*ru.transforms.Z_AXIS)
+        Toffset = orpy.matrixFromAxisAngle(angle*br.Z_AXIS)
         target_list.append(np.dot(Tray, Toffset))
     else:
       target_list.append(target)

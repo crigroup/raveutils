@@ -45,7 +45,7 @@ def get_bounding_box_corners(body, transform=None, scale=1.):
    List containing the 8 box corners. Each corner is a XYZ ``np.array``
   """
   if transform is not None:
-    Tinv = ru.transforms.transform_inv( body.GetTransform() )
+    Tinv = br.transform.inverse(body.GetTransform())
   aabb = body.ComputeAABB()
   corners = []
   for k in itertools.product([-1,1],[-1,1],[-1,1]):
