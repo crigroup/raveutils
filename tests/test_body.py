@@ -39,6 +39,11 @@ class Test_body(unittest.TestCase):
     makita = env.GetBodies()[0]
     corners = ru.body.get_bounding_box_corners(makita)
     self.assertEqual(len(corners), 8)
+    # Transform given
+    makita = env.GetBodies()[0]
+    transform = makita.GetTransform()
+    corners = ru.body.get_bounding_box_corners(makita, transform)
+    self.assertEqual(len(corners), 8)
 
   def test_set_body_transparency(self):
     env = self.env

@@ -46,7 +46,7 @@ def plan_to_joint_configuration(robot, qgoal, pname='BiRRT', max_iters=20,
   # Plan trajectory
   best_traj = None
   min_duration = float('inf')
-  is_best_reversed = False
+  reversed_is_better = False
   count = 0
   for qa, qb in itertools.permutations([qstart, qgoal], 2):
     count += 1
@@ -65,11 +65,11 @@ def plan_to_joint_configuration(robot, qgoal, pname='BiRRT', max_iters=20,
             best_traj = orpy.RaveCreateTrajectory(env, traj.GetXMLId())
             best_traj.Clone(traj, 0)
             if count == 2:
-              is_best_reversed = True
+              reversed_is_better = True
     if not try_swap:
       break
   # Check if we need to reverse the trajectory
-  if is_best_reversed:
+  if reversed_is_better:
     best_traj = orpy.planningutils.ReverseTrajectory(best_traj)
   return best_traj
 

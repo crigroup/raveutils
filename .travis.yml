@@ -13,6 +13,11 @@ env:
 
 # Install package dependencies
 before_install:
+  # Testing $DISPLAY
+  - echo "---"
+  - echo "Testing display environment variable"
+  - echo $DISPLAY
+  - echo "---"
   # Install OpenRAVE
   - mkdir -p ~/git; cd ~/git
   - git clone https://github.com/crigroup/openrave-installation.git
@@ -29,6 +34,8 @@ before_install:
   # Prepare rosdep to install dependencies.
   - sudo rosdep init
   - rosdep update
+  # Install coveralls
+  - pip install coveralls --user
 
 # Create a catkin workspace with the package under integration.
 install:
@@ -41,6 +48,8 @@ install:
   - cd ~/catkin_ws/src
   - git clone https://github.com/crigroup/openrave_catkin.git
   - ln -s $CI_SOURCE_PATH .
+  # TODO: Remove this once baldor is released into the public repositories
+  - git clone https://github.com/crigroup/baldor.git
 
 # Install all dependencies
 before_script:
@@ -55,3 +64,8 @@ script:
   - cd ~/catkin_ws/src/raveutils/tests
   # Test all the modules except for visual
   - nosetests -e test_visual -v
+  # Run coverage
+  - nosetests tests/ --with-coverage --cover-package=raveutils -e test_visual -v
+
+after_success:
+  - coveralls

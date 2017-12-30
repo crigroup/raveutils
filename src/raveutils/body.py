@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import itertools
 import numpy as np
+import baldor as br
 import openravepy as orpy
 # Local modules
 import raveutils as ru

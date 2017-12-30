@@ -42,8 +42,9 @@ def compute_jacobian(robot, link_name=None, link_idx=None,
       names = [l.GetName() for l in robot.GetLinks()]
       if link_name not in names:
         raise KeyError('Invalid link name: {0}'.format(link_name))
+      link_idx = names.index(link_name)
   elif not (0 <= num_links < num_links):
-    raise KeyError('Invalid link index: {0}'.format(num_links))
+    raise IndexError('Invalid link index: {0}'.format(num_links))
   origin = robot.GetLinks()[link_idx].GetTransform()[:3,3]
   manip = robot.GetActiveManipulator()
   indices = manip.GetArmIndices()
@@ -134,7 +135,7 @@ def find_ik_solutions(robot, target, iktype, collision_free=True, freeinc=0.1):
   target_list = []
   if iktype == orpy.IkParameterizationType.TranslationDirection5D:
     if type(target) is not orpy.Ray:
-      ray = ru.conversions.to_ray(goal)
+      ray = ru.conversions.to_ray(target)
       target_list.append(ray)
     else:
       target_list.append(target)
@@ -169,8 +170,8 @@ def load_ikfast(robot, iktype, freejoints=['J6'], freeinc=[0.01],
   iktype: orpy.IkParameterizationType
     Inverse kinematics type to be used
   freeinc: list
-    The free increment (discretization) to be used for the free DOF when the
-    target is the `iktype` is `TranslationDirection5D`
+    The increment (discretization) to be used for the free DOF when the target
+    `iktype` is `TranslationDirection5D`
   autogenerate: bool, optional
     If true, auto-generate the IKFast solver
 
@@ -243,21 +244,17 @@ def load_link_stats(robot, xyzdelta=0.01, autogenerate=True):
   else:
     manip = robot.GetActiveManipulator()
     indices = manip.GetArmIndices()
-    if robot.GetActiveDOF() == 6:
-      origins = [l.GetTransform()[:3,3] for l in robot.GetLinks()]
-      jweights = [np.linalg.norm(origins[1] - origins[2]),
-                  np.linalg.norm(origins[2] - origins[3]),
-                  np.linalg.norm(origins[3] - origins[4]),
-                  np.linalg.norm(origins[4] - origins[5]),
-                  np.linalg.norm(origins[5] - origins[6]),
-                  np.linalg.norm(origins[6] - origins[-1])]
-      for i in range(robot.GetActiveDOF()):
-        jweights[i] = np.sum(jweights[i:])
-      robot_weights = np.ones(robot.GetDOF())
-      robot_weights[indices] = np.array(jweights) / np.max(jweights)
-      robot.SetDOFWeights(robot_weights)
-    else:
-      robot.SetDOFWeights([1]*robot.GetDOF())
+    jweights = []
+    for j in indices:
+      joint = robot.GetJoints()[j]
+      parent_origin = joint.GetHierarchyParentLink().GetTransform()[:3,3]
+      child_origin = joint.GetHierarchyChildLink().GetTransform()[:3,3]
+      jweights.append(np.linalg.norm(child_origin - parent_origin))
+    for i in range(len(jweights)):
+      jweights[i] = np.sum(jweights[i:])
+    robot_weights = np.ones(robot.GetDOF())
+    robot_weights[indices] = np.array(jweights) / np.max(jweights)
+    robot.SetDOFWeights(robot_weights)
   return success
 
 def random_joint_values(robot):

@@ -59,3 +59,6 @@ class Test_visual(unittest.TestCase):
     types = [type(h) for h in handles]
     self.assertEqual(len(set(types)), 1)
     self.assertEqual(set(types), {orpy.GraphHandle})
+    # Use negative distance
+    handles = ru.visual.draw_ray(self.env, ray, dist=-0.03)
+    self.assertEqual(len(handles), 3)
