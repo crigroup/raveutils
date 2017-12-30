@@ -14,10 +14,7 @@ env:
 # Install package dependencies
 before_install:
   # Testing $DISPLAY
-  - echo "---"
-  - echo "Testing display environment variable"
   - echo $DISPLAY
-  - echo "---"
   # Install OpenRAVE
   - mkdir -p ~/git; cd ~/git
   - git clone https://github.com/crigroup/openrave-installation.git
@@ -61,11 +58,9 @@ script:
   - cd ~/catkin_ws
   - catkin_make install
   - source devel/setup.bash
-  - cd ~/catkin_ws/src/raveutils/tests
-  # Test all the modules except for visual
-  - nosetests -e test_visual -v
-  # Run coverage
-  - nosetests tests/ --with-coverage --cover-package=raveutils -e test_visual -v
+  - cd ~/catkin_ws/src/raveutils
+  # Run the tests with coverage
+  - nosetests tests/ --with-coverage --cover-package=raveutils -v
 
 after_success:
   - coveralls

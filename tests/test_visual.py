@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+import os
 import unittest
 import numpy as np
 import openravepy as orpy
@@ -9,10 +10,18 @@ import raveutils as ru
 class Test_visual(unittest.TestCase):
   @classmethod
   def setUpClass(cls):
+    # Check there is a display available
+    display_available = False
+    if os.environ.has_key('DISPLAY'):
+      if len(os.environ['DISPLAY']) > 0:
+        display_available = True
+    # Setup the environment
     np.set_printoptions(precision=6, suppress=True)
     env = orpy.Environment()
-    env.SetViewer('qtcoin')
+    if display_available:
+      env.SetViewer('qtcoin')
     cls.env = env
+    cls.display_available = display_available
     print('') # dummy line
 
   @classmethod
@@ -28,8 +37,9 @@ class Test_visual(unittest.TestCase):
     transform = orpy.matrixFromAxisAngle(angle*axis)
     transform[:3,3] = np.random.randn(3)*0.5
     h = ru.visual.draw_axes(self.env, transform)
-    self.assertEqual(len(h), 1)
-    self.assertEqual(type(h[0]), orpy.GraphHandle)
+    if self.display_available:
+      self.assertEqual(len(h), 1)
+      self.assertEqual(type(h[0]), orpy.GraphHandle)
 
   def test_draw_plane(self):
     np.random.seed(123)
@@ -39,14 +49,16 @@ class Test_visual(unittest.TestCase):
     transform = orpy.matrixFromAxisAngle(angle*axis)
     transform[:3,3] = np.random.randn(3)*0.5
     h = ru.visual.draw_plane(self.env, transform)
-    self.assertEqual(type(h), orpy.GraphHandle)
+    if self.display_available:
+      self.assertEqual(type(h), orpy.GraphHandle)
 
   def test_draw_point(self):
     np.random.seed(123)
     point = np.random.randn(3)
     h = ru.visual.draw_point(self.env, point)
-    self.assertEqual(len(h), 1)
-    self.assertEqual(type(h[0]), orpy.GraphHandle)
+    if self.display_available:
+      self.assertEqual(len(h), 1)
+      self.assertEqual(type(h[0]), orpy.GraphHandle)
 
   def test_draw_ray(self):
     np.random.seed(123)
@@ -55,10 +67,12 @@ class Test_visual(unittest.TestCase):
     position = np.random.randn(3)*0.5
     ray = orpy.Ray(position, direction)
     handles = ru.visual.draw_ray(self.env, ray)
-    self.assertEqual(len(handles), 3)
-    types = [type(h) for h in handles]
-    self.assertEqual(len(set(types)), 1)
-    self.assertEqual(set(types), {orpy.GraphHandle})
+    if self.display_available:
+      self.assertEqual(len(handles), 3)
+      types = [type(h) for h in handles]
+      self.assertEqual(len(set(types)), 1)
+      self.assertEqual(set(types), {orpy.GraphHandle})
     # Use negative distance
     handles = ru.visual.draw_ray(self.env, ray, dist=-0.03)
-    self.assertEqual(len(handles), 3)
+    if self.display_available:
+      self.assertEqual(len(handles), 3)
