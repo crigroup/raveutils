@@ -2,7 +2,6 @@
 import unittest
 import numpy as np
 import openravepy as orpy
-import resource_retriever
 # Tested package
 import raveutils as ru
 
