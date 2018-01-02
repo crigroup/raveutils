@@ -232,7 +232,7 @@ def load_link_stats(robot, xyzdelta=0.01, autogenerate=True):
   success: bool
     `True` if succeeded, `False` otherwise
   """
-  success = False
+  success = True
   statsmodel = orpy.databases.linkstatistics.LinkStatisticsModel(robot)
   if not statsmodel.load() and autogenerate:
     print 'Generating LinkStatistics database. Will take ~1 minute...'
@@ -240,7 +240,6 @@ def load_link_stats(robot, xyzdelta=0.01, autogenerate=True):
   if statsmodel.load():
     statsmodel.setRobotWeights()
     statsmodel.setRobotResolutions(xyzdelta=xyzdelta)
-    success = True
   else:
     manip = robot.GetActiveManipulator()
     indices = manip.GetArmIndices()
@@ -254,7 +253,11 @@ def load_link_stats(robot, xyzdelta=0.01, autogenerate=True):
       jweights[i] = np.sum(jweights[i:])
     robot_weights = np.ones(robot.GetDOF())
     robot_weights[indices] = np.array(jweights) / np.max(jweights)
-    robot.SetDOFWeights(robot_weights)
+    if np.all(robot_weights >= br._EPS):
+      # All the weights have to be greater than 0
+      robot.SetDOFWeights(robot_weights)
+    else:
+      success = False
   return success
 
 def random_joint_values(robot):
