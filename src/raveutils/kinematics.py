@@ -30,7 +30,7 @@ def check_joint_limits(robot, q=None):
   return np.all(lower <= q) and np.all(q <= upper)
 
 def compute_jacobian(robot, link_name=None, link_idx=None,
-                                                      translation_only=False):
+                                                        translation_only=False):
   """
   Compute the Jacobian matrix
 
@@ -39,11 +39,9 @@ def compute_jacobian(robot, link_name=None, link_idx=None,
   robot: orpy.Robot
     The OpenRAVE robot
   link_name: str, optional
-    The name of link. If it's `None`, the last link of the kinematic chain is
-    used
+    The name of link. If it's `None`, the manipulator frame will be used
   link_idx: int, optional
-    The index of link. If it's `None`, the last link of the kinematic chain is
-    used
+    The index of link. If it's `None`, the manipulator frame will be used
   translation_only: bool, optional
     If set, only the translation Jacobian is computed
 
@@ -57,27 +55,34 @@ def compute_jacobian(robot, link_name=None, link_idx=None,
   If both `link_idx` and `link_name` are given, `link_idx` will have priority.
   """
   num_links = len(robot.GetLinks())
-  if link_idx is None:
-    if link_name is None:
-      link_name = robot.GetLinks()[-1].GetName()
-      link_idx = num_links - 1
+  manip = robot.GetActiveManipulator()
+  if link_idx is None and link_name is None:
+    Jtrans = manip.CalculateJacobian()
+    J = manip.CalculateAngularVelocityJacobian
+    if translation_only:
+      J = Jtrans
     else:
+      J = np.zeros((6, Jtrans.shape[1]))
+      J[:3,:] = Jtrans
+      J[3:,:] = manip.CalculateAngularVelocityJacobian()
+  else:
+    if link_idx is None:
       names = [l.GetName() for l in robot.GetLinks()]
       if link_name not in names:
         raise KeyError('Invalid link name: {0}'.format(link_name))
       link_idx = names.index(link_name)
-  elif not (0 <= num_links < num_links):
-    raise IndexError('Invalid link index: {0}'.format(num_links))
-  origin = robot.GetLinks()[link_idx].GetTransform()[:3,3]
-  manip = robot.GetActiveManipulator()
-  indices = manip.GetArmIndices()
-  Jtrans = robot.ComputeJacobianTranslation(link_idx, origin)[:,indices]
-  if translation_only:
-    J = Jtrans
-  else:
-    J = np.zeros((6, Jtrans.shape[1]))
-    J[:3,:] = Jtrans
-    J[3:,:] = robot.ComputeJacobianAxisAngle(link_idx)[:,indices]
+    else:
+      if not (0 <= link_idx < num_links):
+        raise IndexError('Invalid link index: {0}'.format(num_links))
+    origin = robot.GetLinks()[link_idx].GetTransform()[:3,3]
+    indices = manip.GetArmIndices()
+    Jtrans = robot.ComputeJacobianTranslation(link_idx, origin)[:,indices]
+    if translation_only:
+      J = Jtrans
+    else:
+      J = np.zeros((6, Jtrans.shape[1]))
+      J[:3,:] = Jtrans
+      J[3:,:] = robot.ComputeJacobianAxisAngle(link_idx)[:,indices]
   return J
 
 def compute_yoshikawa_index(robot, link_name=None, translation_only=False,
@@ -209,8 +214,10 @@ def load_ikfast(robot, iktype, freejoints=['J6'], freeinc=[0.01],
   if iktype == orpy.IkParameterizationType.TranslationDirection5D:
     ikmodel = InverseKinematicsModel(robot, iktype=iktype,
                                                         freejoints=freejoints)
-  else:
+  elif iktype == orpy.IkParameterizationType.Transform6D:
     ikmodel = InverseKinematicsModel(robot, iktype=iktype)
+  else:
+    raise TypeError('Unsupported ikmodel: {}'.format(iktype.name))
   # Load or generate
   if not ikmodel.load() and autogenerate:
     print 'Generating IKFast {0}. Will take few minutes...'.format(iktype.name)
@@ -225,8 +232,6 @@ def load_ikfast(robot, iktype, freejoints=['J6'], freeinc=[0.01],
   if iktype == orpy.IkParameterizationType.TranslationDirection5D:
     success = ikmodel.load(freeinc=freeinc)
   elif iktype == orpy.IkParameterizationType.Transform6D:
-    success = ikmodel.load()
-  else:
     success = ikmodel.load()
   return success
 

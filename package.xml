@@ -19,7 +19,9 @@
   <exec_depend>baldor</exec_depend>
   <exec_depend>image_geometry</exec_depend>
   <exec_depend>python-numpy</exec_depend>
+  <exec_depend>python_orocos_kdl</exec_depend>
   <exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>tf_conversions</exec_depend>
   <exec_depend>trajectory_msgs</exec_depend>
 
   <doc_depend>rosdoc_lite</doc_depend>

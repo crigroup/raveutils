@@ -27,13 +27,26 @@ class Test_kinematics(unittest.TestCase):
     cls.env.Reset()
     cls.env.Destroy()
 
+  def test_check_joint_limits(self):
+    robot = self.robot
+    lower, upper = robot.GetActiveDOFLimits()
+    result = ru.kinematics.check_joint_limits(robot, lower)
+    self.assertTrue(result)
+    result = ru.kinematics.check_joint_limits(robot, upper)
+    self.assertTrue(result)
+    result = ru.kinematics.check_joint_limits(robot, q=None)
+    self.assertTrue(result)
+
   def test_compute_jacobian(self):
     robot = self.robot
     # Try the function with its variants
     Jtrans = ru.kinematics.compute_jacobian(robot, translation_only=True)
     J = ru.kinematics.compute_jacobian(robot, translation_only=False)
     link_name = robot.GetLinks()[-1].GetName()
-    J = ru.kinematics.compute_jacobian(robot, link_name=link_name)
+    J = ru.kinematics.compute_jacobian(robot, link_name=link_name,
+                                                          translation_only=True)
+    J = ru.kinematics.compute_jacobian(robot, link_name=link_name,
+                                                          translation_only=False)
     # Raise KeyError invalid link name
     try:
       J = ru.kinematics.compute_jacobian(robot, link_name='invalid_name')
@@ -57,14 +70,6 @@ class Test_kinematics(unittest.TestCase):
     idx = ru.kinematics.compute_yoshikawa_index(robot, penalize_jnt_limits=False)
     idx = ru.kinematics.compute_yoshikawa_index(robot, translation_only=True)
     idx = ru.kinematics.compute_yoshikawa_index(robot, translation_only=False)
-
-  def test_check_joint_limits(self):
-    robot = self.robot
-    lower, upper = robot.GetActiveDOFLimits()
-    result = ru.kinematics.check_joint_limits(robot, lower)
-    self.assertTrue(result)
-    result = ru.kinematics.check_joint_limits(robot, upper)
-    self.assertTrue(result)
 
   def test_load_ikfast_and_find_ik_solutions(self):
     robot = self.robot
@@ -92,7 +97,7 @@ class Test_kinematics(unittest.TestCase):
       with env:
         robot.SetActiveDOFValues(q)
       if not env.CheckCollision(robot):
-        return
+        break
     iktype = orpy.IkParameterizationType.TranslationDirection5D
     success = ru.kinematics.load_ikfast(robot, iktype, autogenerate=False,
                                                                   freejoints=[])
@@ -106,6 +111,14 @@ class Test_kinematics(unittest.TestCase):
     solutions = ru.kinematics.find_ik_solutions(robot, ray, iktype,
                                                           collision_free=True)
     self.assertTrue(len(solutions) > 0)
+    # Test unsupported IKFast
+    iktype = orpy.IkParameterizationType.Lookat3D
+    try:
+      success = ru.kinematics.load_ikfast(robot, iktype)
+      raises_exception = False
+    except TypeError:
+      raises_exception = True
+    self.assertTrue(raises_exception)
 
   def test_load_link_stats(self):
     # Autogenerate: False
