@@ -6,6 +6,29 @@ import openravepy as orpy
 import raveutils as ru
 
 
+def check_joint_limits(robot, q=None):
+  """
+  Check if the provided joint configuration exceeds the joint limits
+
+  Parameters
+  ----------
+  robot: orpy.Robot
+    The OpenRAVE robot
+  q: array_like (optional)
+    The joint configuration to check. If `q` is `None`, the current joint
+    configuration of the robot is used.
+
+  Returns
+  ----------
+  result: bool
+    True if the given joint configuration is within the joint limits of the
+    robot. False otherwise.
+  """
+  if q is None:
+    q = robot.GetActiveDOFValues()
+  lower, upper = robot.GetActiveDOFLimits()
+  return np.all(lower <= q) and np.all(q <= upper)
+
 def compute_jacobian(robot, link_name=None, link_idx=None,
                                                       translation_only=False):
   """
@@ -232,7 +255,7 @@ def load_link_stats(robot, xyzdelta=0.01, autogenerate=True):
   success: bool
     `True` if succeeded, `False` otherwise
   """
-  success = True
+  success = False
   statsmodel = orpy.databases.linkstatistics.LinkStatisticsModel(robot)
   if not statsmodel.load() and autogenerate:
     print 'Generating LinkStatistics database. Will take ~1 minute...'
@@ -240,6 +263,7 @@ def load_link_stats(robot, xyzdelta=0.01, autogenerate=True):
   if statsmodel.load():
     statsmodel.setRobotWeights()
     statsmodel.setRobotResolutions(xyzdelta=xyzdelta)
+    success = True
   else:
     manip = robot.GetActiveManipulator()
     indices = manip.GetArmIndices()
@@ -256,8 +280,7 @@ def load_link_stats(robot, xyzdelta=0.01, autogenerate=True):
     if np.all(robot_weights >= br._EPS):
       # All the weights have to be greater than 0
       robot.SetDOFWeights(robot_weights)
-    else:
-      success = False
+      success = True
   return success
 
 def random_joint_values(robot):
