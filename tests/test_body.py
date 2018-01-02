@@ -48,6 +48,8 @@ class Test_body(unittest.TestCase):
   def test_set_body_transparency(self):
     env = self.env
     makita = env.GetBodies()[0]
+    # Modify only a given link
+    ru.body.set_body_transparency(makita, 0.5, links=['body'])
     for _ in range(10):
       expected = np.random.sample(1)
       ru.body.set_body_transparency(makita, expected)
