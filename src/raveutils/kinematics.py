@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 import numpy as np
+import baldor as br
 import openravepy as orpy
 # Local modules
 import raveutils as ru
 
 
-def compute_jacobian(robot, link_name=None, translation_only=False):
+def compute_jacobian(robot, link_name=None, link_idx=None,
+                                                      translation_only=False):
   """
   Compute the Jacobian matrix
 
@@ -16,6 +18,9 @@ def compute_jacobian(robot, link_name=None, translation_only=False):
   link_name: str, optional
     The name of link. If it's `None`, the last link of the kinematic chain is
     used
+  link_idx: int, optional
+    The index of link. If it's `None`, the last link of the kinematic chain is
+    used
   translation_only: bool, optional
     If set, only the translation Jacobian is computed
 
@@ -23,23 +28,33 @@ def compute_jacobian(robot, link_name=None, translation_only=False):
   -------
   J: array_like
     The computed Jacobian matrix
+
+  Notes
+  -----
+  If both `link_idx` and `link_name` are given, `link_idx` will have priority.
   """
-  if link_name is None:
-    link_name = robot.GetLinks()[-1].GetName()
-  names = [l.GetName() for l in robot.GetLinks()]
-  if link_name not in names:
-    raise KeyError('Invalid link name: {0}'.format(link_name))
-  idx = names.index(link_name)
-  origin = robot.GetLink(link_name).GetTransform()[:3,3]
+  num_links = len(robot.GetLinks())
+  if link_idx is None:
+    if link_name is None:
+      link_name = robot.GetLinks()[-1].GetName()
+      link_idx = num_links - 1
+    else:
+      names = [l.GetName() for l in robot.GetLinks()]
+      if link_name not in names:
+        raise KeyError('Invalid link name: {0}'.format(link_name))
+      link_idx = names.index(link_name)
+  elif not (0 <= num_links < num_links):
+    raise IndexError('Invalid link index: {0}'.format(num_links))
+  origin = robot.GetLinks()[link_idx].GetTransform()[:3,3]
   manip = robot.GetActiveManipulator()
   indices = manip.GetArmIndices()
-  Jtrans = robot.ComputeJacobianTranslation(idx, origin)[:,indices]
+  Jtrans = robot.ComputeJacobianTranslation(link_idx, origin)[:,indices]
   if translation_only:
     J = Jtrans
   else:
     J = np.zeros((6, Jtrans.shape[1]))
     J[:3,:] = Jtrans
-    J[3:,:] = robot.ComputeJacobianAxisAngle(idx)[:,indices]
+    J[3:,:] = robot.ComputeJacobianAxisAngle(link_idx)[:,indices]
   return J
 
 def compute_yoshikawa_index(robot, link_name=None, translation_only=False,
@@ -120,7 +135,7 @@ def find_ik_solutions(robot, target, iktype, collision_free=True, freeinc=0.1):
   target_list = []
   if iktype == orpy.IkParameterizationType.TranslationDirection5D:
     if type(target) is not orpy.Ray:
-      ray = ru.conversions.to_ray(goal)
+      ray = ru.conversions.to_ray(target)
       target_list.append(ray)
     else:
       target_list.append(target)
@@ -128,7 +143,7 @@ def find_ik_solutions(robot, target, iktype, collision_free=True, freeinc=0.1):
     if type(target) is orpy.Ray:
       Tray = ru.conversions.from_ray(target)
       for angle in np.arange(0, 2*np.pi, freeinc):
-        Toffset = orpy.matrixFromAxisAngle(angle*ru.transforms.Z_AXIS)
+        Toffset = orpy.matrixFromAxisAngle(angle*br.Z_AXIS)
         target_list.append(np.dot(Tray, Toffset))
     else:
       target_list.append(target)
@@ -155,8 +170,8 @@ def load_ikfast(robot, iktype, freejoints=['J6'], freeinc=[0.01],
   iktype: orpy.IkParameterizationType
     Inverse kinematics type to be used
   freeinc: list
-    The free increment (discretization) to be used for the free DOF when the
-    target is the `iktype` is `TranslationDirection5D`
+    The increment (discretization) to be used for the free DOF when the target
+    `iktype` is `TranslationDirection5D`
   autogenerate: bool, optional
     If true, auto-generate the IKFast solver
 
@@ -217,7 +232,7 @@ def load_link_stats(robot, xyzdelta=0.01, autogenerate=True):
   success: bool
     `True` if succeeded, `False` otherwise
   """
-  success = False
+  success = True
   statsmodel = orpy.databases.linkstatistics.LinkStatisticsModel(robot)
   if not statsmodel.load() and autogenerate:
     print 'Generating LinkStatistics database. Will take ~1 minute...'
@@ -225,25 +240,24 @@ def load_link_stats(robot, xyzdelta=0.01, autogenerate=True):
   if statsmodel.load():
     statsmodel.setRobotWeights()
     statsmodel.setRobotResolutions(xyzdelta=xyzdelta)
-    success = True
   else:
     manip = robot.GetActiveManipulator()
     indices = manip.GetArmIndices()
-    if robot.GetActiveDOF() == 6:
-      origins = [l.GetTransform()[:3,3] for l in robot.GetLinks()]
-      jweights = [np.linalg.norm(origins[1] - origins[2]),
-                  np.linalg.norm(origins[2] - origins[3]),
-                  np.linalg.norm(origins[3] - origins[4]),
-                  np.linalg.norm(origins[4] - origins[5]),
-                  np.linalg.norm(origins[5] - origins[6]),
-                  np.linalg.norm(origins[6] - origins[-1])]
-      for i in range(robot.GetActiveDOF()):
-        jweights[i] = np.sum(jweights[i:])
-      robot_weights = np.ones(robot.GetDOF())
-      robot_weights[indices] = np.array(jweights) / np.max(jweights)
+    jweights = []
+    for j in indices:
+      joint = robot.GetJoints()[j]
+      parent_origin = joint.GetHierarchyParentLink().GetTransform()[:3,3]
+      child_origin = joint.GetHierarchyChildLink().GetTransform()[:3,3]
+      jweights.append(np.linalg.norm(child_origin - parent_origin))
+    for i in range(len(jweights)):
+      jweights[i] = np.sum(jweights[i:])
+    robot_weights = np.ones(robot.GetDOF())
+    robot_weights[indices] = np.array(jweights) / np.max(jweights)
+    if np.all(robot_weights >= br._EPS):
+      # All the weights have to be greater than 0
       robot.SetDOFWeights(robot_weights)
     else:
-      robot.SetDOFWeights([1]*robot.GetDOF())
+      success = False
   return success
 
 def random_joint_values(robot):

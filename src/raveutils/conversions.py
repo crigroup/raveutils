@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import numpy as np
+import baldor as br
 import openravepy as orpy
 # Local modules
 import raveutils as ru
@@ -19,7 +20,7 @@ def from_ray(ray):
   transform: array_like
     The resulting homogeneous transformation
   """
-  transform = ru.transforms.transform_between_axes(ru.transforms.Z_AXIS, ray.dir())
+  transform = br.transform.between_axes(br.Z_AXIS, ray.dir())
   transform[:3,3] = ray.pos()
   return transform
 

@@ -41,6 +41,10 @@ class Test_planning(unittest.TestCase):
     traj2 = ru.planning.plan_to_joint_configuration(robot, qgoal, pname='BiRRT',
                                                                   try_swap=True)
     self.assertNotEqual(traj2, None)
+    # Test without post-processing
+    traj3 = ru.planning.plan_to_joint_configuration(robot, qgoal, pname='BiRRT',
+                                                                max_ppiters=-1)
+    self.assertNotEqual(traj3, None)
 
   def test_retime_trajectory(self):
     robot = self.robot
@@ -69,6 +73,7 @@ class Test_planning(unittest.TestCase):
     np.testing.assert_almost_equal(ros_traj_duration, traj.GetDuration())
     # Check num of waypoints
     self.assertEqual(len(ros_traj.points), traj.GetNumWaypoints())
+    # TODO: Send trajectory with repeated waypoints
 
 
   def test_trajectory_from_waypoints(self):
