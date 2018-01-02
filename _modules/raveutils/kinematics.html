@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>raveutils.kinematics &mdash; raveutils 0.1.1 documentation</title>
+  <title>raveutils.kinematics &mdash; raveutils 0.1.2 documentation</title>
   
 
   
@@ -30,7 +30,10 @@
   
 
   
-    <link rel="top" title="raveutils 0.1.1 documentation" href="../../index.html"/>
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="raveutils 0.1.2 documentation" href="../../index.html"/>
         <link rel="up" title="Module code" href="../index.html"/> 
 
   
@@ -59,7 +62,7 @@
             
             
               <div class="version">
-                0.1.1
+                0.1.2
               </div>
             
           
@@ -128,14 +131,16 @@
            <div itemprop="articleBody">
             
   <h1>Source code for raveutils.kinematics</h1><div class="highlight"><pre>
-<span class="ch">#!/usr/bin/env python</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">openravepy</span> <span class="kn">as</span> <span class="nn">orpy</span>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">baldor</span> <span class="k">as</span> <span class="nn">br</span>
+<span class="kn">import</span> <span class="nn">openravepy</span> <span class="k">as</span> <span class="nn">orpy</span>
 <span class="c1"># Local modules</span>
-<span class="kn">import</span> <span class="nn">raveutils</span> <span class="kn">as</span> <span class="nn">ru</span>
+<span class="kn">import</span> <span class="nn">raveutils</span> <span class="k">as</span> <span class="nn">ru</span>
 
 
-<div class="viewcode-block" id="compute_jacobian"><a class="viewcode-back" href="../../reference.html#raveutils.kinematics.compute_jacobian">[docs]</a><span class="k">def</span> <span class="nf">compute_jacobian</span><span class="p">(</span><span class="n">robot</span><span class="p">,</span> <span class="n">link_name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">translation_only</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="compute_jacobian"><a class="viewcode-back" href="../../reference.html#raveutils.kinematics.compute_jacobian">[docs]</a><span class="k">def</span> <span class="nf">compute_jacobian</span><span class="p">(</span><span class="n">robot</span><span class="p">,</span> <span class="n">link_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">link_idx</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                                      <span class="n">translation_only</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
   <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">  Compute the Jacobian matrix</span>
 
@@ -146,6 +151,9 @@
 <span class="sd">  link_name: str, optional</span>
 <span class="sd">    The name of link. If it&#39;s `None`, the last link of the kinematic chain is</span>
 <span class="sd">    used</span>
+<span class="sd">  link_idx: int, optional</span>
+<span class="sd">    The index of link. If it&#39;s `None`, the last link of the kinematic chain is</span>
+<span class="sd">    used</span>
 <span class="sd">  translation_only: bool, optional</span>
 <span class="sd">    If set, only the translation Jacobian is computed</span>
 
@@ -153,27 +161,37 @@
 <span class="sd">  -------</span>
 <span class="sd">  J: array_like</span>
 <span class="sd">    The computed Jacobian matrix</span>
+
+<span class="sd">  Notes</span>
+<span class="sd">  -----</span>
+<span class="sd">  If both `link_idx` and `link_name` are given, `link_idx` will have priority.</span>
 <span class="sd">  &quot;&quot;&quot;</span>
-  <span class="k">if</span> <span class="n">link_name</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-    <span class="n">link_name</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">GetLinks</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">GetName</span><span class="p">()</span>
-  <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="n">l</span><span class="o">.</span><span class="n">GetName</span><span class="p">()</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">robot</span><span class="o">.</span><span class="n">GetLinks</span><span class="p">()]</span>
-  <span class="k">if</span> <span class="n">link_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
-    <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s1">&#39;Invalid link name: {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">link_name</span><span class="p">))</span>
-  <span class="n">idx</span> <span class="o">=</span> <span class="n">names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">link_name</span><span class="p">)</span>
-  <span class="n">origin</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">GetLink</span><span class="p">(</span><span class="n">link_name</span><span class="p">)</span><span class="o">.</span><span class="n">GetTransform</span><span class="p">()[:</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+  <span class="n">num_links</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">robot</span><span class="o">.</span><span class="n">GetLinks</span><span class="p">())</span>
+  <span class="k">if</span> <span class="n">link_idx</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">link_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="n">link_name</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">GetLinks</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">GetName</span><span class="p">()</span>
+      <span class="n">link_idx</span> <span class="o">=</span> <span class="n">num_links</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="n">l</span><span class="o">.</span><span class="n">GetName</span><span class="p">()</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">robot</span><span class="o">.</span><span class="n">GetLinks</span><span class="p">()]</span>
+      <span class="k">if</span> <span class="n">link_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s1">&#39;Invalid link name: </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">link_name</span><span class="p">))</span>
+      <span class="n">link_idx</span> <span class="o">=</span> <span class="n">names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">link_name</span><span class="p">)</span>
+  <span class="k">elif</span> <span class="ow">not</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">num_links</span> <span class="o">&lt;</span> <span class="n">num_links</span><span class="p">):</span>
+    <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s1">&#39;Invalid link index: </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">num_links</span><span class="p">))</span>
+  <span class="n">origin</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">GetLinks</span><span class="p">()[</span><span class="n">link_idx</span><span class="p">]</span><span class="o">.</span><span class="n">GetTransform</span><span class="p">()[:</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
   <span class="n">manip</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">GetActiveManipulator</span><span class="p">()</span>
   <span class="n">indices</span> <span class="o">=</span> <span class="n">manip</span><span class="o">.</span><span class="n">GetArmIndices</span><span class="p">()</span>
-  <span class="n">Jtrans</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">ComputeJacobianTranslation</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">origin</span><span class="p">)[:,</span><span class="n">indices</span><span class="p">]</span>
+  <span class="n">Jtrans</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">ComputeJacobianTranslation</span><span class="p">(</span><span class="n">link_idx</span><span class="p">,</span> <span class="n">origin</span><span class="p">)[:,</span><span class="n">indices</span><span class="p">]</span>
   <span class="k">if</span> <span class="n">translation_only</span><span class="p">:</span>
     <span class="n">J</span> <span class="o">=</span> <span class="n">Jtrans</span>
   <span class="k">else</span><span class="p">:</span>
     <span class="n">J</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">6</span><span class="p">,</span> <span class="n">Jtrans</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
     <span class="n">J</span><span class="p">[:</span><span class="mi">3</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">Jtrans</span>
-    <span class="n">J</span><span class="p">[</span><span class="mi">3</span><span class="p">:,:]</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">ComputeJacobianAxisAngle</span><span class="p">(</span><span class="n">idx</span><span class="p">)[:,</span><span class="n">indices</span><span class="p">]</span>
+    <span class="n">J</span><span class="p">[</span><span class="mi">3</span><span class="p">:,:]</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">ComputeJacobianAxisAngle</span><span class="p">(</span><span class="n">link_idx</span><span class="p">)[:,</span><span class="n">indices</span><span class="p">]</span>
   <span class="k">return</span> <span class="n">J</span></div>
 
-<div class="viewcode-block" id="compute_yoshikawa_index"><a class="viewcode-back" href="../../reference.html#raveutils.kinematics.compute_yoshikawa_index">[docs]</a><span class="k">def</span> <span class="nf">compute_yoshikawa_index</span><span class="p">(</span><span class="n">robot</span><span class="p">,</span> <span class="n">link_name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">translation_only</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
-                                                      <span class="n">penalize_jnt_limits</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="compute_yoshikawa_index"><a class="viewcode-back" href="../../reference.html#raveutils.kinematics.compute_yoshikawa_index">[docs]</a><span class="k">def</span> <span class="nf">compute_yoshikawa_index</span><span class="p">(</span><span class="n">robot</span><span class="p">,</span> <span class="n">link_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">translation_only</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                                      <span class="n">penalize_jnt_limits</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
   <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">  Compute the Yoshikawa index (manipulability index)</span>
 
@@ -219,7 +237,7 @@
   <span class="n">index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span> <span class="nb">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">det</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">J</span><span class="o">.</span><span class="n">T</span><span class="p">)),</span> <span class="mi">0</span><span class="p">)</span> <span class="p">)</span><span class="o">*</span><span class="n">weight</span><span class="o">*</span><span class="n">scale</span>
   <span class="k">return</span> <span class="n">index</span></div>
 
-<div class="viewcode-block" id="find_ik_solutions"><a class="viewcode-back" href="../../reference.html#raveutils.kinematics.find_ik_solutions">[docs]</a><span class="k">def</span> <span class="nf">find_ik_solutions</span><span class="p">(</span><span class="n">robot</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">iktype</span><span class="p">,</span> <span class="n">collision_free</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">freeinc</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
+<div class="viewcode-block" id="find_ik_solutions"><a class="viewcode-back" href="../../reference.html#raveutils.kinematics.find_ik_solutions">[docs]</a><span class="k">def</span> <span class="nf">find_ik_solutions</span><span class="p">(</span><span class="n">robot</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">iktype</span><span class="p">,</span> <span class="n">collision_free</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">freeinc</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
   <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">  Find all the possible IK solutions</span>
 
@@ -250,7 +268,7 @@
   <span class="n">target_list</span> <span class="o">=</span> <span class="p">[]</span>
   <span class="k">if</span> <span class="n">iktype</span> <span class="o">==</span> <span class="n">orpy</span><span class="o">.</span><span class="n">IkParameterizationType</span><span class="o">.</span><span class="n">TranslationDirection5D</span><span class="p">:</span>
     <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">target</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">orpy</span><span class="o">.</span><span class="n">Ray</span><span class="p">:</span>
-      <span class="n">ray</span> <span class="o">=</span> <span class="n">ru</span><span class="o">.</span><span class="n">conversions</span><span class="o">.</span><span class="n">to_ray</span><span class="p">(</span><span class="n">goal</span><span class="p">)</span>
+      <span class="n">ray</span> <span class="o">=</span> <span class="n">ru</span><span class="o">.</span><span class="n">conversions</span><span class="o">.</span><span class="n">to_ray</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
       <span class="n">target_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ray</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
       <span class="n">target_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
@@ -258,7 +276,7 @@
     <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">target</span><span class="p">)</span> <span class="ow">is</span> <span class="n">orpy</span><span class="o">.</span><span class="n">Ray</span><span class="p">:</span>
       <span class="n">Tray</span> <span class="o">=</span> <span class="n">ru</span><span class="o">.</span><span class="n">conversions</span><span class="o">.</span><span class="n">from_ray</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
       <span class="k">for</span> <span class="n">angle</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">freeinc</span><span class="p">):</span>
-        <span class="n">Toffset</span> <span class="o">=</span> <span class="n">orpy</span><span class="o">.</span><span class="n">matrixFromAxisAngle</span><span class="p">(</span><span class="n">angle</span><span class="o">*</span><span class="n">ru</span><span class="o">.</span><span class="n">transforms</span><span class="o">.</span><span class="n">Z_AXIS</span><span class="p">)</span>
+        <span class="n">Toffset</span> <span class="o">=</span> <span class="n">orpy</span><span class="o">.</span><span class="n">matrixFromAxisAngle</span><span class="p">(</span><span class="n">angle</span><span class="o">*</span><span class="n">br</span><span class="o">.</span><span class="n">Z_AXIS</span><span class="p">)</span>
         <span class="n">target_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Tray</span><span class="p">,</span> <span class="n">Toffset</span><span class="p">))</span>
     <span class="k">else</span><span class="p">:</span>
       <span class="n">target_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
@@ -274,7 +292,7 @@
   <span class="k">return</span> <span class="n">solutions</span></div>
 
 <div class="viewcode-block" id="load_ikfast"><a class="viewcode-back" href="../../reference.html#raveutils.kinematics.load_ikfast">[docs]</a><span class="k">def</span> <span class="nf">load_ikfast</span><span class="p">(</span><span class="n">robot</span><span class="p">,</span> <span class="n">iktype</span><span class="p">,</span> <span class="n">freejoints</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;J6&#39;</span><span class="p">],</span> <span class="n">freeinc</span><span class="o">=</span><span class="p">[</span><span class="mf">0.01</span><span class="p">],</span>
-                                                            <span class="n">autogenerate</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+                                                            <span class="n">autogenerate</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
   <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">  Load the IKFast solver</span>
 
@@ -285,8 +303,8 @@
 <span class="sd">  iktype: orpy.IkParameterizationType</span>
 <span class="sd">    Inverse kinematics type to be used</span>
 <span class="sd">  freeinc: list</span>
-<span class="sd">    The free increment (discretization) to be used for the free DOF when the</span>
-<span class="sd">    target is the `iktype` is `TranslationDirection5D`</span>
+<span class="sd">    The increment (discretization) to be used for the free DOF when the target</span>
+<span class="sd">    `iktype` is `TranslationDirection5D`</span>
 <span class="sd">  autogenerate: bool, optional</span>
 <span class="sd">    If true, auto-generate the IKFast solver</span>
 
@@ -296,7 +314,7 @@
 <span class="sd">    `True` if succeeded, `False` otherwise</span>
 <span class="sd">  &quot;&quot;&quot;</span>
   <span class="c1"># Improve code readability</span>
-  <span class="kn">from</span> <span class="nn">openravepy.databases.inversekinematics</span> <span class="kn">import</span> <span class="n">InverseKinematicsModel</span>
+  <span class="kn">from</span> <span class="nn">openravepy.databases.inversekinematics</span> <span class="k">import</span> <span class="n">InverseKinematicsModel</span>
   <span class="c1"># Initialize the ikmodel</span>
   <span class="k">if</span> <span class="n">iktype</span> <span class="o">==</span> <span class="n">orpy</span><span class="o">.</span><span class="n">IkParameterizationType</span><span class="o">.</span><span class="n">TranslationDirection5D</span><span class="p">:</span>
     <span class="n">ikmodel</span> <span class="o">=</span> <span class="n">InverseKinematicsModel</span><span class="p">(</span><span class="n">robot</span><span class="p">,</span> <span class="n">iktype</span><span class="o">=</span><span class="n">iktype</span><span class="p">,</span>
@@ -305,7 +323,7 @@
     <span class="n">ikmodel</span> <span class="o">=</span> <span class="n">InverseKinematicsModel</span><span class="p">(</span><span class="n">robot</span><span class="p">,</span> <span class="n">iktype</span><span class="o">=</span><span class="n">iktype</span><span class="p">)</span>
   <span class="c1"># Load or generate</span>
   <span class="k">if</span> <span class="ow">not</span> <span class="n">ikmodel</span><span class="o">.</span><span class="n">load</span><span class="p">()</span> <span class="ow">and</span> <span class="n">autogenerate</span><span class="p">:</span>
-    <span class="k">print</span> <span class="s1">&#39;Generating IKFast {0}. Will take few minutes...&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">iktype</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+    <span class="nb">print</span> <span class="s1">&#39;Generating IKFast </span><span class="si">{0}</span><span class="s1">. Will take few minutes...&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">iktype</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">iktype</span> <span class="o">==</span> <span class="n">orpy</span><span class="o">.</span><span class="n">IkParameterizationType</span><span class="o">.</span><span class="n">Transform6D</span><span class="p">:</span>
       <span class="n">ikmodel</span><span class="o">.</span><span class="n">autogenerate</span><span class="p">()</span>
     <span class="k">elif</span> <span class="n">iktype</span> <span class="o">==</span> <span class="n">orpy</span><span class="o">.</span><span class="n">IkParameterizationType</span><span class="o">.</span><span class="n">TranslationDirection5D</span><span class="p">:</span>
@@ -313,7 +331,7 @@
       <span class="n">ikmodel</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
       <span class="n">ikmodel</span><span class="o">.</span><span class="n">autogenerate</span><span class="p">()</span>
-    <span class="k">print</span> <span class="s1">&#39;IKFast {0} has been successfully generated&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">iktype</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+    <span class="nb">print</span> <span class="s1">&#39;IKFast </span><span class="si">{0}</span><span class="s1"> has been successfully generated&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">iktype</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
   <span class="k">if</span> <span class="n">iktype</span> <span class="o">==</span> <span class="n">orpy</span><span class="o">.</span><span class="n">IkParameterizationType</span><span class="o">.</span><span class="n">TranslationDirection5D</span><span class="p">:</span>
     <span class="n">success</span> <span class="o">=</span> <span class="n">ikmodel</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">freeinc</span><span class="o">=</span><span class="n">freeinc</span><span class="p">)</span>
   <span class="k">elif</span> <span class="n">iktype</span> <span class="o">==</span> <span class="n">orpy</span><span class="o">.</span><span class="n">IkParameterizationType</span><span class="o">.</span><span class="n">Transform6D</span><span class="p">:</span>
@@ -322,7 +340,7 @@
     <span class="n">success</span> <span class="o">=</span> <span class="n">ikmodel</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
   <span class="k">return</span> <span class="n">success</span></div>
 
-<div class="viewcode-block" id="load_link_stats"><a class="viewcode-back" href="../../reference.html#raveutils.kinematics.load_link_stats">[docs]</a><span class="k">def</span> <span class="nf">load_link_stats</span><span class="p">(</span><span class="n">robot</span><span class="p">,</span> <span class="n">xyzdelta</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">autogenerate</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="load_link_stats"><a class="viewcode-back" href="../../reference.html#raveutils.kinematics.load_link_stats">[docs]</a><span class="k">def</span> <span class="nf">load_link_stats</span><span class="p">(</span><span class="n">robot</span><span class="p">,</span> <span class="n">xyzdelta</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">autogenerate</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
   <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">  Load/generate the `Link Statistics` database which contains statistics on body</span>
 <span class="sd">  links like swept volumes.</span>
@@ -347,33 +365,32 @@
 <span class="sd">  success: bool</span>
 <span class="sd">    `True` if succeeded, `False` otherwise</span>
 <span class="sd">  &quot;&quot;&quot;</span>
-  <span class="n">success</span> <span class="o">=</span> <span class="bp">False</span>
+  <span class="n">success</span> <span class="o">=</span> <span class="kc">True</span>
   <span class="n">statsmodel</span> <span class="o">=</span> <span class="n">orpy</span><span class="o">.</span><span class="n">databases</span><span class="o">.</span><span class="n">linkstatistics</span><span class="o">.</span><span class="n">LinkStatisticsModel</span><span class="p">(</span><span class="n">robot</span><span class="p">)</span>
   <span class="k">if</span> <span class="ow">not</span> <span class="n">statsmodel</span><span class="o">.</span><span class="n">load</span><span class="p">()</span> <span class="ow">and</span> <span class="n">autogenerate</span><span class="p">:</span>
-    <span class="k">print</span> <span class="s1">&#39;Generating LinkStatistics database. Will take ~1 minute...&#39;</span>
+    <span class="nb">print</span> <span class="s1">&#39;Generating LinkStatistics database. Will take ~1 minute...&#39;</span>
     <span class="n">statsmodel</span><span class="o">.</span><span class="n">autogenerate</span><span class="p">()</span>
   <span class="k">if</span> <span class="n">statsmodel</span><span class="o">.</span><span class="n">load</span><span class="p">():</span>
     <span class="n">statsmodel</span><span class="o">.</span><span class="n">setRobotWeights</span><span class="p">()</span>
     <span class="n">statsmodel</span><span class="o">.</span><span class="n">setRobotResolutions</span><span class="p">(</span><span class="n">xyzdelta</span><span class="o">=</span><span class="n">xyzdelta</span><span class="p">)</span>
-    <span class="n">success</span> <span class="o">=</span> <span class="bp">True</span>
   <span class="k">else</span><span class="p">:</span>
     <span class="n">manip</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">GetActiveManipulator</span><span class="p">()</span>
     <span class="n">indices</span> <span class="o">=</span> <span class="n">manip</span><span class="o">.</span><span class="n">GetArmIndices</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">robot</span><span class="o">.</span><span class="n">GetActiveDOF</span><span class="p">()</span> <span class="o">==</span> <span class="mi">6</span><span class="p">:</span>
-      <span class="n">origins</span> <span class="o">=</span> <span class="p">[</span><span class="n">l</span><span class="o">.</span><span class="n">GetTransform</span><span class="p">()[:</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">robot</span><span class="o">.</span><span class="n">GetLinks</span><span class="p">()]</span>
-      <span class="n">jweights</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">origins</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">origins</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span>
-                  <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">origins</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">origins</span><span class="p">[</span><span class="mi">3</span><span class="p">]),</span>
-                  <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">origins</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">-</span> <span class="n">origins</span><span class="p">[</span><span class="mi">4</span><span class="p">]),</span>
-                  <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">origins</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">-</span> <span class="n">origins</span><span class="p">[</span><span class="mi">5</span><span class="p">]),</span>
-                  <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">origins</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">-</span> <span class="n">origins</span><span class="p">[</span><span class="mi">6</span><span class="p">]),</span>
-                  <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">origins</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">-</span> <span class="n">origins</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])]</span>
-      <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">robot</span><span class="o">.</span><span class="n">GetActiveDOF</span><span class="p">()):</span>
-        <span class="n">jweights</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">jweights</span><span class="p">[</span><span class="n">i</span><span class="p">:])</span>
-      <span class="n">robot_weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">robot</span><span class="o">.</span><span class="n">GetDOF</span><span class="p">())</span>
-      <span class="n">robot_weights</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jweights</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">jweights</span><span class="p">)</span>
+    <span class="n">jweights</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">:</span>
+      <span class="n">joint</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">GetJoints</span><span class="p">()[</span><span class="n">j</span><span class="p">]</span>
+      <span class="n">parent_origin</span> <span class="o">=</span> <span class="n">joint</span><span class="o">.</span><span class="n">GetHierarchyParentLink</span><span class="p">()</span><span class="o">.</span><span class="n">GetTransform</span><span class="p">()[:</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+      <span class="n">child_origin</span> <span class="o">=</span> <span class="n">joint</span><span class="o">.</span><span class="n">GetHierarchyChildLink</span><span class="p">()</span><span class="o">.</span><span class="n">GetTransform</span><span class="p">()[:</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+      <span class="n">jweights</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">child_origin</span> <span class="o">-</span> <span class="n">parent_origin</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">jweights</span><span class="p">)):</span>
+      <span class="n">jweights</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">jweights</span><span class="p">[</span><span class="n">i</span><span class="p">:])</span>
+    <span class="n">robot_weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">robot</span><span class="o">.</span><span class="n">GetDOF</span><span class="p">())</span>
+    <span class="n">robot_weights</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jweights</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">jweights</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">robot_weights</span> <span class="o">&gt;=</span> <span class="n">br</span><span class="o">.</span><span class="n">_EPS</span><span class="p">):</span>
+      <span class="c1"># All the weights have to be greater than 0</span>
       <span class="n">robot</span><span class="o">.</span><span class="n">SetDOFWeights</span><span class="p">(</span><span class="n">robot_weights</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-      <span class="n">robot</span><span class="o">.</span><span class="n">SetDOFWeights</span><span class="p">([</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">robot</span><span class="o">.</span><span class="n">GetDOF</span><span class="p">())</span>
+      <span class="n">success</span> <span class="o">=</span> <span class="kc">False</span>
   <span class="k">return</span> <span class="n">success</span></div>
 
 <div class="viewcode-block" id="random_joint_values"><a class="viewcode-back" href="../../reference.html#raveutils.kinematics.random_joint_values">[docs]</a><span class="k">def</span> <span class="nf">random_joint_values</span><span class="p">(</span><span class="n">robot</span><span class="p">):</span>
@@ -427,7 +444,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.1.1',
+            VERSION:'0.1.2',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true
@@ -436,7 +453,7 @@
       <script type="text/javascript" src="../../_static/jquery.js"></script>
       <script type="text/javascript" src="../../_static/underscore.js"></script>
       <script type="text/javascript" src="../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

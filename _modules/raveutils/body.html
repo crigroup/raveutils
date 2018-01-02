@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>raveutils.body &mdash; raveutils 0.1.1 documentation</title>
+  <title>raveutils.body &mdash; raveutils 0.1.2 documentation</title>
   
 
   
@@ -30,7 +30,10 @@
   
 
   
-    <link rel="top" title="raveutils 0.1.1 documentation" href="../../index.html"/>
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="raveutils 0.1.2 documentation" href="../../index.html"/>
         <link rel="up" title="Module code" href="../index.html"/> 
 
   
@@ -59,7 +62,7 @@
             
             
               <div class="version">
-                0.1.1
+                0.1.2
               </div>
             
           
@@ -128,12 +131,13 @@
            <div itemprop="articleBody">
             
   <h1>Source code for raveutils.body</h1><div class="highlight"><pre>
-<span class="ch">#!/usr/bin/env python</span>
+<span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="kn">import</span> <span class="nn">itertools</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">openravepy</span> <span class="kn">as</span> <span class="nn">orpy</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">baldor</span> <span class="k">as</span> <span class="nn">br</span>
+<span class="kn">import</span> <span class="nn">openravepy</span> <span class="k">as</span> <span class="nn">orpy</span>
 <span class="c1"># Local modules</span>
-<span class="kn">import</span> <span class="nn">raveutils</span> <span class="kn">as</span> <span class="nn">ru</span>
+<span class="kn">import</span> <span class="nn">raveutils</span> <span class="k">as</span> <span class="nn">ru</span>
 
 
 <div class="viewcode-block" id="enable_body"><a class="viewcode-back" href="../../reference.html#raveutils.body.enable_body">[docs]</a><span class="k">def</span> <span class="nf">enable_body</span><span class="p">(</span><span class="n">body</span><span class="p">,</span> <span class="n">enable</span><span class="p">):</span>
@@ -152,7 +156,7 @@
     <span class="k">for</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">body</span><span class="o">.</span><span class="n">GetLinks</span><span class="p">():</span>
       <span class="n">link</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="n">enable</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="get_bounding_box_corners"><a class="viewcode-back" href="../../reference.html#raveutils.body.get_bounding_box_corners">[docs]</a><span class="k">def</span> <span class="nf">get_bounding_box_corners</span><span class="p">(</span><span class="n">body</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
+<div class="viewcode-block" id="get_bounding_box_corners"><a class="viewcode-back" href="../../reference.html#raveutils.body.get_bounding_box_corners">[docs]</a><span class="k">def</span> <span class="nf">get_bounding_box_corners</span><span class="p">(</span><span class="n">body</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
   <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">  Get the bounding box corners (8 corners) for the given body.</span>
 <span class="sd">  If ``transform`` is given the corners are transformed properly.</span>
@@ -174,20 +178,20 @@
 <span class="sd">  corners: list</span>
 <span class="sd">   List containing the 8 box corners. Each corner is a XYZ ``np.array``</span>
 <span class="sd">  &quot;&quot;&quot;</span>
-  <span class="k">if</span> <span class="n">transform</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-    <span class="n">Tinv</span> <span class="o">=</span> <span class="n">ru</span><span class="o">.</span><span class="n">transforms</span><span class="o">.</span><span class="n">transform_inv</span><span class="p">(</span> <span class="n">body</span><span class="o">.</span><span class="n">GetTransform</span><span class="p">()</span> <span class="p">)</span>
+  <span class="k">if</span> <span class="n">transform</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">Tinv</span> <span class="o">=</span> <span class="n">br</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">inverse</span><span class="p">(</span><span class="n">body</span><span class="o">.</span><span class="n">GetTransform</span><span class="p">())</span>
   <span class="n">aabb</span> <span class="o">=</span> <span class="n">body</span><span class="o">.</span><span class="n">ComputeAABB</span><span class="p">()</span>
   <span class="n">corners</span> <span class="o">=</span> <span class="p">[]</span>
   <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]):</span>
     <span class="n">position</span> <span class="o">=</span> <span class="n">aabb</span><span class="o">.</span><span class="n">pos</span><span class="p">()</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">*</span><span class="n">aabb</span><span class="o">.</span><span class="n">extents</span><span class="p">()</span><span class="o">*</span><span class="n">scale</span>
-    <span class="k">if</span> <span class="n">transform</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">transform</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
       <span class="n">homposition</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">position</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
       <span class="n">homposition</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Tinv</span><span class="p">,</span> <span class="n">homposition</span><span class="p">)</span>
       <span class="n">position</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">transform</span><span class="p">,</span> <span class="n">homposition</span><span class="p">)[:</span><span class="mi">3</span><span class="p">]</span>
     <span class="n">corners</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">position</span><span class="p">)</span>
   <span class="k">return</span> <span class="n">corners</span></div>
 
-<div class="viewcode-block" id="set_body_transparency"><a class="viewcode-back" href="../../reference.html#raveutils.body.set_body_transparency">[docs]</a><span class="k">def</span> <span class="nf">set_body_transparency</span><span class="p">(</span><span class="n">body</span><span class="p">,</span> <span class="n">transparency</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">links</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="set_body_transparency"><a class="viewcode-back" href="../../reference.html#raveutils.body.set_body_transparency">[docs]</a><span class="k">def</span> <span class="nf">set_body_transparency</span><span class="p">(</span><span class="n">body</span><span class="p">,</span> <span class="n">transparency</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">links</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
   <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">  Set the transparency value of all the body&#39;s geometries</span>
 
@@ -200,7 +204,7 @@
 <span class="sd">  links: list</span>
 <span class="sd">   List of links to be modified. By default all the links are.</span>
 <span class="sd">  &quot;&quot;&quot;</span>
-  <span class="k">if</span> <span class="n">links</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+  <span class="k">if</span> <span class="n">links</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
     <span class="n">links_to_modify</span> <span class="o">=</span> <span class="p">[</span><span class="n">link</span><span class="o">.</span><span class="n">GetName</span><span class="p">()</span> <span class="k">for</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">body</span><span class="o">.</span><span class="n">GetLinks</span><span class="p">()]</span>
   <span class="k">else</span><span class="p">:</span>
     <span class="n">links_to_modify</span> <span class="o">=</span> <span class="n">links</span>
@@ -244,7 +248,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.1.1',
+            VERSION:'0.1.2',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true
@@ -253,7 +257,7 @@
       <script type="text/javascript" src="../../_static/jquery.js"></script>
       <script type="text/javascript" src="../../_static/underscore.js"></script>
       <script type="text/javascript" src="../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Install &mdash; raveutils 0.1.1 documentation</title>
+  <title>Install &mdash; raveutils 0.1.2 documentation</title>
   
 
   
@@ -30,7 +30,10 @@
   
 
   
-    <link rel="top" title="raveutils 0.1.1 documentation" href="index.html"/>
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="raveutils 0.1.2 documentation" href="index.html"/>
         <link rel="next" title="API Reference" href="reference.html"/>
         <link rel="prev" title="raveutils Package" href="index.html"/> 
 
@@ -60,7 +63,7 @@
             
             
               <div class="version">
-                0.1.1
+                0.1.2
               </div>
             
           
@@ -82,7 +85,7 @@
             
             
                 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="">Install</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Install</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#ros-kinetic">ROS Kinetic</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#openrave">OpenRAVE</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ros-package-installation">ROS Package installation</a></li>
@@ -124,7 +127,7 @@
       <li class="wy-breadcrumbs-aside">
         
           
-            <a href="_sources/install.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/install.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -144,12 +147,12 @@ bits.</p>
 keys following the steps described at
 <a class="reference external" href="http://wiki.ros.org/kinetic/Installation/Ubuntu">http://wiki.ros.org/kinetic/Installation/Ubuntu</a></p>
 <p>Now, install the ROS bare bones:</p>
-<div class="highlight-python"><div class="highlight"><pre># Installation
-sudo apt-get update
-sudo apt-get install python-wstool ros-kinetic-ros-base
-# Initialize rosdep
-sudo rosdep init
-rosdep update
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># Installation</span>
+<span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">update</span>
+<span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">python</span><span class="o">-</span><span class="n">wstool</span> <span class="n">ros</span><span class="o">-</span><span class="n">kinetic</span><span class="o">-</span><span class="n">ros</span><span class="o">-</span><span class="n">base</span>
+<span class="c1"># Initialize rosdep</span>
+<span class="n">sudo</span> <span class="n">rosdep</span> <span class="n">init</span>
+<span class="n">rosdep</span> <span class="n">update</span>
 </pre></div>
 </div>
 </div>
@@ -168,33 +171,33 @@ and motion planning environments. It is widely used in academia and industry.</p
 <div class="section" id="ros-package-installation">
 <h2>ROS Package installation<a class="headerlink" href="#ros-package-installation" title="Permalink to this headline">¶</a></h2>
 <p>Go to your ROS working directory:</p>
-<div class="highlight-python"><div class="highlight"><pre>cd ~/catkin_ws/src
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">~/</span><span class="n">catkin_ws</span><span class="o">/</span><span class="n">src</span>
 </pre></div>
 </div>
 <p>Clone these repositories:</p>
-<div class="highlight-python"><div class="highlight"><pre>git clone https://github.com/crigroup/raveutils.git
-git clone https://github.com/crigroup/openrave_catkin.git
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">crigroup</span><span class="o">/</span><span class="n">raveutils</span><span class="o">.</span><span class="n">git</span>
+<span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">crigroup</span><span class="o">/</span><span class="n">openrave_catkin</span><span class="o">.</span><span class="n">git</span>
 </pre></div>
 </div>
 <p>Install any missing dependencies using rosdep:</p>
-<div class="highlight-python"><div class="highlight"><pre>rosdep update
-rosdep install --from-paths . --ignore-src -y
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">rosdep</span> <span class="n">update</span>
+<span class="n">rosdep</span> <span class="n">install</span> <span class="o">--</span><span class="n">from</span><span class="o">-</span><span class="n">paths</span> <span class="o">.</span> <span class="o">--</span><span class="n">ignore</span><span class="o">-</span><span class="n">src</span> <span class="o">-</span><span class="n">y</span>
 </pre></div>
 </div>
 <p>Now, compile your ROS workspace:</p>
-<div class="highlight-python"><div class="highlight"><pre>cd ~/catkin_ws &amp;&amp; catkin_make
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">~/</span><span class="n">catkin_ws</span> <span class="o">&amp;&amp;</span> <span class="n">catkin_make</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="testing-the-installation">
 <h2>Testing the Installation<a class="headerlink" href="#testing-the-installation" title="Permalink to this headline">¶</a></h2>
 <p>Make sure you always source the appropriate ROS setup file, e.g:</p>
-<div class="highlight-python"><div class="highlight"><pre>source ~/catkin_ws/devel/setup.bash
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">source</span> <span class="o">~/</span><span class="n">catkin_ws</span><span class="o">/</span><span class="n">devel</span><span class="o">/</span><span class="n">setup</span><span class="o">.</span><span class="n">bash</span>
 </pre></div>
 </div>
 <p>The following will run the tests of the <code class="docutils literal"><span class="pre">raveutils</span></code> package:</p>
-<div class="highlight-python"><div class="highlight"><pre>roscd raveutils/tests
-nosetests -v
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">roscd</span> <span class="n">raveutils</span><span class="o">/</span><span class="n">tests</span>
+<span class="n">nosetests</span> <span class="o">-</span><span class="n">v</span>
 </pre></div>
 </div>
 </div>
@@ -241,7 +244,7 @@ nosetests -v
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.1.1',
+            VERSION:'0.1.2',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true
@@ -250,7 +253,7 @@ nosetests -v
       <script type="text/javascript" src="_static/jquery.js"></script>
       <script type="text/javascript" src="_static/underscore.js"></script>
       <script type="text/javascript" src="_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

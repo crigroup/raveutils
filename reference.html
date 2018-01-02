@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>API Reference &mdash; raveutils 0.1.1 documentation</title>
+  <title>API Reference &mdash; raveutils 0.1.2 documentation</title>
   
 
   
@@ -30,7 +30,10 @@
   
 
   
-    <link rel="top" title="raveutils 0.1.1 documentation" href="index.html"/>
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="raveutils 0.1.2 documentation" href="index.html"/>
         <link rel="prev" title="Install" href="install.html"/> 
 
   
@@ -59,7 +62,7 @@
             
             
               <div class="version">
-                0.1.1
+                0.1.2
               </div>
             
           
@@ -82,7 +85,7 @@
             
                 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="install.html">Install</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="">API Reference</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#module-raveutils.body">Body</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-raveutils.camera">Camera</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-raveutils.conversions">Conversions</a></li>
@@ -127,7 +130,7 @@
       <li class="wy-breadcrumbs-aside">
         
           
-            <a href="_sources/reference.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/reference.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -150,8 +153,8 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>body</strong> (<em>orpy.KinBody</em>) &#8211; The OpenRAVE body</li>
-<li><strong>enable</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If true, will enable all the links.</li>
+<li><strong>body</strong> (<em>orpy.KinBody</em>) – The OpenRAVE body</li>
+<li><strong>enable</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) – If true, will enable all the links.</li>
 </ul>
 </td>
 </tr>
@@ -171,15 +174,14 @@ bounding box.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>body</strong> (<em>orpy.KinBody</em>) &#8211; The OpenRAVE body</li>
-<li><strong>transform</strong> (<em>array_like</em>) &#8211; Homogeneous transformation of the body. If <code class="docutils literal"><span class="pre">None</span></code>, the corners are given
+<li><strong>body</strong> (<em>orpy.KinBody</em>) – The OpenRAVE body</li>
+<li><strong>transform</strong> (<em>array_like</em>) – Homogeneous transformation of the body. If <code class="docutils literal"><span class="pre">None</span></code>, the corners are given
 using the current pose of the body in OpenRAVE.</li>
-<li><strong>scale</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The scale factor to modify the extents of the bounding box.</li>
+<li><strong>scale</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – The scale factor to modify the extents of the bounding box.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>corners</strong> &#8211;
-List containing the 8 box corners. Each corner is a XYZ <code class="docutils literal"><span class="pre">np.array</span></code></p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>corners</strong> – List containing the 8 box corners. Each corner is a XYZ <code class="docutils literal"><span class="pre">np.array</span></code></p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
@@ -192,15 +194,15 @@ List containing the 8 box corners. Each corner is a XYZ <code class="docutils li
 <dl class="function">
 <dt id="raveutils.body.set_body_transparency">
 <code class="descclassname">raveutils.body.</code><code class="descname">set_body_transparency</code><span class="sig-paren">(</span><em>body</em>, <em>transparency=0.0</em>, <em>links=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raveutils/body.html#set_body_transparency"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#raveutils.body.set_body_transparency" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the transparency value of all the body&#8217;s geometries</p>
+<dd><p>Set the transparency value of all the body’s geometries</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>body</strong> (<em>orpy.KinBody</em>) &#8211; The OpenRAVE body</li>
-<li><strong>transparency</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The transparency value. If it&#8217;s out of range [0.0, 1.0], it&#8217;ll be clipped.</li>
-<li><strong>links</strong> (<em>list</em>) &#8211; List of links to be modified. By default all the links are.</li>
+<li><strong>body</strong> (<em>orpy.KinBody</em>) – The OpenRAVE body</li>
+<li><strong>transparency</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – The transparency value. If it’s out of range [0.0, 1.0], it’ll be clipped.</li>
+<li><strong>links</strong> (<em>list</em>) – List of links to be modified. By default all the links are.</li>
 </ul>
 </td>
 </tr>
@@ -214,18 +216,18 @@ List containing the 8 box corners. Each corner is a XYZ <code class="docutils li
 <dl class="class">
 <dt id="raveutils.camera.CameraFOV">
 <em class="property">class </em><code class="descclassname">raveutils.camera.</code><code class="descname">CameraFOV</code><span class="sig-paren">(</span><em>camera_info</em>, <em>maxdist</em>, <em>transform=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raveutils/camera.html#CameraFOV"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#raveutils.camera.CameraFOV" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
 <p>Base class for the field-of-view of a Pin hole camera.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>camera_info</strong> (<em>sensor_msgs/CameraInfo</em>) &#8211; Meta information of the camera. For more details check the
+<li><strong>camera_info</strong> (<em>sensor_msgs/CameraInfo</em>) – Meta information of the camera. For more details check the
 <a class="reference external" href="http://docs.ros.org/api/sensor_msgs/html/msg/CameraInfo.html">sensor_msgs/CameraInfo</a>
 documentation.</li>
-<li><strong>maxdist</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; Maximum distance the FOV covers in the Z direction of the camera frame.</li>
-<li><strong>transform</strong> (<em>array_like</em>) &#8211; Homogenous transformation of the camera reference frame. If <cite>None</cite> then
+<li><strong>maxdist</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – Maximum distance the FOV covers in the Z direction of the camera frame.</li>
+<li><strong>transform</strong> (<em>array_like</em>) – Homogenous transformation of the camera reference frame. If <cite>None</cite> then
 the identity matrix is used.</li>
 </ul>
 </td>
@@ -240,12 +242,11 @@ the identity matrix is used.</li>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>points</strong> (<em>array_like</em>) &#8211; List of XYZ points</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>points</strong> (<em>array_like</em>) – List of XYZ points</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>all_inside</strong> &#8211;
-True if all the points are inside the FOV. False otherwise.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>all_inside</strong> – True if all the points are inside the FOV. False otherwise.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/library/functions.html#bool" title="(in Python v2.7)">bool</a></td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)">bool</a></td>
 </tr>
 </tbody>
 </table>
@@ -259,8 +260,7 @@ True if all the points are inside the FOV. False otherwise.</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>corners</strong> &#8211;
-A 5x3 array with the five corners of the camera field of view</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>corners</strong> – A 5x3 array with the five corners of the camera field of view</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">array_like</td>
 </tr>
@@ -277,10 +277,8 @@ A 5x3 array with the five corners of the camera field of view</td>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
-<li><strong>vertices</strong> (<em>array_like</em>) &#8211;
-The trimesh vertices</li>
-<li><strong>faces</strong> (<em>array_like</em>) &#8211;
-The trimesh faces</li>
+<li><strong>vertices</strong> (<em>array_like</em>) – The trimesh vertices</li>
+<li><strong>faces</strong> (<em>array_like</em>) – The trimesh faces</li>
 </ul>
 </td>
 </tr>
@@ -300,8 +298,7 @@ The trimesh faces</li>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>random_point</strong> &#8211;
-The random XYZ point inside the camera field of view</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>random_point</strong> – The random XYZ point inside the camera field of view</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">array_like</td>
 </tr>
@@ -322,10 +319,9 @@ The random XYZ point inside the camera field of view</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ray</strong> (<em>orpy.Ray</em>) &#8211; The input OpenRAVE ray</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ray</strong> (<em>orpy.Ray</em>) – The input OpenRAVE ray</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>transform</strong> &#8211;
-The resulting homogeneous transformation</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>transform</strong> – The resulting homogeneous transformation</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">array_like</td>
 </tr>
@@ -341,10 +337,9 @@ The resulting homogeneous transformation</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>transform</strong> (<em>array_like</em>) &#8211; The input homogeneous transformation</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>transform</strong> (<em>array_like</em>) – The input homogeneous transformation</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>transform</strong> &#8211;
-The resulting ray</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>transform</strong> – The resulting ray</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">orpy.Ray</td>
 </tr>
@@ -357,22 +352,23 @@ The resulting ray</td>
 <span id="kinematics"></span><h2>Kinematics<a class="headerlink" href="#module-raveutils.kinematics" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="raveutils.kinematics.compute_jacobian">
-<code class="descclassname">raveutils.kinematics.</code><code class="descname">compute_jacobian</code><span class="sig-paren">(</span><em>robot</em>, <em>link_name=None</em>, <em>translation_only=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raveutils/kinematics.html#compute_jacobian"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#raveutils.kinematics.compute_jacobian" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">raveutils.kinematics.</code><code class="descname">compute_jacobian</code><span class="sig-paren">(</span><em>robot</em>, <em>link_name=None</em>, <em>link_idx=None</em>, <em>translation_only=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raveutils/kinematics.html#compute_jacobian"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#raveutils.kinematics.compute_jacobian" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the Jacobian matrix</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>robot</strong> (<em>orpy.Robot</em>) &#8211; The OpenRAVE robot</li>
-<li><strong>link_name</strong> (<em>str, optional</em>) &#8211; The name of link. If it&#8217;s <cite>None</cite>, the last link of the kinematic chain is
+<li><strong>robot</strong> (<em>orpy.Robot</em>) – The OpenRAVE robot</li>
+<li><strong>link_name</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – The name of link. If it’s <cite>None</cite>, the last link of the kinematic chain is
 used</li>
-<li><strong>translation_only</strong> (<em>bool, optional</em>) &#8211; If set, only the translation Jacobian is computed</li>
+<li><strong>link_idx</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a><em>, </em><em>optional</em>) – The index of link. If it’s <cite>None</cite>, the last link of the kinematic chain is
+used</li>
+<li><strong>translation_only</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a><em>, </em><em>optional</em>) – If set, only the translation Jacobian is computed</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>J</strong> &#8211;
-The computed Jacobian matrix</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>J</strong> – The computed Jacobian matrix</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">array_like</p>
@@ -380,6 +376,8 @@ The computed Jacobian matrix</p>
 </tr>
 </tbody>
 </table>
+<p class="rubric">Notes</p>
+<p>If both <cite>link_idx</cite> and <cite>link_name</cite> are given, <cite>link_idx</cite> will have priority.</p>
 </dd></dl>
 
 <dl class="function">
@@ -391,21 +389,20 @@ The computed Jacobian matrix</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>robot</strong> (<em>orpy.Robot</em>) &#8211; The OpenRAVE robot</li>
-<li><strong>link_name</strong> (<em>str, optional</em>) &#8211; The name of link. If it&#8217;s <cite>None</cite>, the last link of the kinematic chain is
+<li><strong>robot</strong> (<em>orpy.Robot</em>) – The OpenRAVE robot</li>
+<li><strong>link_name</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – The name of link. If it’s <cite>None</cite>, the last link of the kinematic chain is
 used.</li>
-<li><strong>translation_only</strong> (<em>bool, optional</em>) &#8211; If <cite>True</cite> use only the translation part of the Jacobian matrix to
+<li><strong>translation_only</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a><em>, </em><em>optional</em>) – If <cite>True</cite> use only the translation part of the Jacobian matrix to
 compute the index. If <cite>False</cite> use the translation and rotation.</li>
-<li><strong>penalize_jnt_limits</strong> (<em>bool, optional</em>) &#8211; If True penalize/attenuate the manipulability proportionally
+<li><strong>penalize_jnt_limits</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a><em>, </em><em>optional</em>) – If True penalize/attenuate the manipulability proportionally
 to the <em>distance</em> to the joint limits of the robot</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>index</strong> &#8211;
-The Yoshikawa manipulability index</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>index</strong> – The Yoshikawa manipulability index</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)">float</a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)">float</a></p>
 </td>
 </tr>
 </tbody>
@@ -421,21 +418,20 @@ The Yoshikawa manipulability index</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>robot</strong> (<em>orpy.Robot</em>) &#8211; The OpenRAVE robot</li>
-<li><strong>target</strong> (<em>array_like or orpy.Ray</em>) &#8211; The target in the task space (Cartesian). A target can be defined as a Ray
+<li><strong>robot</strong> (<em>orpy.Robot</em>) – The OpenRAVE robot</li>
+<li><strong>target</strong> (<em>array_like</em><em> or </em><em>orpy.Ray</em>) – The target in the task space (Cartesian). A target can be defined as a Ray
 (position and direction) which is 5D or as an homogeneous transformation
 which is 6D.</li>
-<li><strong>iktype</strong> (<em>orpy.IkParameterizationType</em>) &#8211; Inverse kinematics type to use. Supported values:
+<li><strong>iktype</strong> (<em>orpy.IkParameterizationType</em>) – Inverse kinematics type to use. Supported values:
 <cite>orpy.IkParameterizationType.Transform6D</cite> and
 <cite>orpy.IkParameterizationType.TranslationDirection5D</cite></li>
-<li><strong>collision_free</strong> (<em>bool, optional</em>) &#8211; If true, find only collision-free solutions</li>
-<li><strong>freeinc</strong> (<em>float, optional</em>) &#8211; The free increment (discretization) to be used for the free DOF when the
+<li><strong>collision_free</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a><em>, </em><em>optional</em>) – If true, find only collision-free solutions</li>
+<li><strong>freeinc</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a><em>, </em><em>optional</em>) – The free increment (discretization) to be used for the free DOF when the
 target is 5D.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>solutions</strong> &#8211;
-The list of IK solutions found</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>solutions</strong> – The list of IK solutions found</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
@@ -454,19 +450,18 @@ The list of IK solutions found</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>robot</strong> (<em>orpy.Robot</em>) &#8211; The OpenRAVE robot</li>
-<li><strong>iktype</strong> (<em>orpy.IkParameterizationType</em>) &#8211; Inverse kinematics type to be used</li>
-<li><strong>freeinc</strong> (<em>list</em>) &#8211; The free increment (discretization) to be used for the free DOF when the
-target is the <cite>iktype</cite> is <cite>TranslationDirection5D</cite></li>
-<li><strong>autogenerate</strong> (<em>bool, optional</em>) &#8211; If true, auto-generate the IKFast solver</li>
+<li><strong>robot</strong> (<em>orpy.Robot</em>) – The OpenRAVE robot</li>
+<li><strong>iktype</strong> (<em>orpy.IkParameterizationType</em>) – Inverse kinematics type to be used</li>
+<li><strong>freeinc</strong> (<em>list</em>) – The increment (discretization) to be used for the free DOF when the target
+<cite>iktype</cite> is <cite>TranslationDirection5D</cite></li>
+<li><strong>autogenerate</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a><em>, </em><em>optional</em>) – If true, auto-generate the IKFast solver</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>success</strong> &#8211;
-<cite>True</cite> if succeeded, <cite>False</cite> otherwise</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>success</strong> – <cite>True</cite> if succeeded, <cite>False</cite> otherwise</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/library/functions.html#bool" title="(in Python v2.7)">bool</a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)">bool</a></p>
 </td>
 </tr>
 </tbody>
@@ -488,17 +483,16 @@ planning.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>robot</strong> (<em>orpy.Robot</em>) &#8211; The OpenRAVE robot</li>
-<li><strong>xyzdelta</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; Smallest object that can be found in the environment (meters)</li>
-<li><strong>autogenerate</strong> (<em>bool, optional</em>) &#8211; If true, auto-generate the <cite>Link Statistics</cite> database</li>
+<li><strong>robot</strong> (<em>orpy.Robot</em>) – The OpenRAVE robot</li>
+<li><strong>xyzdelta</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – Smallest object that can be found in the environment (meters)</li>
+<li><strong>autogenerate</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a><em>, </em><em>optional</em>) – If true, auto-generate the <cite>Link Statistics</cite> database</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>success</strong> &#8211;
-<cite>True</cite> if succeeded, <cite>False</cite> otherwise</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>success</strong> – <cite>True</cite> if succeeded, <cite>False</cite> otherwise</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/library/functions.html#bool" title="(in Python v2.7)">bool</a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)">bool</a></p>
 </td>
 </tr>
 </tbody>
@@ -513,10 +507,9 @@ planning.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>robot</strong> (<em>orpy.Robot</em>) &#8211; The OpenRAVE robot</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>robot</strong> (<em>orpy.Robot</em>) – The OpenRAVE robot</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>values</strong> &#8211;
-The random joint values</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>values</strong> – The random joint values</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">array_like</td>
 </tr>
@@ -535,13 +528,11 @@ The random joint values</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cloud</strong> (<em>array_like</em>) &#8211; The input point cloud. It can be <code class="docutils literal"><span class="pre">pcl.Cloud</span></code> or <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.array.html#numpy.array" title="(in NumPy v1.13)"><code class="xref py py-obj docutils literal"><span class="pre">numpy.array</span></code></a></td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cloud</strong> (<em>array_like</em>) – The input point cloud. It can be <code class="docutils literal"><span class="pre">pcl.Cloud</span></code> or <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.array.html#numpy.array" title="(in NumPy v1.13)"><code class="xref py py-obj docutils literal"><span class="pre">numpy.array</span></code></a></td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
-<li><strong>vertices</strong> (<em>array_like</em>) &#8211;
-The trimesh vertices</li>
-<li><strong>faces</strong> (<em>array_like</em>) &#8211;
-The trimesh faces</li>
+<li><strong>vertices</strong> (<em>array_like</em>) – The trimesh vertices</li>
+<li><strong>faces</strong> (<em>array_like</em>) – The trimesh faces</li>
 </ul>
 </td>
 </tr>
@@ -550,7 +541,7 @@ The trimesh faces</li>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
 <dl class="last docutils">
-<dt><a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.ConvexHull.html#scipy.spatial.ConvexHull" title="(in SciPy v0.19.1)"><code class="xref py py-obj docutils literal"><span class="pre">scipy.spatial.ConvexHull</span></code></a></dt>
+<dt><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.ConvexHull.html#scipy.spatial.ConvexHull" title="(in SciPy v1.0.0)"><code class="xref py py-obj docutils literal"><span class="pre">scipy.spatial.ConvexHull</span></code></a></dt>
 <dd>For more details about convex hulls</dd>
 </dl>
 </div>
@@ -568,19 +559,18 @@ The trimesh faces</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>robot</strong> (<em>orpy.Robot</em>) &#8211; The OpenRAVE robot</li>
-<li><strong>qgoal</strong> (<em>array_like</em>) &#8211; The goal configuration</li>
-<li><strong>pname</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; Name of the planning algorithm. Available options are: <cite>BasicRRT</cite>, <cite>BiRRT</cite></li>
-<li><strong>max_iters</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; Maximum iterations for the planning stage</li>
-<li><strong>max_ppiters</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; Maximum iterations for the post-processing stage. It will use a parabolic
+<li><strong>robot</strong> (<em>orpy.Robot</em>) – The OpenRAVE robot</li>
+<li><strong>qgoal</strong> (<em>array_like</em>) – The goal configuration</li>
+<li><strong>pname</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – Name of the planning algorithm. Available options are: <cite>BasicRRT</cite>, <cite>BiRRT</cite></li>
+<li><strong>max_iters</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – Maximum iterations for the planning stage</li>
+<li><strong>max_ppiters</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – Maximum iterations for the post-processing stage. It will use a parabolic
 smoother wich short-cuts the trajectory and then smooths it</li>
-<li><strong>try_swap</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; If set will compute two trajectories: first <cite>qstart</cite> -&gt; <cite>qgoal</cite>, second
-<cite>qgoal</cite> -&gt; <cite>qstart</cite> and will select the minimum duration one.</li>
+<li><strong>try_swap</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) – If set, will compute the direct and reversed trajectory. The minimum
+duration trajectory is used.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>traj</strong> &#8211;
-Planned trajectory. If plan fails, this function returns <cite>None</cite>.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>traj</strong> – Planned trajectory. If plan fails, this function returns <cite>None</cite>.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">orpy.Trajectory</p>
@@ -599,15 +589,14 @@ Planned trajectory. If plan fails, this function returns <cite>None</cite>.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>robot</strong> (<em>orpy.Robot</em>) &#8211; The OpenRAVE robot</li>
-<li><strong>traj</strong> (<em>orpy.Trajectory</em>) &#8211; The traj to be retimed. The time paremetrization will be <em>overwritten</em>.</li>
-<li><strong>method</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; Retiming method. Available options are: <cite>LinearTrajectoryRetimer</cite>,
+<li><strong>robot</strong> (<em>orpy.Robot</em>) – The OpenRAVE robot</li>
+<li><strong>traj</strong> (<em>orpy.Trajectory</em>) – The traj to be retimed. The time paremetrization will be <em>overwritten</em>.</li>
+<li><strong>method</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – Retiming method. Available options are: <cite>LinearTrajectoryRetimer</cite>,
 <cite>ParabolicTrajectoryRetimer</cite>, <cite>CubicTrajectoryRetimer</cite></li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>status</strong> &#8211;
-Flag indicating the status of the trajectory retiming. It can be: <cite>Failed</cite>,
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>status</strong> – Flag indicating the status of the trajectory retiming. It can be: <cite>Failed</cite>,
 <cite>HasSolution</cite>, <cite>Interrupted</cite> or <cite>InterruptedWithSolution</cite>.</p>
 </td>
 </tr>
@@ -627,13 +616,12 @@ Flag indicating the status of the trajectory retiming. It can be: <cite>Failed</
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>robot_name</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The robot name in OpenRAVE</li>
-<li><strong>traj</strong> (<em>orpy.Trajectory</em>) &#8211; The input OpenRAVE trajectory</li>
+<li><strong>robot_name</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – The robot name in OpenRAVE</li>
+<li><strong>traj</strong> (<em>orpy.Trajectory</em>) – The input OpenRAVE trajectory</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>ros_traj</strong> &#8211;
-The equivalent ROS JointTrajectory message</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>ros_traj</strong> – The equivalent ROS JointTrajectory message</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">trajectory_msgs/JointTrajectory</p>
@@ -652,13 +640,12 @@ The equivalent ROS JointTrajectory message</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>robot</strong> (<em>orpy.Robot</em>) &#8211; The OpenRAVE robot</li>
-<li><strong>waypoints</strong> (<em>list</em>) &#8211; List of waypoints (joint configurations)</li>
+<li><strong>robot</strong> (<em>orpy.Robot</em>) – The OpenRAVE robot</li>
+<li><strong>waypoints</strong> (<em>list</em>) – List of waypoints (joint configurations)</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>traj</strong> &#8211;
-Resulting OpenRAVE trajectory.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>traj</strong> – Resulting OpenRAVE trajectory.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">orpy.Trajectory</p>
@@ -679,94 +666,7 @@ Resulting OpenRAVE trajectory.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>hull</strong> (<a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.ConvexHull.html#scipy.spatial.ConvexHull" title="(in SciPy v0.19.1)"><em>scipy.spatial.ConvexHull</em></a>) &#8211; Convex hull to be re-ordered.</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="raveutils.transforms.perpendicular_vector">
-<code class="descclassname">raveutils.transforms.</code><code class="descname">perpendicular_vector</code><span class="sig-paren">(</span><em>vector</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raveutils/transforms.html#perpendicular_vector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#raveutils.transforms.perpendicular_vector" title="Permalink to this definition">¶</a></dt>
-<dd><p>Find an arbitrary perpendicular vector</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>vector</strong> (<em>array_like</em>) &#8211; The input vector</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>perpendicular</strong> &#8211;
-The perpendicular vector</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">array_like</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="raveutils.transforms.transform_between_axes">
-<code class="descclassname">raveutils.transforms.</code><code class="descname">transform_between_axes</code><span class="sig-paren">(</span><em>axis_a</em>, <em>axis_b</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raveutils/transforms.html#transform_between_axes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#raveutils.transforms.transform_between_axes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the transformation that aligns two vectors/axes.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>axis_a</strong> (<em>array_like</em>) &#8211; The initial axis</li>
-<li><strong>axis_b</strong> (<em>array_like</em>) &#8211; The goal axis</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>transform</strong> &#8211;
-The transformation that transforms axis <code class="docutils literal"><span class="pre">axis_a</span></code> into axis <code class="docutils literal"><span class="pre">axis_b</span></code></p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">array_like</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="raveutils.transforms.transform_inv">
-<code class="descclassname">raveutils.transforms.</code><code class="descname">transform_inv</code><span class="sig-paren">(</span><em>transform</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raveutils/transforms.html#transform_inv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#raveutils.transforms.transform_inv" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the inverse of an homogeneous transformation.</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This function is more efficient than <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.linalg.inv.html#numpy.linalg.inv" title="(in NumPy v1.13)"><code class="xref py py-obj docutils literal"><span class="pre">numpy.linalg.inv</span></code></a> given
-the special properties of homogeneous transformations.</p>
-</div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>transform</strong> (<em>array_like</em>) &#8211; The input homogeneous transformation</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>transform</strong> &#8211;
-The resulting homogeneous transformation inverse</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">array_like</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="raveutils.transforms.unit_vector">
-<code class="descclassname">raveutils.transforms.</code><code class="descname">unit_vector</code><span class="sig-paren">(</span><em>vector</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raveutils/transforms.html#unit_vector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#raveutils.transforms.unit_vector" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return unit vector (normalized)</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>vector</strong> (<em>array_like</em>) &#8211; The input vector</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>unit</strong> &#8211;
-The resulting unit vector (normalized)</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">array_like</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>hull</strong> (<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.ConvexHull.html#scipy.spatial.ConvexHull" title="(in SciPy v1.0.0)"><em>scipy.spatial.ConvexHull</em></a>) – Convex hull to be re-ordered.</td>
 </tr>
 </tbody>
 </table>
@@ -784,15 +684,14 @@ The resulting unit vector (normalized)</td>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>env</strong> (<em>orpy.Environment</em>) &#8211; The OpenRAVE environment</li>
-<li><strong>transform</strong> (<em>array_like</em>) &#8211; The homogeneous transformation where to draw the axes</li>
-<li><strong>dist</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; Length of the axes (meters)</li>
-<li><strong>linewidth</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; Line width of the axes (pixels)</li>
+<li><strong>env</strong> (<em>orpy.Environment</em>) – The OpenRAVE environment</li>
+<li><strong>transform</strong> (<em>array_like</em>) – The homogeneous transformation where to draw the axes</li>
+<li><strong>dist</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – Length of the axes (meters)</li>
+<li><strong>linewidth</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – Line width of the axes (pixels)</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>h</strong> &#8211;
-The total axes added to the scene.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>h</strong> – The total axes added to the scene.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">orpy.GraphHandle</p>
@@ -811,18 +710,17 @@ The total axes added to the scene.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>env</strong> (<em>orpy.Environment</em>) &#8211; The OpenRAVE environment</li>
-<li><strong>transform</strong> (<em>array_like</em>) &#8211; Transform that represents the plane. The origin of the plane corresponds to
+<li><strong>env</strong> (<em>orpy.Environment</em>) – The OpenRAVE environment</li>
+<li><strong>transform</strong> (<em>array_like</em>) – Transform that represents the plane. The origin of the plane corresponds to
 the position of the transform. Axis Z of the transform is used as the plane
 normal</li>
-<li><strong>extents</strong> (<em>list</em>) &#8211; The length and width of the plane (meters)</li>
-<li><strong>texture</strong> (<em>array_like</em>) &#8211; Texture of the drawn plane. It must have a size <cite>N*M*4</cite>. The last dimension
+<li><strong>extents</strong> (<em>list</em>) – The length and width of the plane (meters)</li>
+<li><strong>texture</strong> (<em>array_like</em>) – Texture of the drawn plane. It must have a size <cite>N*M*4</cite>. The last dimension
 corresponds to the RGBA channels.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>h</strong> &#8211;
-Handles holding the plot.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>h</strong> – Handles holding the plot.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">orpy.GraphHandle</p>
@@ -841,15 +739,14 @@ Handles holding the plot.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>env</strong> (<em>orpy.Environment</em>) &#8211; The OpenRAVE environment</li>
-<li><strong>point</strong> (<em>array_like</em>) &#8211; XYZ position of the point</li>
-<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; Size of the point (pixels)</li>
-<li><strong>color</strong> (<em>array_like</em>) &#8211; Color of the point in the format <cite>(red, green, blue, alpha)</cite></li>
+<li><strong>env</strong> (<em>orpy.Environment</em>) – The OpenRAVE environment</li>
+<li><strong>point</strong> (<em>array_like</em>) – XYZ position of the point</li>
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – Size of the point (pixels)</li>
+<li><strong>color</strong> (<em>array_like</em>) – Color of the point in the format <cite>(red, green, blue, alpha)</cite></li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>h</strong> &#8211;
-Handles of the plot. This is require for the point to stay on the
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>h</strong> – Handles of the plot. This is require for the point to stay on the
 environment</p>
 </td>
 </tr>
@@ -869,16 +766,15 @@ environment</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>env</strong> (<em>orpy.Environment</em>) &#8211; The OpenRAVE environment</li>
-<li><strong>ray</strong> (<em>orpy.ray</em>) &#8211; The input ray  with the position and direction of the arrow</li>
-<li><strong>dist</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; Length of the line</li>
-<li><strong>linewidth</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; Linewidth of the arrow and line (pixels)</li>
-<li><strong>color</strong> (<em>array_like</em>) &#8211; Color of the arrow in the format <cite>(red, green, blue, alpha)</cite></li>
+<li><strong>env</strong> (<em>orpy.Environment</em>) – The OpenRAVE environment</li>
+<li><strong>ray</strong> (<em>orpy.ray</em>) – The input ray  with the position and direction of the arrow</li>
+<li><strong>dist</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – Length of the line</li>
+<li><strong>linewidth</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) – Linewidth of the arrow and line (pixels)</li>
+<li><strong>color</strong> (<em>array_like</em>) – Color of the arrow in the format <cite>(red, green, blue, alpha)</cite></li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>h</strong> &#8211;
-Handles holding the plot.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>h</strong> – Handles holding the plot.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">orpy.GraphHandle</p>
@@ -930,7 +826,7 @@ Handles holding the plot.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.1.1',
+            VERSION:'0.1.2',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true
@@ -939,7 +835,7 @@ Handles holding the plot.</p>
       <script type="text/javascript" src="_static/jquery.js"></script>
       <script type="text/javascript" src="_static/underscore.js"></script>
       <script type="text/javascript" src="_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 
