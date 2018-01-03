@@ -103,3 +103,6 @@ ENV/
 # Documentation
 doc/manifest.yaml
 doc/html
+
+# Coverage
+.coverage

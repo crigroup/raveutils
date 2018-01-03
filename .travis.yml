@@ -45,7 +45,7 @@ install:
   - cd ~/catkin_ws/src
   - git clone https://github.com/crigroup/openrave_catkin.git
   - ln -s $CI_SOURCE_PATH .
-  # TODO: Remove this once baldor is released into the public repositories
+  # This is required only for installing from source
   - git clone https://github.com/crigroup/baldor.git
 
 # Install all dependencies
