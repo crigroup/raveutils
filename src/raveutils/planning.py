@@ -145,19 +145,24 @@ def ros_trajectory_from_openrave(robot_name, traj):
     return None
   # Copy waypoints
   time_from_start = 0
-  for i in range(traj.GetNumWaypoints()):
+  skipped_time = 0
+  num_waypoints = traj.GetNumWaypoints()
+  for i in xrange(num_waypoints):
     waypoint = traj.GetWaypoint(i).tolist()
     deltatime = waypoint[deltatime_group.offset]
-    # OpenRAVE trajectory sometimes comes with repeated waypoints. Skip them!
-    if np.isclose(deltatime, 0) and i > 0:
+    time_from_start += deltatime
+    if (np.isclose(deltatime, 0) and np.isclose(skipped_time, 0)
+            and (0 < i < num_waypoints - 1)):
+      skipped_time += deltatime
       continue
+    else:
+      skipped_time = 0
     # Append waypoint
     ros_point = JointTrajectoryPoint()
     values_end = values_group.offset + values_group.dof
     ros_point.positions = waypoint[values_group.offset:values_end]
     velocities_end = velocities_group.offset + velocities_group.dof
     ros_point.velocities = waypoint[velocities_group.offset:velocities_end]
-    time_from_start += deltatime
     ros_point.time_from_start = rospy.Duration(time_from_start)
     ros_traj.points.append(ros_point)
   return ros_traj
