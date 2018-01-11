@@ -4,7 +4,50 @@ import itertools
 import numpy as np
 import openravepy as orpy
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
+# Local modules
+import raveutils as ru
 
+
+def plan_cartesian_twist(robot, twist, num_waypoints=10):
+  """
+  Plan the cartesian trajectory to apply the given twist to the current robot
+  configuration
+
+  Parameters
+  ----------
+  robot: orpy.Robot
+    The OpenRAVE robot
+  twist: array_like
+    The twist to be applied to the end-effector
+  num_waypoints: int
+    Number of waypoints to be used by the trajectory
+
+  Returns
+  -------
+  traj: orpy.Trajectory
+    Planned trajectory. If plan fails, this function returns `None`.
+  """
+  waypoints = [robot.GetActiveDOFValues()]
+  delta = np.array(twist) / float(num_waypoints)
+  with robot:
+    for i in xrange(num_waypoints):
+      q = robot.GetActiveDOFValues()
+      J = ru.kinematics.compute_jacobian(robot)
+      Jpinv = np.linalg.pinv(J)
+      delta_q = np.dot(Jpinv, delta)
+      q += delta_q
+      robot.SetActiveDOFValues(q)
+      if ru.kinematics.check_joint_limits(robot, q):
+        waypoints.append(q)
+      else:
+        # q is outside the joint limits
+        return None
+  traj = trajectory_from_waypoints(robot, waypoints)
+  status = retime_trajectory(robot, traj, 'ParabolicTrajectoryRetimer')
+  if status != orpy.PlannerStatus.HasSolution:
+    # Time parameterization failed. Could not find a valid path solution.
+    return None
+  return traj
 
 def plan_to_joint_configuration(robot, qgoal, pname='BiRRT', max_iters=20,
                                                 max_ppiters=40, try_swap=False):
@@ -101,11 +144,10 @@ def retime_trajectory(robot, traj, method):
   params.SetPostProcessing('', '')
   # Generate the trajectory
   planner = orpy.RaveCreatePlanner(env, method)
+  status = orpy.PlannerStatus.Failed
   success = planner.InitPlan(robot, params)
   if success:
     status = planner.PlanPath(traj)
-  else:
-    status = orpy.PlannerStatus.Failed
   return status
 
 def ros_trajectory_from_openrave(robot_name, traj):
