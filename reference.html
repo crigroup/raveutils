@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>API Reference &mdash; raveutils 0.1.2 documentation</title>
+  <title>API Reference &mdash; raveutils 0.1.3 documentation</title>
   
 
   
@@ -33,7 +33,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="raveutils 0.1.2 documentation" href="index.html"/>
+    <link rel="top" title="raveutils 0.1.3 documentation" href="index.html"/>
         <link rel="prev" title="Install" href="install.html"/> 
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                0.1.2
+                0.1.3
               </div>
             
           
@@ -351,6 +351,32 @@ the identity matrix is used.</li>
 <div class="section" id="module-raveutils.kinematics">
 <span id="kinematics"></span><h2>Kinematics<a class="headerlink" href="#module-raveutils.kinematics" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
+<dt id="raveutils.kinematics.check_joint_limits">
+<code class="descclassname">raveutils.kinematics.</code><code class="descname">check_joint_limits</code><span class="sig-paren">(</span><em>robot</em>, <em>q=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raveutils/kinematics.html#check_joint_limits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#raveutils.kinematics.check_joint_limits" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the provided joint configuration exceeds the joint limits</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>robot</strong> (<em>orpy.Robot</em>) – The OpenRAVE robot</li>
+<li><strong>q</strong> (<em>array_like</em><em> (</em><em>optional</em><em>)</em>) – The joint configuration to check. If <cite>q</cite> is <cite>None</cite>, the current joint
+configuration of the robot is used.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>result</strong> – True if the given joint configuration is within the joint limits of the
+robot. False otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)">bool</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="raveutils.kinematics.compute_jacobian">
 <code class="descclassname">raveutils.kinematics.</code><code class="descname">compute_jacobian</code><span class="sig-paren">(</span><em>robot</em>, <em>link_name=None</em>, <em>link_idx=None</em>, <em>translation_only=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raveutils/kinematics.html#compute_jacobian"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#raveutils.kinematics.compute_jacobian" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the Jacobian matrix</p>
@@ -360,10 +386,8 @@ the identity matrix is used.</li>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>robot</strong> (<em>orpy.Robot</em>) – The OpenRAVE robot</li>
-<li><strong>link_name</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – The name of link. If it’s <cite>None</cite>, the last link of the kinematic chain is
-used</li>
-<li><strong>link_idx</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a><em>, </em><em>optional</em>) – The index of link. If it’s <cite>None</cite>, the last link of the kinematic chain is
-used</li>
+<li><strong>link_name</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – The name of link. If it’s <cite>None</cite>, the manipulator frame will be used</li>
+<li><strong>link_idx</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a><em>, </em><em>optional</em>) – The index of link. If it’s <cite>None</cite>, the manipulator frame will be used</li>
 <li><strong>translation_only</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a><em>, </em><em>optional</em>) – If set, only the translation Jacobian is computed</li>
 </ul>
 </td>
@@ -528,7 +552,7 @@ planning.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cloud</strong> (<em>array_like</em>) – The input point cloud. It can be <code class="docutils literal"><span class="pre">pcl.Cloud</span></code> or <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.array.html#numpy.array" title="(in NumPy v1.13)"><code class="xref py py-obj docutils literal"><span class="pre">numpy.array</span></code></a></td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cloud</strong> (<em>array_like</em>) – The input point cloud. It can be <code class="docutils literal"><span class="pre">pcl.Cloud</span></code> or <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.array.html#numpy.array" title="(in NumPy v1.14)"><code class="xref py py-obj docutils literal"><span class="pre">numpy.array</span></code></a></td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
 <li><strong>vertices</strong> (<em>array_like</em>) – The trimesh vertices</li>
@@ -550,6 +574,32 @@ planning.</p>
 </div>
 <div class="section" id="module-raveutils.planning">
 <span id="planning"></span><h2>Planning<a class="headerlink" href="#module-raveutils.planning" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="raveutils.planning.plan_cartesian_twist">
+<code class="descclassname">raveutils.planning.</code><code class="descname">plan_cartesian_twist</code><span class="sig-paren">(</span><em>robot</em>, <em>twist</em>, <em>num_waypoints=10</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raveutils/planning.html#plan_cartesian_twist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#raveutils.planning.plan_cartesian_twist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plan the cartesian trajectory to apply the given twist to the current robot
+configuration</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>robot</strong> (<em>orpy.Robot</em>) – The OpenRAVE robot</li>
+<li><strong>twist</strong> (<em>array_like</em>) – The twist to be applied to the end-effector</li>
+<li><strong>num_waypoints</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) – Number of waypoints to be used by the trajectory</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>traj</strong> – Planned trajectory. If plan fails, this function returns <cite>None</cite>.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">orpy.Trajectory</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="function">
 <dt id="raveutils.planning.plan_to_joint_configuration">
 <code class="descclassname">raveutils.planning.</code><code class="descname">plan_to_joint_configuration</code><span class="sig-paren">(</span><em>robot</em>, <em>qgoal</em>, <em>pname='BiRRT'</em>, <em>max_iters=20</em>, <em>max_ppiters=40</em>, <em>try_swap=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raveutils/planning.html#plan_to_joint_configuration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#raveutils.planning.plan_to_joint_configuration" title="Permalink to this definition">¶</a></dt>
@@ -658,6 +708,24 @@ duration trajectory is used.</li>
 </div>
 <div class="section" id="module-raveutils.transforms">
 <span id="transforms"></span><h2>Transforms<a class="headerlink" href="#module-raveutils.transforms" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="raveutils.transforms.compute_twist">
+<code class="descclassname">raveutils.transforms.</code><code class="descname">compute_twist</code><span class="sig-paren">(</span><em>T0</em>, <em>T1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raveutils/transforms.html#compute_twist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#raveutils.transforms.compute_twist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the twist between two homogeneous transformations: <cite>twist = T1 - T0</cite></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>T0</strong> (<em>array_like</em>) – Initial homogeneous transformation</li>
+<li><strong>T1</strong> (<em>array_like</em>) – Final homogeneous transformation</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="function">
 <dt id="raveutils.transforms.counterclockwise_hull">
 <code class="descclassname">raveutils.transforms.</code><code class="descname">counterclockwise_hull</code><span class="sig-paren">(</span><em>hull</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raveutils/transforms.html#counterclockwise_hull"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#raveutils.transforms.counterclockwise_hull" title="Permalink to this definition">¶</a></dt>
@@ -826,7 +894,7 @@ environment</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.1.2',
+            VERSION:'0.1.3',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

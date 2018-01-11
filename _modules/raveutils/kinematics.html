@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>raveutils.kinematics &mdash; raveutils 0.1.2 documentation</title>
+  <title>raveutils.kinematics &mdash; raveutils 0.1.3 documentation</title>
   
 
   
@@ -33,7 +33,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="raveutils 0.1.2 documentation" href="../../index.html"/>
+    <link rel="top" title="raveutils 0.1.3 documentation" href="../../index.html"/>
         <link rel="up" title="Module code" href="../index.html"/> 
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                0.1.2
+                0.1.3
               </div>
             
           
@@ -139,8 +139,31 @@
 <span class="kn">import</span> <span class="nn">raveutils</span> <span class="k">as</span> <span class="nn">ru</span>
 
 
+<div class="viewcode-block" id="check_joint_limits"><a class="viewcode-back" href="../../reference.html#raveutils.kinematics.check_joint_limits">[docs]</a><span class="k">def</span> <span class="nf">check_joint_limits</span><span class="p">(</span><span class="n">robot</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">  Check if the provided joint configuration exceeds the joint limits</span>
+
+<span class="sd">  Parameters</span>
+<span class="sd">  ----------</span>
+<span class="sd">  robot: orpy.Robot</span>
+<span class="sd">    The OpenRAVE robot</span>
+<span class="sd">  q: array_like (optional)</span>
+<span class="sd">    The joint configuration to check. If `q` is `None`, the current joint</span>
+<span class="sd">    configuration of the robot is used.</span>
+
+<span class="sd">  Returns</span>
+<span class="sd">  ----------</span>
+<span class="sd">  result: bool</span>
+<span class="sd">    True if the given joint configuration is within the joint limits of the</span>
+<span class="sd">    robot. False otherwise.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">if</span> <span class="n">q</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">GetActiveDOFValues</span><span class="p">()</span>
+  <span class="n">lower</span><span class="p">,</span> <span class="n">upper</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">GetActiveDOFLimits</span><span class="p">()</span>
+  <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">lower</span> <span class="o">&lt;=</span> <span class="n">q</span><span class="p">)</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">q</span> <span class="o">&lt;=</span> <span class="n">upper</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="compute_jacobian"><a class="viewcode-back" href="../../reference.html#raveutils.kinematics.compute_jacobian">[docs]</a><span class="k">def</span> <span class="nf">compute_jacobian</span><span class="p">(</span><span class="n">robot</span><span class="p">,</span> <span class="n">link_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">link_idx</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                                                      <span class="n">translation_only</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+                                                        <span class="n">translation_only</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
   <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">  Compute the Jacobian matrix</span>
 
@@ -149,11 +172,9 @@
 <span class="sd">  robot: orpy.Robot</span>
 <span class="sd">    The OpenRAVE robot</span>
 <span class="sd">  link_name: str, optional</span>
-<span class="sd">    The name of link. If it&#39;s `None`, the last link of the kinematic chain is</span>
-<span class="sd">    used</span>
+<span class="sd">    The name of link. If it&#39;s `None`, the manipulator frame will be used</span>
 <span class="sd">  link_idx: int, optional</span>
-<span class="sd">    The index of link. If it&#39;s `None`, the last link of the kinematic chain is</span>
-<span class="sd">    used</span>
+<span class="sd">    The index of link. If it&#39;s `None`, the manipulator frame will be used</span>
 <span class="sd">  translation_only: bool, optional</span>
 <span class="sd">    If set, only the translation Jacobian is computed</span>
 
@@ -167,27 +188,34 @@
 <span class="sd">  If both `link_idx` and `link_name` are given, `link_idx` will have priority.</span>
 <span class="sd">  &quot;&quot;&quot;</span>
   <span class="n">num_links</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">robot</span><span class="o">.</span><span class="n">GetLinks</span><span class="p">())</span>
-  <span class="k">if</span> <span class="n">link_idx</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="k">if</span> <span class="n">link_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-      <span class="n">link_name</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">GetLinks</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">GetName</span><span class="p">()</span>
-      <span class="n">link_idx</span> <span class="o">=</span> <span class="n">num_links</span> <span class="o">-</span> <span class="mi">1</span>
+  <span class="n">manip</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">GetActiveManipulator</span><span class="p">()</span>
+  <span class="k">if</span> <span class="n">link_idx</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">link_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">Jtrans</span> <span class="o">=</span> <span class="n">manip</span><span class="o">.</span><span class="n">CalculateJacobian</span><span class="p">()</span>
+    <span class="n">J</span> <span class="o">=</span> <span class="n">manip</span><span class="o">.</span><span class="n">CalculateAngularVelocityJacobian</span>
+    <span class="k">if</span> <span class="n">translation_only</span><span class="p">:</span>
+      <span class="n">J</span> <span class="o">=</span> <span class="n">Jtrans</span>
     <span class="k">else</span><span class="p">:</span>
+      <span class="n">J</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">6</span><span class="p">,</span> <span class="n">Jtrans</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+      <span class="n">J</span><span class="p">[:</span><span class="mi">3</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">Jtrans</span>
+      <span class="n">J</span><span class="p">[</span><span class="mi">3</span><span class="p">:,:]</span> <span class="o">=</span> <span class="n">manip</span><span class="o">.</span><span class="n">CalculateAngularVelocityJacobian</span><span class="p">()</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">link_idx</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
       <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="n">l</span><span class="o">.</span><span class="n">GetName</span><span class="p">()</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">robot</span><span class="o">.</span><span class="n">GetLinks</span><span class="p">()]</span>
       <span class="k">if</span> <span class="n">link_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s1">&#39;Invalid link name: </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">link_name</span><span class="p">))</span>
       <span class="n">link_idx</span> <span class="o">=</span> <span class="n">names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">link_name</span><span class="p">)</span>
-  <span class="k">elif</span> <span class="ow">not</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">num_links</span> <span class="o">&lt;</span> <span class="n">num_links</span><span class="p">):</span>
-    <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s1">&#39;Invalid link index: </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">num_links</span><span class="p">))</span>
-  <span class="n">origin</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">GetLinks</span><span class="p">()[</span><span class="n">link_idx</span><span class="p">]</span><span class="o">.</span><span class="n">GetTransform</span><span class="p">()[:</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
-  <span class="n">manip</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">GetActiveManipulator</span><span class="p">()</span>
-  <span class="n">indices</span> <span class="o">=</span> <span class="n">manip</span><span class="o">.</span><span class="n">GetArmIndices</span><span class="p">()</span>
-  <span class="n">Jtrans</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">ComputeJacobianTranslation</span><span class="p">(</span><span class="n">link_idx</span><span class="p">,</span> <span class="n">origin</span><span class="p">)[:,</span><span class="n">indices</span><span class="p">]</span>
-  <span class="k">if</span> <span class="n">translation_only</span><span class="p">:</span>
-    <span class="n">J</span> <span class="o">=</span> <span class="n">Jtrans</span>
-  <span class="k">else</span><span class="p">:</span>
-    <span class="n">J</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">6</span><span class="p">,</span> <span class="n">Jtrans</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
-    <span class="n">J</span><span class="p">[:</span><span class="mi">3</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">Jtrans</span>
-    <span class="n">J</span><span class="p">[</span><span class="mi">3</span><span class="p">:,:]</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">ComputeJacobianAxisAngle</span><span class="p">(</span><span class="n">link_idx</span><span class="p">)[:,</span><span class="n">indices</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">link_idx</span> <span class="o">&lt;</span> <span class="n">num_links</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s1">&#39;Invalid link index: </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">num_links</span><span class="p">))</span>
+    <span class="n">origin</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">GetLinks</span><span class="p">()[</span><span class="n">link_idx</span><span class="p">]</span><span class="o">.</span><span class="n">GetTransform</span><span class="p">()[:</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+    <span class="n">indices</span> <span class="o">=</span> <span class="n">manip</span><span class="o">.</span><span class="n">GetArmIndices</span><span class="p">()</span>
+    <span class="n">Jtrans</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">ComputeJacobianTranslation</span><span class="p">(</span><span class="n">link_idx</span><span class="p">,</span> <span class="n">origin</span><span class="p">)[:,</span><span class="n">indices</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">translation_only</span><span class="p">:</span>
+      <span class="n">J</span> <span class="o">=</span> <span class="n">Jtrans</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">J</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">6</span><span class="p">,</span> <span class="n">Jtrans</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+      <span class="n">J</span><span class="p">[:</span><span class="mi">3</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">Jtrans</span>
+      <span class="n">J</span><span class="p">[</span><span class="mi">3</span><span class="p">:,:]</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">ComputeJacobianAxisAngle</span><span class="p">(</span><span class="n">link_idx</span><span class="p">)[:,</span><span class="n">indices</span><span class="p">]</span>
   <span class="k">return</span> <span class="n">J</span></div>
 
 <div class="viewcode-block" id="compute_yoshikawa_index"><a class="viewcode-back" href="../../reference.html#raveutils.kinematics.compute_yoshikawa_index">[docs]</a><span class="k">def</span> <span class="nf">compute_yoshikawa_index</span><span class="p">(</span><span class="n">robot</span><span class="p">,</span> <span class="n">link_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">translation_only</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -319,8 +347,10 @@
   <span class="k">if</span> <span class="n">iktype</span> <span class="o">==</span> <span class="n">orpy</span><span class="o">.</span><span class="n">IkParameterizationType</span><span class="o">.</span><span class="n">TranslationDirection5D</span><span class="p">:</span>
     <span class="n">ikmodel</span> <span class="o">=</span> <span class="n">InverseKinematicsModel</span><span class="p">(</span><span class="n">robot</span><span class="p">,</span> <span class="n">iktype</span><span class="o">=</span><span class="n">iktype</span><span class="p">,</span>
                                                         <span class="n">freejoints</span><span class="o">=</span><span class="n">freejoints</span><span class="p">)</span>
-  <span class="k">else</span><span class="p">:</span>
+  <span class="k">elif</span> <span class="n">iktype</span> <span class="o">==</span> <span class="n">orpy</span><span class="o">.</span><span class="n">IkParameterizationType</span><span class="o">.</span><span class="n">Transform6D</span><span class="p">:</span>
     <span class="n">ikmodel</span> <span class="o">=</span> <span class="n">InverseKinematicsModel</span><span class="p">(</span><span class="n">robot</span><span class="p">,</span> <span class="n">iktype</span><span class="o">=</span><span class="n">iktype</span><span class="p">)</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Unsupported ikmodel: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">iktype</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
   <span class="c1"># Load or generate</span>
   <span class="k">if</span> <span class="ow">not</span> <span class="n">ikmodel</span><span class="o">.</span><span class="n">load</span><span class="p">()</span> <span class="ow">and</span> <span class="n">autogenerate</span><span class="p">:</span>
     <span class="nb">print</span> <span class="s1">&#39;Generating IKFast </span><span class="si">{0}</span><span class="s1">. Will take few minutes...&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">iktype</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
@@ -335,8 +365,6 @@
   <span class="k">if</span> <span class="n">iktype</span> <span class="o">==</span> <span class="n">orpy</span><span class="o">.</span><span class="n">IkParameterizationType</span><span class="o">.</span><span class="n">TranslationDirection5D</span><span class="p">:</span>
     <span class="n">success</span> <span class="o">=</span> <span class="n">ikmodel</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">freeinc</span><span class="o">=</span><span class="n">freeinc</span><span class="p">)</span>
   <span class="k">elif</span> <span class="n">iktype</span> <span class="o">==</span> <span class="n">orpy</span><span class="o">.</span><span class="n">IkParameterizationType</span><span class="o">.</span><span class="n">Transform6D</span><span class="p">:</span>
-    <span class="n">success</span> <span class="o">=</span> <span class="n">ikmodel</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
-  <span class="k">else</span><span class="p">:</span>
     <span class="n">success</span> <span class="o">=</span> <span class="n">ikmodel</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
   <span class="k">return</span> <span class="n">success</span></div>
 
@@ -365,7 +393,7 @@
 <span class="sd">  success: bool</span>
 <span class="sd">    `True` if succeeded, `False` otherwise</span>
 <span class="sd">  &quot;&quot;&quot;</span>
-  <span class="n">success</span> <span class="o">=</span> <span class="kc">True</span>
+  <span class="n">success</span> <span class="o">=</span> <span class="kc">False</span>
   <span class="n">statsmodel</span> <span class="o">=</span> <span class="n">orpy</span><span class="o">.</span><span class="n">databases</span><span class="o">.</span><span class="n">linkstatistics</span><span class="o">.</span><span class="n">LinkStatisticsModel</span><span class="p">(</span><span class="n">robot</span><span class="p">)</span>
   <span class="k">if</span> <span class="ow">not</span> <span class="n">statsmodel</span><span class="o">.</span><span class="n">load</span><span class="p">()</span> <span class="ow">and</span> <span class="n">autogenerate</span><span class="p">:</span>
     <span class="nb">print</span> <span class="s1">&#39;Generating LinkStatistics database. Will take ~1 minute...&#39;</span>
@@ -373,6 +401,7 @@
   <span class="k">if</span> <span class="n">statsmodel</span><span class="o">.</span><span class="n">load</span><span class="p">():</span>
     <span class="n">statsmodel</span><span class="o">.</span><span class="n">setRobotWeights</span><span class="p">()</span>
     <span class="n">statsmodel</span><span class="o">.</span><span class="n">setRobotResolutions</span><span class="p">(</span><span class="n">xyzdelta</span><span class="o">=</span><span class="n">xyzdelta</span><span class="p">)</span>
+    <span class="n">success</span> <span class="o">=</span> <span class="kc">True</span>
   <span class="k">else</span><span class="p">:</span>
     <span class="n">manip</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">GetActiveManipulator</span><span class="p">()</span>
     <span class="n">indices</span> <span class="o">=</span> <span class="n">manip</span><span class="o">.</span><span class="n">GetArmIndices</span><span class="p">()</span>
@@ -389,8 +418,7 @@
     <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">robot_weights</span> <span class="o">&gt;=</span> <span class="n">br</span><span class="o">.</span><span class="n">_EPS</span><span class="p">):</span>
       <span class="c1"># All the weights have to be greater than 0</span>
       <span class="n">robot</span><span class="o">.</span><span class="n">SetDOFWeights</span><span class="p">(</span><span class="n">robot_weights</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-      <span class="n">success</span> <span class="o">=</span> <span class="kc">False</span>
+      <span class="n">success</span> <span class="o">=</span> <span class="kc">True</span>
   <span class="k">return</span> <span class="n">success</span></div>
 
 <div class="viewcode-block" id="random_joint_values"><a class="viewcode-back" href="../../reference.html#raveutils.kinematics.random_joint_values">[docs]</a><span class="k">def</span> <span class="nf">random_joint_values</span><span class="p">(</span><span class="n">robot</span><span class="p">):</span>
@@ -444,7 +472,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.1.2',
+            VERSION:'0.1.3',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>raveutils.transforms &mdash; raveutils 0.1.2 documentation</title>
+  <title>raveutils.transforms &mdash; raveutils 0.1.3 documentation</title>
   
 
   
@@ -33,7 +33,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="raveutils 0.1.2 documentation" href="../../index.html"/>
+    <link rel="top" title="raveutils 0.1.3 documentation" href="../../index.html"/>
         <link rel="up" title="Module code" href="../index.html"/> 
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                0.1.2
+                0.1.3
               </div>
             
           
@@ -135,7 +135,29 @@
 <span class="kn">import</span> <span class="nn">math</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">openravepy</span> <span class="k">as</span> <span class="nn">orpy</span>
+<span class="c1"># PyKDL</span>
+<span class="kn">import</span> <span class="nn">PyKDL</span>
+<span class="kn">from</span> <span class="nn">tf_conversions</span> <span class="k">import</span> <span class="n">posemath</span>
 
+
+<div class="viewcode-block" id="compute_twist"><a class="viewcode-back" href="../../reference.html#raveutils.transforms.compute_twist">[docs]</a><span class="k">def</span> <span class="nf">compute_twist</span><span class="p">(</span><span class="n">T0</span><span class="p">,</span> <span class="n">T1</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">  Compute the twist between two homogeneous transformations: `twist = T1 - T0`</span>
+
+<span class="sd">  Parameters</span>
+<span class="sd">  ----------</span>
+<span class="sd">  T0: array_like</span>
+<span class="sd">    Initial homogeneous transformation</span>
+<span class="sd">  T1: array_like</span>
+<span class="sd">    Final homogeneous transformation</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="n">F0</span> <span class="o">=</span> <span class="n">posemath</span><span class="o">.</span><span class="n">fromMatrix</span><span class="p">(</span><span class="n">T0</span><span class="p">)</span>
+  <span class="n">F1</span> <span class="o">=</span> <span class="n">posemath</span><span class="o">.</span><span class="n">fromMatrix</span><span class="p">(</span><span class="n">T1</span><span class="p">)</span>
+  <span class="n">kdl_twist</span> <span class="o">=</span> <span class="n">PyKDL</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">F0</span><span class="p">,</span> <span class="n">F1</span><span class="p">)</span>
+  <span class="n">twist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
+  <span class="n">twist</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">kdl_twist</span><span class="o">.</span><span class="n">vel</span><span class="o">.</span><span class="n">x</span><span class="p">(),</span><span class="n">kdl_twist</span><span class="o">.</span><span class="n">vel</span><span class="o">.</span><span class="n">y</span><span class="p">(),</span><span class="n">kdl_twist</span><span class="o">.</span><span class="n">vel</span><span class="o">.</span><span class="n">z</span><span class="p">()]</span>
+  <span class="n">twist</span><span class="p">[</span><span class="mi">3</span><span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="n">kdl_twist</span><span class="o">.</span><span class="n">rot</span><span class="o">.</span><span class="n">x</span><span class="p">(),</span><span class="n">kdl_twist</span><span class="o">.</span><span class="n">rot</span><span class="o">.</span><span class="n">y</span><span class="p">(),</span><span class="n">kdl_twist</span><span class="o">.</span><span class="n">rot</span><span class="o">.</span><span class="n">z</span><span class="p">()]</span>
+  <span class="k">return</span> <span class="n">twist</span></div>
 
 <div class="viewcode-block" id="counterclockwise_hull"><a class="viewcode-back" href="../../reference.html#raveutils.transforms.counterclockwise_hull">[docs]</a><span class="k">def</span> <span class="nf">counterclockwise_hull</span><span class="p">(</span><span class="n">hull</span><span class="p">):</span>
   <span class="sd">&quot;&quot;&quot;</span>
@@ -186,7 +208,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.1.2',
+            VERSION:'0.1.3',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true
