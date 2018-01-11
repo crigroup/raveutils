@@ -2,8 +2,8 @@
 Changelog for package raveutils
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.1.3 (2018-01-11)
+------------------
 * Add cartesian planning capabilities: #6
 * Fix ros_trajectory_from_openrave function: #5
 * Improve test coverage
