@@ -2,6 +2,14 @@
 Changelog for package raveutils
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Add cartesian planning capabilities: #6
+* Fix ros_trajectory_from_openrave function: #5
+* Improve test coverage
+* Add check_joint_limits function
+* Contributors: fsuarez6, xiaotaoqi-yy
+
 0.1.2 (2018-01-02)
 ------------------
 * Enable testing of the visual module in travis
