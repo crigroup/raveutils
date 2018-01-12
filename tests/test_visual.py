@@ -76,3 +76,13 @@ class Test_visual(unittest.TestCase):
     handles = ru.visual.draw_ray(self.env, ray, dist=-0.03)
     if self.display_available:
       self.assertEqual(len(handles), 3)
+
+  def test_draw_spline(self):
+    np.random.seed(123)
+    nodes = np.random.randn(5, 3).T
+    from scipy.interpolate import splprep, BSpline
+    tck, u = splprep(nodes)
+    spline = BSpline(*tck, axis=1)
+    h = ru.visual.draw_spline(self.env, spline)
+    if self.display_available:
+      self.assertEqual(type(h), orpy.GraphHandle)
