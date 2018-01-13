@@ -33,6 +33,8 @@ before_install:
   - rosdep update
   # Install coveralls
   - pip install coveralls --user
+  # Upgrade scipy so that we can test visual.draw_bspline
+  - pip install --upgrade --user scipy
 
 # Create a catkin workspace with the package under integration.
 install:

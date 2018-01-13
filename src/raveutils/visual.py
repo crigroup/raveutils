@@ -118,3 +118,37 @@ def draw_ray(env, ray, dist=0.03, linewidth=2, color=None):
   h = orpy.misc.DrawIkparam2(env, ikparam, dist=dist, linewidth=linewidth,
                                                                 coloradd=color)
   return h
+
+def draw_spline(env, spline, num=100, linewidth=1.0, colors=(0,0,1),
+                                                      start=0, stop=1):
+  """
+  Draw line strips for the sequential segments of a curve to the OpenRAVE environment.
+
+  Parameters
+  ----------
+  spline: scipy.interpolate.BSpline
+    B-spline of the curve.
+  num: int
+    Number of segments to draw.
+  linewidth: float
+    Line width of the line strip (pixels).
+  colors: list or array_like
+    Colors of the line strips.
+  start: float
+    Start drawing position of the curve, in ``[0, 1]``.
+  stop: float
+    End drawing position of the curve, in ``[0, 1]``.
+
+  Returns
+  -------
+  handles: orpy.GraphHandle
+    Handles holding the plot.
+  """
+  if colors is None:
+    colors = [0,0,1] * num
+  linestrip = []
+  for u in np.linspace(start, stop, num=num):
+    linestrip.append(spline(u))
+  h = env.drawlinestrip(np.array(linestrip), linewidth=linewidth,
+                                                        colors=np.array(colors))
+  return h
