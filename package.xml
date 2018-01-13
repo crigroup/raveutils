@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package format="2">
   <name>raveutils</name>
-  <version>0.1.2</version>
+  <version>0.1.3</version>
   <description>Utilities package for OpenRAVE</description>
 
   <author email="fsuarez6@gmail.com">Francisco Suarez-Ruiz</author>
@@ -19,8 +19,10 @@
   <exec_depend>baldor</exec_depend>
   <exec_depend>image_geometry</exec_depend>
   <exec_depend>python-numpy</exec_depend>
+  <exec_depend>python_orocos_kdl</exec_depend>
   <exec_depend>python-scipy</exec_depend>
   <exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>tf_conversions</exec_depend>
   <exec_depend>trajectory_msgs</exec_depend>
 
   <doc_depend>rosdoc_lite</doc_depend>

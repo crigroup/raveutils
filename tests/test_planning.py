@@ -27,9 +27,24 @@ class Test_planning(unittest.TestCase):
     cls.env.Reset()
     cls.env.Destroy()
 
-  def test_plan_to_joint_configuration(self):
-    robot = self.robot
+  def test_plan_cartesian_twist(self):
     np.random.seed(123)
+    env = self.env
+    robot = self.robot
+    distances = [0.01, 0.02, 0.1, 0.5, 1.]
+    for dist in distances:
+      while True:
+        q = ru.kinematics.random_joint_values(robot)
+        with env:
+          robot.SetActiveDOFValues(q)
+        if not env.CheckCollision(robot):
+          break
+      twist = np.random.rand(6)*dist
+      traj = ru.planning.plan_cartesian_twist(robot, twist, num_waypoints=10)
+
+  def test_plan_to_joint_configuration(self):
+    np.random.seed(123)
+    robot = self.robot
     qgoal = ru.kinematics.random_joint_values(robot)
     # Test all the available planners
     traj1 = ru.planning.plan_to_joint_configuration(robot, qgoal, pname='BiRRT')
@@ -47,8 +62,8 @@ class Test_planning(unittest.TestCase):
     self.assertNotEqual(traj3, None)
 
   def test_retime_trajectory(self):
-    robot = self.robot
     np.random.seed(123)
+    robot = self.robot
     qgoal = ru.kinematics.random_joint_values(robot)
     traj = ru.planning.plan_to_joint_configuration(robot, qgoal, pname='BiRRT')
     # Test all the available retiming methods
@@ -63,8 +78,8 @@ class Test_planning(unittest.TestCase):
     self.assertEqual(status, orpy.PlannerStatus.HasSolution)
 
   def test_ros_trajectory_from_openrave(self):
-    robot = self.robot
     np.random.seed(123)
+    robot = self.robot
     qgoal = ru.kinematics.random_joint_values(robot)
     traj = ru.planning.plan_to_joint_configuration(robot, qgoal, pname='BiRRT')
     ros_traj = ru.planning.ros_trajectory_from_openrave(robot.GetName(), traj)
@@ -75,10 +90,9 @@ class Test_planning(unittest.TestCase):
     self.assertEqual(len(ros_traj.points), traj.GetNumWaypoints())
     # TODO: Send trajectory with repeated waypoints
 
-
   def test_trajectory_from_waypoints(self):
-    robot = self.robot
     np.random.seed(123)
+    robot = self.robot
     waypoints = []
     for i in range(5):
       waypoints.append(ru.kinematics.random_joint_values(robot))
