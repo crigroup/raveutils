@@ -49,6 +49,51 @@ def plan_cartesian_twist(robot, twist, num_waypoints=10):
     return None
   return traj
 
+def plan_constant_velocity_twist(robot, twist, velocity, num_waypoints=10):
+  manip = robot.GetActiveManipulator()
+  indices = manip.GetArmIndices()
+  DOF = robot.GetActiveDOF()
+  velocity_limits = robot.GetDOFVelocityLimits()[indices]
+  spec = orpy.ConfigurationSpecification()
+  suffix = robot.GetName() + ' ' + ' '.join(map(str, indices))
+  values_offset = spec.AddGroup('joint_values '+suffix, DOF, 'linear')
+  velocities_offset = spec.AddGroup('joint_velocities '+suffix, DOF,'next')
+  deltatime_offset = spec.AddGroup('deltatime', 1, '')
+  traj = orpy.RaveCreateTrajectory(robot.GetEnv(), '')
+  traj.Init(spec)
+  # Add the current robot joint values
+  waypoint = np.zeros(deltatime_offset+1)
+  waypoint[values_offset:values_offset+DOF] = robot.GetActiveDOFValues()
+  traj.Insert(0, waypoint)
+  # Compute and populate the traj waypoints
+  distance = np.linalg.norm(twist)
+  duration = distance / velocity
+  dt = duration / float(num_waypoints)
+  delta = np.array(twist) / float(num_waypoints)
+  with robot:
+    for i in xrange(num_waypoints):
+      q = robot.GetActiveDOFValues()
+      J = ru.kinematics.compute_jacobian(robot)
+      Jpinv = np.linalg.pinv(J)
+      delta_q = np.dot(Jpinv, delta)
+      q += delta_q
+      qdot = delta_q / dt
+      if not ru.kinematics.check_joint_limits(robot, q):
+        break
+      if np.any(np.abs(qdot) > velocity_limits):
+        break
+      robot.SetActiveDOFValues(q)
+      # Populate the waypoint
+      waypoint = np.zeros(deltatime_offset+1)
+      waypoint[values_offset:values_offset+DOF] = q
+      waypoint[velocities_offset:velocities_offset+DOF] = qdot*np.ones(DOF)
+      waypoint[deltatime_offset] = dt
+      traj.Insert(traj.GetNumWaypoints(), waypoint)
+  if traj.GetNumWaypoints() < (num_waypoints-1):
+    return None
+  else:
+    return traj
+
 def plan_to_joint_configuration(robot, qgoal, pname='BiRRT', max_iters=20,
                                                 max_ppiters=40, try_swap=False):
   """
