@@ -193,8 +193,7 @@ def ros_trajectory_from_openrave(robot_name, traj):
     waypoint = traj.GetWaypoint(i).tolist()
     deltatime = waypoint[deltatime_group.offset]
     time_from_start += deltatime
-    if (np.isclose(deltatime, 0) and np.isclose(skipped_time, 0)
-            and (0 < i < num_waypoints - 1)):
+    if (i > 0) and np.isclose(deltatime, 0) and np.isclose(skipped_time, 0):
       skipped_time += deltatime
       continue
     else:
