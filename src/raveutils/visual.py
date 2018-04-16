@@ -144,8 +144,6 @@ def draw_spline(env, spline, num=100, linewidth=1.0, colors=(0,0,1),
   handles: orpy.GraphHandle
     Handles holding the plot.
   """
-  if colors is None:
-    colors = [0,0,1] * num
   linestrip = []
   for u in np.linspace(start, stop, num=num):
     linestrip.append(spline(u))

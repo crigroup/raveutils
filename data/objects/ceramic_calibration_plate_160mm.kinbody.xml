@@ -4,6 +4,7 @@
     <geom type="box">
       <extents>0.085 0.085 0.0025</extents>
       <translation>0 0 0.00075</translation>
+      <diffusecolor>1 0 0</diffusecolor>
       <transparency>1</transparency>
     </geom>
     <!-- Visual -->

@@ -1,75 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Kinbody name="installation_base_vs060">
 
-  <body name="top_plate">
-    <Geom type="box">
-      <Extents>0.25 0.25 0.01</Extents>
+  <body name="top_plate" enable="False">
+    <geom type="box">
+      <extents>0.25 0.25 0.01</extents>
       <diffusecolor>0.8 0.8 0.8</diffusecolor>
       <translation>0 0 -0.01</translation>
-    </Geom>
+    </geom>
   </body>
 
   <body name="padding">
-    <Geom type="box" modifiable="true">
-      <Extents>0.26 0.005 0.01</Extents>
+    <geom type="box">
+      <extents>0.26 0.26 0.285</extents>
       <diffusecolor>1 0 0</diffusecolor>
-      <transparency>0.25</transparency>
-      <translation>0 0.255 -0.01</translation>
-    </Geom>
-    <Geom type="box">
-      <Extents>0.26 0.005 0.01</Extents>
+      <transparency>1</transparency>
+      <translation>0 0 -0.285</translation>
+    </geom>
+    <!-- Padding on top of the base -->
+    <geom type="box">
+      <extents>0.08 0.1 0.005</extents>
+      <diffusecolor>0 1 0</diffusecolor>
+      <transparency>1</transparency>
+      <translation>0.18 0 0.005</translation>
+    </geom>
+    <geom type="box">
+      <extents>0.26 0.08 0.005</extents>
+      <diffusecolor>0 0 1</diffusecolor>
+      <transparency>1</transparency>
+      <translation>0 0.18 0.005</translation>
+    </geom>
+    <geom type="box">
+      <extents>0.26 0.08 0.005</extents>
       <diffusecolor>1 0 0</diffusecolor>
-      <transparency>0.25</transparency>
-      <translation>0 -0.255 -0.01</translation>
-    </Geom>
-    <Geom type="box">
-      <Extents>0.005 0.26 0.01</Extents>
-      <diffusecolor>1 0 0</diffusecolor>
-      <transparency>0.25</transparency>
-      <translation>0.255 0 -0.01</translation>
-    </Geom>
-    <Geom type="box">
-      <Extents>0.005 0.26 0.01</Extents>
-      <diffusecolor>1 0 0</diffusecolor>
-      <transparency>0.25</transparency>
-      <translation>-0.255 0 -0.01</translation>
-    </Geom>
+      <transparency>1</transparency>
+      <translation>0 -0.18 0.005</translation>
+    </geom>
   </body>
 
-  <body name="leg1">
+  <body name="leg1" enable="False">
     <offsetfrom>top_plate</offsetfrom>
-    <Translation>0.22 0.22 -0.305</Translation>
-    <Geom type="box">
-      <Extents>0.02 0.02 0.285</Extents>
+    <translation>0.22 0.22 -0.305</translation>
+    <geom type="box">
+      <extents>0.02 0.02 0.285</extents>
       <diffusecolor>0.8 0.8 0.8</diffusecolor>
-    </Geom>
+    </geom>
   </body>
 
-  <body name="leg2">
+  <body name="leg2" enable="False">
     <offsetfrom>top_plate</offsetfrom>
-    <Translation>-0.22 0.22 -0.305</Translation>
-    <Geom type="box">
-      <Extents>0.02 0.02 0.285</Extents>
+    <translation>-0.22 0.22 -0.305</translation>
+    <geom type="box">
+      <extents>0.02 0.02 0.285</extents>
       <diffusecolor>0.8 0.8 0.8</diffusecolor>
-    </Geom>
+    </geom>
   </body>
 
-  <body name="leg3">
+  <body name="leg3" enable="False">
     <offsetfrom>top_plate</offsetfrom>
-    <Translation>-0.22 -0.22 -0.305</Translation>
-    <Geom type="box">
-      <Extents>0.02 0.02 0.285</Extents>
+    <translation>-0.22 -0.22 -0.305</translation>
+    <geom type="box">
+      <extents>0.02 0.02 0.285</extents>
       <diffusecolor>0.8 0.8 0.8</diffusecolor>
-    </Geom>
+    </geom>
   </body>
 
-  <body name="leg4">
+  <body name="leg4" enable="False">
     <offsetfrom>top_plate</offsetfrom>
-    <Translation>0.22 -0.22 -0.305</Translation>
-    <Geom type="box">
-      <Extents>0.02 0.02 0.285</Extents>
+    <translation>0.22 -0.22 -0.305</translation>
+    <geom type="box">
+      <extents>0.02 0.02 0.285</extents>
       <diffusecolor>0.8 0.8 0.8</diffusecolor>
-    </Geom>
+    </geom>
   </body>
 
   <!-- adjacent links -->
