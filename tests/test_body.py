@@ -45,6 +45,22 @@ class Test_body(unittest.TestCase):
     corners = ru.body.get_bounding_box_corners(makita, transform)
     self.assertEqual(len(corners), 8)
 
+  def test_set_body_color(self):
+    env = self.env
+    makita = env.GetBodies()[0]
+    for _ in range(10):
+      diffuse = np.random.sample(3)
+      ambient = np.random.sample(3)
+      ru.body.set_body_color(makita, diffuse, ambient)
+      dcolors = [g.GetDiffuseColor() for l in makita.GetLinks()
+                                                    for g in l.GetGeometries()]
+      dcolor = np.unique(dcolors, axis=0).reshape(diffuse.shape)
+      np.testing.assert_allclose(diffuse, dcolor)
+      acolors = [g.GetAmbientColor() for l in makita.GetLinks()
+                                                    for g in l.GetGeometries()]
+      acolor = np.unique(acolors, axis=0).reshape(ambient.shape)
+      np.testing.assert_allclose(ambient, acolor)
+
   def test_set_body_transparency(self):
     env = self.env
     makita = env.GetBodies()[0]

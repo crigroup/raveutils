@@ -1,0 +1,393 @@
+<kinbody name="ceramic_calibration_plate_160mm">
+  <body name="ceramic_plate" type="dynamic">
+    <!-- Collision -->
+    <geom type="box">
+      <extents>0.085 0.085 0.0025</extents>
+      <translation>0 0 0.00075</translation>
+      <diffusecolor>1 0 0</diffusecolor>
+      <transparency>1</transparency>
+    </geom>
+    <!-- Visual -->
+    <!-- Plate -->
+    <geom type="box">
+      <extents>0.08 0.08 0.00075</extents>
+      <diffusecolor>1 1 1</diffusecolor>
+      <translation>0 0 0.00075</translation>
+    </geom>
+    <!-- Border -->
+    <geom type="box">
+      <extents>0.075 0.0025 0.0005</extents>
+      <diffusecolor>0 0 0</diffusecolor>
+      <translation>0 0.0725 -0.0005</translation>
+    </geom>
+    <geom type="box">
+      <extents>0.0025 0.075 0.0005</extents>
+      <diffusecolor>0 0 0</diffusecolor>
+      <translation>0.0725 0 -0.0005</translation>
+    </geom>
+    <geom type="box">
+      <extents>0.075 0.0025 0.0005</extents>
+      <diffusecolor>0 0 0</diffusecolor>
+      <translation>0 -0.0725 -0.0005</translation>
+    </geom>
+    <geom type="box">
+      <extents>0.0025 0.075 0.0005</extents>
+      <diffusecolor>0 0 0</diffusecolor>
+      <translation>-0.0725 0 -0.0005</translation>
+    </geom>
+    <!-- Corner -->
+    <geom type="box">
+      <extents>0.003 0.006 0.0005</extents>
+      <diffusecolor>0 0 0</diffusecolor>
+      <rotationaxis>0 0 1 45</rotationaxis>
+      <translation>0.068 0.068 -0.0005</translation>
+    </geom>
+    <!-- Pattern -->
+    <geom type="cylinder">
+      <radius>0.0046</radius>
+      <height>0.001</height>
+      <diffusecolor>0 0 0</diffusecolor>
+      <rotationaxis>1 0 0 90</rotationaxis>
+      <translation>-0.05625 -0.05625 -0.0005</translation>
+    </geom>
+    <geom type="cylinder">
+      <radius>0.0046</radius>
+      <height>0.001</height>
+      <diffusecolor>0 0 0</diffusecolor>
+      <rotationaxis>1 0 0 90</rotationaxis>
+      <translation>-0.05625 -0.0375 -0.0005</translation>
+    </geom>
+    <geom type="cylinder">
+      <radius>0.0046</radius>
+      <height>0.001</height>
+      <diffusecolor>0 0 0</diffusecolor>
+      <rotationaxis>1 0 0 90</rotationaxis>
+      <translation>-0.05625 -0.01875 -0.0005</translation>
+    </geom>
+    <geom type="cylinder">
+      <radius>0.0046</radius>
+      <height>0.001</height>
+      <diffusecolor>0 0 0</diffusecolor>
+      <rotationaxis>1 0 0 90</rotationaxis>
+      <translation>-0.05625 0.0 -0.0005</translation>
+    </geom>
+    <geom type="cylinder">
+      <radius>0.0046</radius>
+      <height>0.001</height>
+      <diffusecolor>0 0 0</diffusecolor>
+      <rotationaxis>1 0 0 90</rotationaxis>
+      <translation>-0.05625 0.01875 -0.0005</translation>
+    </geom>
+    <geom type="cylinder">
+      <radius>0.0046</radius>
+      <height>0.001</height>
+      <diffusecolor>0 0 0</diffusecolor>
+      <rotationaxis>1 0 0 90</rotationaxis>
+      <translation>-0.05625 0.0375 -0.0005</translation>
+    </geom>
+    <geom type="cylinder">
+      <radius>0.0046</radius>
+      <height>0.001</height>
+      <diffusecolor>0 0 0</diffusecolor>
+      <rotationaxis>1 0 0 90</rotationaxis>
+      <translation>-0.05625 0.05625 -0.0005</translation>
+    </geom>
+    <geom type="cylinder">
+      <radius>0.0046</radius>
+      <height>0.001</height>
+      <diffusecolor>0 0 0</diffusecolor>
+      <rotationaxis>1 0 0 90</rotationaxis>
+      <translation>-0.0375 -0.05625 -0.0005</translation>
+    </geom>
+    <geom type="cylinder">
+      <radius>0.0046</radius>
+      <height>0.001</height>
+      <diffusecolor>0 0 0</diffusecolor>
+      <rotationaxis>1 0 0 90</rotationaxis>
+      <translation>-0.0375 -0.0375 -0.0005</translation>
+    </geom>
+    <geom type="cylinder">
+      <radius>0.0046</radius>
+      <height>0.001</height>
+      <diffusecolor>0 0 0</diffusecolor>
+      <rotationaxis>1 0 0 90</rotationaxis>
+      <translation>-0.0375 -0.01875 -0.0005</translation>
+    </geom>
+    <geom type="cylinder">
+      <radius>0.0046</radius>
+      <height>0.001</height>
+      <diffusecolor>0 0 0</diffusecolor>
+      <rotationaxis>1 0 0 90</rotationaxis>
+      <translation>-0.0375 0.0 -0.0005</translation>
+    </geom>
+    <geom type="cylinder">
+      <radius>0.0046</radius>
+      <height>0.001</height>
+      <diffusecolor>0 0 0</diffusecolor>
+      <rotationaxis>1 0 0 90</rotationaxis>
+      <translation>-0.0375 0.01875 -0.0005</translation>
+    </geom>
+    <geom type="cylinder">
+      <radius>0.0046</radius>
+      <height>0.001</height>
+      <diffusecolor>0 0 0</diffusecolor>
+      <rotationaxis>1 0 0 90</rotationaxis>
+      <translation>-0.0375 0.0375 -0.0005</translation>
+    </geom>
+    <geom type="cylinder">
+      <radius>0.0046</radius>
+      <height>0.001</height>
+      <diffusecolor>0 0 0</diffusecolor>
+      <rotationaxis>1 0 0 90</rotationaxis>
+      <translation>-0.0375 0.05625 -0.0005</translation>
+    </geom>
+    <geom type="cylinder">
+      <radius>0.0046</radius>
+      <height>0.001</height>
+      <diffusecolor>0 0 0</diffusecolor>
+      <rotationaxis>1 0 0 90</rotationaxis>
+      <translation>-0.01875 -0.05625 -0.0005</translation>
+    </geom>
+    <geom type="cylinder">
+      <radius>0.0046</radius>
+      <height>0.001</height>
+      <diffusecolor>0 0 0</diffusecolor>
+      <rotationaxis>1 0 0 90</rotationaxis>
+      <translation>-0.01875 -0.0375 -0.0005</translation>
+    </geom>
+    <geom type="cylinder">
+      <radius>0.0046</radius>
+      <height>0.001</height>
+      <diffusecolor>0 0 0</diffusecolor>
+      <rotationaxis>1 0 0 90</rotationaxis>
+      <translation>-0.01875 -0.01875 -0.0005</translation>
+    </geom>
+    <geom type="cylinder">
+      <radius>0.0046</radius>
+      <height>0.001</height>
+      <diffusecolor>0 0 0</diffusecolor>
+      <rotationaxis>1 0 0 90</rotationaxis>
+      <translation>-0.01875 0.0 -0.0005</translation>
+    </geom>
+    <geom type="cylinder">
+      <radius>0.0046</radius>
+      <height>0.001</height>
+      <diffusecolor>0 0 0</diffusecolor>
+      <rotationaxis>1 0 0 90</rotationaxis>
+      <translation>-0.01875 0.01875 -0.0005</translation>
+    </geom>
+    <geom type="cylinder">
+      <radius>0.0046</radius>
+      <height>0.001</height>
+      <diffusecolor>0 0 0</diffusecolor>
+      <rotationaxis>1 0 0 90</rotationaxis>
+      <translation>-0.01875 0.0375 -0.0005</translation>
+    </geom>
+    <geom type="cylinder">
+      <radius>0.0046</radius>
+      <height>0.001</height>
+      <diffusecolor>0 0 0</diffusecolor>
+      <rotationaxis>1 0 0 90</rotationaxis>
+      <translation>-0.01875 0.05625 -0.0005</translation>
+    </geom>
+    <geom type="cylinder">
+      <radius>0.0046</radius>
+      <height>0.001</height>
+      <diffusecolor>0 0 0</diffusecolor>
+      <rotationaxis>1 0 0 90</rotationaxis>
+      <translation>0.0 -0.05625 -0.0005</translation>
+    </geom>
+    <geom type="cylinder">
+      <radius>0.0046</radius>
+      <height>0.001</height>
+      <diffusecolor>0 0 0</diffusecolor>
+      <rotationaxis>1 0 0 90</rotationaxis>
+      <translation>0.0 -0.0375 -0.0005</translation>
+    </geom>
+    <geom type="cylinder">
+      <radius>0.0046</radius>
+      <height>0.001</height>
+      <diffusecolor>0 0 0</diffusecolor>
+      <rotationaxis>1 0 0 90</rotationaxis>
+      <translation>0.0 -0.01875 -0.0005</translation>
+    </geom>
+    <geom type="cylinder">
+      <radius>0.0046</radius>
+      <height>0.001</height>
+      <diffusecolor>0 0 0</diffusecolor>
+      <rotationaxis>1 0 0 90</rotationaxis>
+      <translation>0.0 0.0 -0.0005</translation>
+    </geom>
+    <geom type="cylinder">
+      <radius>0.0046</radius>
+      <height>0.001</height>
+      <diffusecolor>0 0 0</diffusecolor>
+      <rotationaxis>1 0 0 90</rotationaxis>
+      <translation>0.0 0.01875 -0.0005</translation>
+    </geom>
+    <geom type="cylinder">
+      <radius>0.0046</radius>
+      <height>0.001</height>
+      <diffusecolor>0 0 0</diffusecolor>
+      <rotationaxis>1 0 0 90</rotationaxis>
+      <translation>0.0 0.0375 -0.0005</translation>
+    </geom>
+    <geom type="cylinder">
+      <radius>0.0046</radius>
+      <height>0.001</height>
+      <diffusecolor>0 0 0</diffusecolor>
+      <rotationaxis>1 0 0 90</rotationaxis>
+      <translation>0.0 0.05625 -0.0005</translation>
+    </geom>
+    <geom type="cylinder">
+      <radius>0.0046</radius>
+      <height>0.001</height>
+      <diffusecolor>0 0 0</diffusecolor>
+      <rotationaxis>1 0 0 90</rotationaxis>
+      <translation>0.01875 -0.05625 -0.0005</translation>
+    </geom>
+    <geom type="cylinder">
+      <radius>0.0046</radius>
+      <height>0.001</height>
+      <diffusecolor>0 0 0</diffusecolor>
+      <rotationaxis>1 0 0 90</rotationaxis>
+      <translation>0.01875 -0.0375 -0.0005</translation>
+    </geom>
+    <geom type="cylinder">
+      <radius>0.0046</radius>
+      <height>0.001</height>
+      <diffusecolor>0 0 0</diffusecolor>
+      <rotationaxis>1 0 0 90</rotationaxis>
+      <translation>0.01875 -0.01875 -0.0005</translation>
+    </geom>
+    <geom type="cylinder">
+      <radius>0.0046</radius>
+      <height>0.001</height>
+      <diffusecolor>0 0 0</diffusecolor>
+      <rotationaxis>1 0 0 90</rotationaxis>
+      <translation>0.01875 0.0 -0.0005</translation>
+    </geom>
+    <geom type="cylinder">
+      <radius>0.0046</radius>
+      <height>0.001</height>
+      <diffusecolor>0 0 0</diffusecolor>
+      <rotationaxis>1 0 0 90</rotationaxis>
+      <translation>0.01875 0.01875 -0.0005</translation>
+    </geom>
+    <geom type="cylinder">
+      <radius>0.0046</radius>
+      <height>0.001</height>
+      <diffusecolor>0 0 0</diffusecolor>
+      <rotationaxis>1 0 0 90</rotationaxis>
+      <translation>0.01875 0.0375 -0.0005</translation>
+    </geom>
+    <geom type="cylinder">
+      <radius>0.0046</radius>
+      <height>0.001</height>
+      <diffusecolor>0 0 0</diffusecolor>
+      <rotationaxis>1 0 0 90</rotationaxis>
+      <translation>0.01875 0.05625 -0.0005</translation>
+    </geom>
+    <geom type="cylinder">
+      <radius>0.0046</radius>
+      <height>0.001</height>
+      <diffusecolor>0 0 0</diffusecolor>
+      <rotationaxis>1 0 0 90</rotationaxis>
+      <translation>0.0375 -0.05625 -0.0005</translation>
+    </geom>
+    <geom type="cylinder">
+      <radius>0.0046</radius>
+      <height>0.001</height>
+      <diffusecolor>0 0 0</diffusecolor>
+      <rotationaxis>1 0 0 90</rotationaxis>
+      <translation>0.0375 -0.0375 -0.0005</translation>
+    </geom>
+    <geom type="cylinder">
+      <radius>0.0046</radius>
+      <height>0.001</height>
+      <diffusecolor>0 0 0</diffusecolor>
+      <rotationaxis>1 0 0 90</rotationaxis>
+      <translation>0.0375 -0.01875 -0.0005</translation>
+    </geom>
+    <geom type="cylinder">
+      <radius>0.0046</radius>
+      <height>0.001</height>
+      <diffusecolor>0 0 0</diffusecolor>
+      <rotationaxis>1 0 0 90</rotationaxis>
+      <translation>0.0375 0.0 -0.0005</translation>
+    </geom>
+    <geom type="cylinder">
+      <radius>0.0046</radius>
+      <height>0.001</height>
+      <diffusecolor>0 0 0</diffusecolor>
+      <rotationaxis>1 0 0 90</rotationaxis>
+      <translation>0.0375 0.01875 -0.0005</translation>
+    </geom>
+    <geom type="cylinder">
+      <radius>0.0046</radius>
+      <height>0.001</height>
+      <diffusecolor>0 0 0</diffusecolor>
+      <rotationaxis>1 0 0 90</rotationaxis>
+      <translation>0.0375 0.0375 -0.0005</translation>
+    </geom>
+    <geom type="cylinder">
+      <radius>0.0046</radius>
+      <height>0.001</height>
+      <diffusecolor>0 0 0</diffusecolor>
+      <rotationaxis>1 0 0 90</rotationaxis>
+      <translation>0.0375 0.05625 -0.0005</translation>
+    </geom>
+    <geom type="cylinder">
+      <radius>0.0046</radius>
+      <height>0.001</height>
+      <diffusecolor>0 0 0</diffusecolor>
+      <rotationaxis>1 0 0 90</rotationaxis>
+      <translation>0.05625 -0.05625 -0.0005</translation>
+    </geom>
+    <geom type="cylinder">
+      <radius>0.0046</radius>
+      <height>0.001</height>
+      <diffusecolor>0 0 0</diffusecolor>
+      <rotationaxis>1 0 0 90</rotationaxis>
+      <translation>0.05625 -0.0375 -0.0005</translation>
+    </geom>
+    <geom type="cylinder">
+      <radius>0.0046</radius>
+      <height>0.001</height>
+      <diffusecolor>0 0 0</diffusecolor>
+      <rotationaxis>1 0 0 90</rotationaxis>
+      <translation>0.05625 -0.01875 -0.0005</translation>
+    </geom>
+    <geom type="cylinder">
+      <radius>0.0046</radius>
+      <height>0.001</height>
+      <diffusecolor>0 0 0</diffusecolor>
+      <rotationaxis>1 0 0 90</rotationaxis>
+      <translation>0.05625 0.0 -0.0005</translation>
+    </geom>
+    <geom type="cylinder">
+      <radius>0.0046</radius>
+      <height>0.001</height>
+      <diffusecolor>0 0 0</diffusecolor>
+      <rotationaxis>1 0 0 90</rotationaxis>
+      <translation>0.05625 0.01875 -0.0005</translation>
+    </geom>
+    <geom type="cylinder">
+      <radius>0.0046</radius>
+      <height>0.001</height>
+      <diffusecolor>0 0 0</diffusecolor>
+      <rotationaxis>1 0 0 90</rotationaxis>
+      <translation>0.05625 0.0375 -0.0005</translation>
+    </geom>
+    <geom type="cylinder">
+      <radius>0.0046</radius>
+      <height>0.001</height>
+      <diffusecolor>0 0 0</diffusecolor>
+      <rotationaxis>1 0 0 90</rotationaxis>
+      <translation>0.05625 0.05625 -0.0005</translation>
+    </geom>
+  </body>
+  <mass type="mimicgeom">
+    <total>0.165</total>
+  </mass>
+</kinbody>

@@ -58,6 +58,32 @@ def get_bounding_box_corners(body, transform=None, scale=1.):
     corners.append(position)
   return corners
 
+def set_body_color(body, diffuse, ambient=None):
+  """
+  Override diffuse and ambient color of the body
+
+  Parameters
+  ----------
+  body: orpy.KinBody
+    The OpenRAVE body
+  diffuse: array_like
+    The input diffuse color in RGB format (3 elements array)
+  ambient: array_like
+    The input ambient color in RGB format (3 elements array)
+
+  Notes
+  -----
+  The value of each color channel (R, G and B) must be between :math:`[0, 1]`
+  """
+  env = body.GetEnv()
+  is_ambient_available = ambient is not None
+  with env:
+    for link in body.GetLinks():
+      for geom in link.GetGeometries():
+        geom.SetDiffuseColor(diffuse)
+        if is_ambient_available:
+          geom.SetAmbientColor(ambient)
+
 def set_body_transparency(body, transparency=0.0, links=None):
   """
   Set the transparency value of all the body's geometries
