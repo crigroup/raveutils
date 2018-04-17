@@ -50,6 +50,26 @@ def plan_cartesian_twist(robot, twist, num_waypoints=10):
   return traj
 
 def plan_constant_velocity_twist(robot, twist, velocity, num_waypoints=10):
+  """
+  Plan the cartesian trajectory to apply the given twist to the current robot
+  configuration at constant velocity
+
+  Parameters
+  ----------
+  robot: orpy.Robot
+    The OpenRAVE robot
+  twist: array_like
+    The twist to be applied to the end-effector
+  velocity: float
+    Robot velocity in the cartesian workspace (units are meters)
+  num_waypoints: int
+    Number of waypoints to be used by the trajectory
+
+  Returns
+  -------
+  traj: orpy.Trajectory
+    Planned trajectory. If plan fails, this function returns `None`.
+  """
   manip = robot.GetActiveManipulator()
   indices = manip.GetArmIndices()
   DOF = robot.GetActiveDOF()
