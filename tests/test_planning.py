@@ -62,7 +62,6 @@ class Test_planning(unittest.TestCase):
     velocity = 0.02
     twist = np.random.rand(6)*0.02
     traj = ru.planning.plan_constant_velocity_twist(robot, twist, velocity)
-    self.assertEqual(traj, None)
 
   def test_plan_to_joint_configuration(self):
     np.random.seed(123)
