@@ -4,7 +4,7 @@
   <body name="top_plate" enable="False">
     <geom type="box">
       <extents>0.25 0.25 0.01</extents>
-      <diffusecolor>0.8 0.8 0.8</diffusecolor>
+      <diffusecolor>0.518 0.529 0.537</diffusecolor>
       <translation>0 0 -0.01</translation>
     </geom>
   </body>
@@ -39,37 +39,37 @@
 
   <body name="leg1" enable="False">
     <offsetfrom>top_plate</offsetfrom>
-    <translation>0.22 0.22 -0.305</translation>
+    <translation>0.215 0.215 -0.305</translation>
     <geom type="box">
       <extents>0.02 0.02 0.285</extents>
-      <diffusecolor>0.8 0.8 0.8</diffusecolor>
+      <diffusecolor>0.518 0.529 0.537</diffusecolor>
     </geom>
   </body>
 
   <body name="leg2" enable="False">
     <offsetfrom>top_plate</offsetfrom>
-    <translation>-0.22 0.22 -0.305</translation>
+    <translation>-0.215 0.215 -0.305</translation>
     <geom type="box">
       <extents>0.02 0.02 0.285</extents>
-      <diffusecolor>0.8 0.8 0.8</diffusecolor>
+      <diffusecolor>0.518 0.529 0.537</diffusecolor>
     </geom>
   </body>
 
   <body name="leg3" enable="False">
     <offsetfrom>top_plate</offsetfrom>
-    <translation>-0.22 -0.22 -0.305</translation>
+    <translation>-0.215 -0.215 -0.305</translation>
     <geom type="box">
       <extents>0.02 0.02 0.285</extents>
-      <diffusecolor>0.8 0.8 0.8</diffusecolor>
+      <diffusecolor>0.518 0.529 0.537</diffusecolor>
     </geom>
   </body>
 
   <body name="leg4" enable="False">
     <offsetfrom>top_plate</offsetfrom>
-    <translation>0.22 -0.22 -0.305</translation>
+    <translation>0.215 -0.215 -0.305</translation>
     <geom type="box">
       <extents>0.02 0.02 0.285</extents>
-      <diffusecolor>0.8 0.8 0.8</diffusecolor>
+      <diffusecolor>0.518 0.529 0.537</diffusecolor>
     </geom>
   </body>
 
