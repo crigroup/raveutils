@@ -82,6 +82,31 @@ class Test_planning(unittest.TestCase):
                                                                 max_ppiters=-1)
     self.assertNotEqual(traj3, None)
 
+  def test_plan_to_pose(self):
+    np.random.seed(123)
+    env = self.env
+    robot = self.robot
+    manip = robot.GetActiveManipulator()
+    # Start at a random configuration
+    qstart = ru.kinematics.random_joint_values(robot)
+    robot.SetActiveDOFValues(qstart)
+    Tstart = manip.GetEndEffectorTransform()
+    # In this example, we want to move at constant velocity to a pose that is 5 cm away from the start pose
+    # The rotation is 10 degress in every component
+    twist = np.zeros(6)
+    twist[:3] = [0.05, 0.05, 0.05]
+    twist[3:] = np.deg2rad([10, 10, 10])
+    velocity = 0.1 # m/s^2
+    traj = ru.planning.plan_constant_velocity_twist(robot, twist, velocity)
+    # Use ros_trajectory_from_openrave to get the lastest joint config of the trajectory
+    ros_traj = ru.planning.ros_trajectory_from_openrave(robot.GetName(), traj)
+    qgoal = ros_traj.points[-1].positions
+    robot.SetActiveDOFValues(qgoal)
+    Tgoal = manip.GetEndEffectorTransform()
+    # Check the goal config makes sense (don't expect to much precision, here we are 1.5mm off the goal)
+    pos_diff = Tgoal[:3,3] - Tstart[:3,3]
+    self.assertTrue(np.linalg.norm(pos_diff - twist[:3]) < 2e-3)
+
   def test_retime_trajectory(self):
     np.random.seed(123)
     robot = self.robot
