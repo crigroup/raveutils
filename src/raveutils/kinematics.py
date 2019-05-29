@@ -132,7 +132,7 @@ def compute_yoshikawa_index(robot, link_name=None, translation_only=False,
   index = np.sqrt( max(np.linalg.det(np.dot(J, J.T)), 0) )*weight*scale
   return index
 
-def find_ik_solutions(robot, target, iktype, collision_free=True, freeinc=0.1):
+def find_ik_solutions(robot, target, iktype, collision_free=True, freeinc=0.1, angle_offset=0.0):
   """
   Find all the possible IK solutions
 
@@ -153,6 +153,8 @@ def find_ik_solutions(robot, target, iktype, collision_free=True, freeinc=0.1):
   freeinc: float, optional
     The free increment (discretization) to be used for the free DOF when the
     target is 5D.
+  angle_offset: float, optional
+    Angle offset to be used for the free DOF discretization. Use only if freeinc is given.
 
   Returns
   -------
@@ -171,7 +173,7 @@ def find_ik_solutions(robot, target, iktype, collision_free=True, freeinc=0.1):
     if type(target) is orpy.Ray:
       Tray = ru.conversions.from_ray(target)
       for angle in np.arange(0, 2*np.pi, freeinc):
-        Toffset = orpy.matrixFromAxisAngle(angle*br.Z_AXIS)
+        Toffset = orpy.matrixFromAxisAngle((angle_offset + angle)*br.Z_AXIS)
         target_list.append(np.dot(Tray, Toffset))
     else:
       target_list.append(target)
